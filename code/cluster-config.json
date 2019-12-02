@@ -1,0 +1,35 @@
+{
+  "__default__" :
+  {"partition" : "broadwl", "account": "pi-yangili1",   "mem" : 4000, "n" : 1, "name" : "{rule}-{wildcards}", "logfile": "/dev/null"},
+
+  "STAR_make_index_human":
+  {"mem" : 68000, "tasks-per-node" : 5, "partition" : "bigmem2"},
+
+  "STAR_make_index_human_AfterFirstPass":
+  {"mem" : 68000, "tasks-per-node" : 5, "partition" : "bigmem2"},
+
+  "hisat2_make_index":
+  {"mem" : 68000, "tasks-per-node" : 5, "partition" : "bigmem2"},
+
+  "STAR_alignment_FirstPass":
+  {"partition" : "broadwl", "mem": 42000, "tasks-per-node" : 10},
+
+  "STAR_alignment_FirstPass_PE":
+  {"partition" : "broadwl", "mem": 42000, "tasks-per-node" : 10},
+
+  "computeMatrix_metatranscript":
+  {"mem" : 10000, "tasks-per-node" : 3},
+
+  "STAR_alignment_SecondPass":
+  {"partition" : "broadwl", "mem": 42000, "tasks-per-node" : 10},
+
+  "STAR_alignment_SecondPass_PE":
+  {"partition" : "broadwl", "mem": 42000, "tasks-per-node" : 10},
+
+  "leafcutter_cluster" :
+  {"mem" : 24000, "partition":"broadwl"},
+
+  "leafcutter_ds" :
+  {"mem" : 16000, "partition":"broadwl", "tasks-per-node": 6}
+}
+

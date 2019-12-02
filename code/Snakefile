@@ -1,0 +1,24 @@
+# The main entry point of your workflow.
+# After configuring, running snakemake -n in a clone of this repository should successfully execute a dry-run of the workflow.
+
+include: "rules/common.smk"
+configfile: "config.yaml"
+
+# Instead of using samples.tsv file, a quick/dirty way to apply rules over grob of existing files is this:
+# IDS, = glob_wildcards("Path/To/{MyFileNames}.bed.gz")
+
+rule all:
+    input:
+        config["Human_ref"]["genome_dir"] + "chrLength.txt",
+        "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed.gz",
+        "leafcutter/differential_splicing/leafcutter_effect_sizes.txt",
+        expand("UnstrandedBigwigs/{sample}.bw", sample=SampleList),
+        expand("Junctions/{sample}.junctions.bed.gz", sample=SampleList),
+        Output = "GeneExpression/GeneExpressionCountTable.subread.txt.gz",
+
+include: "rules/DownloadReference.smk"
+include: "rules/DownloadAndMergeFastq.smk"
+include: "rules/Align.smk"
+include: "rules/leafcutter.smk"
+include: "rules/GeneExpressionAnalysis.smk"
+include: "rules/other.smk"

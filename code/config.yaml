@@ -1,0 +1,26 @@
+# This file should contain everything to configure the workflow on a global scale.
+# In case of sample based data, it should be complemented by a samples.tsv file that contains
+# one row per sample. It can be parsed easily via pandas.
+
+gitinclude_output: "../output/"
+
+FastQList: "Fastq.Samples.txt"
+
+Human_ref:
+    genome_fasta: "/project2/gilad/bjf79/genomes/GRCh38_Ensembl/Sequence/Homo_sapiens.GRCh38.dna_sm.chromosome.all.fa"
+    genome_gtf: "/project2/gilad/bjf79/genomes/GRCh38_Ensembl/Annotations/Homo_sapiens.GRCh38.94.chr.gtf"
+    genome_dir: "/project2/gilad/bjf79/genomes/GRCh38_Ensembl/STAR_genomedir/"
+
+# Install leafcutter in R. Also, clone the leafcutter repository from github
+# https://github.com/davidaknowles/leafcutter
+# and add the repository's path here to allow snakemake to find the sripts in the repo.
+Path_to_leafcutter_repo: "~/software/leafcutter/"
+
+# A file defining the contrasts for differential splicing
+leafcutter_groupfile: "../data/LeafcutterGroups.txt"
+leafcutter_ds_optional_params: ""
+
+# Install featureCounts
+# https://sourceforge.net/projects/subread/files/subread-1.6.4/
+# and add the featureCounts executable path here
+Path_to_subread_feature_counts_executable: "~/software/subread-1.6.3-Linux-x86_64/bin/featureCounts"
