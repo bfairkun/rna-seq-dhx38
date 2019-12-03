@@ -2,18 +2,20 @@ rule gtf2IntronsBed:
     input:
         gtf=config["Human_ref"]["genome_gtf"],
     output:
-        "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed.gz"
+        bedgz = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed.gz",
+        bed = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed"
     params:
         leafcutter_path=config["Path_to_leafcutter_repo"]
     shell:
         """
         {params.leafcutter_path}leafviz/gtf2leafcutter.pl -o Misc/AnnotatedIntronBeds/Annotated {input.gtf}
+        zcat {output.bedgz} > {output.bed}
         """
 
 rule AnnotateSplicingTypes:
     input:
         SJout = "Alignments/SecondPass/{sample}/SJ.out.tab",
-        AnnotatedIntrons = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed.gz"
+        AnnotatedIntrons = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed"
     output:
         SJOutASBed = "Alignments/JunctionBeds/{sample}.junc",
         SJout_AS_annotated = "Alignments/SecondPass/{sample}/SJ.out.annotated.tab"

@@ -36,8 +36,8 @@ rule ConcatFastqPerSample_PE:
         R1 = GetInput_ConcatFastqPerSample,
         R2 = GetInput_ConcatFastqPerSample_R2
     output:
-        R1 = temp( "Sample_Fastq_PE/{sample}.R1.fastq.gz"),
-        R2 = temp( "Sample_Fastq_PE/{sample}.R2.fastq.gz")
+        R1 = "Sample_Fastq_PE/{sample}.R1.fastq.gz",
+        R2 = "Sample_Fastq_PE/{sample}.R2.fastq.gz"
     shell:
         """
         cat {input.R1} > {output.R1}

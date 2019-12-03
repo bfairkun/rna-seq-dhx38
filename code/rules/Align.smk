@@ -13,7 +13,7 @@ rule STAR_alignment_FirstPass_PE:
     shell:
         """
         ulimit -v 31538428657
-        STAR --runThreadN {threads} --genomeDir {params.index} --readFilesIn {input.R1} {input.R2} --readFilesCommand zcat --outSAMmultNmax 1 --outSAMtype None --outFileNamePrefix Alignments/FirstPass/{wildcards.sample}/ &> {log}
+        STAR --runThreadN {threads} --genomeDir {params.index} --readFilesIn {input.R1} {input.R2} --readFilesCommand zcat --outSAMmultNmax 1 --outSAMtype None --outFileNamePrefix Alignments/FirstPass_PE/{wildcards.sample}/ &> {log}
         """
 
 rule STAR_alignment_FirstPass:
@@ -56,15 +56,15 @@ rule STAR_alignment_SecondPass_PE:
         "logs/STAR_SecondPass_PE/{sample}.log"
     threads: 8
     output:
-        SJout = "Alignments/SecondPass_PE/{sample}/SJ.out.tab",
-        bam = "Alignments/SecondPass_PE/{sample}/Aligned.out.bam",
+        SJout = "Alignments/SecondPass/{sample}/SJ.out.tab",
+        bam = "Alignments/SecondPass/{sample}/Aligned.sortedByCoord.out.bam",
+        bai = "Alignments/SecondPass/{sample}/Aligned.sortedByCoord.out.bam.bai",
         # R1Unmapped = "Alignments/SecondPass_PE/{sample}/Unmapped.out.mate1.fastq.gz",
         # R2Unmapped = "Alignments/SecondPass_PE/{sample}/Unmapped.out.mate2.fastq.gz"
     shell:
         """
         ulimit -v 31538428657
-        STAR --runThreadN {threads} --genomeDir Alignments/FirstPass_sjdb_index --readFilesIn {input.R1} {input.R2} --readFilesCommand zcat --outSAMtype BAM Unsorted --outFileNamePrefix Alignments/SecondPass_PE/{wildcards.sample}/ --outReadsUnmapped Fastx --alignEndsType EndToEnd &> {log}
-        samtools view -bh Alignments/SecondPass_PE/{wildcards.sample}/Aligned.out.bam > {output.bam}
+        STAR --runThreadN {threads} --genomeDir Alignments/FirstPass_sjdb_index --readFilesIn {input.R1} {input.R2} --readFilesCommand zcat --outSAMtype BAM SortedByCoordinate --outFileNamePrefix Alignments/SecondPass/{wildcards.sample}/ --outReadsUnmapped Fastx --alignEndsType EndToEnd &> {log}
         samtools index {output.bam}
         """
 
@@ -88,9 +88,9 @@ rule STAR_alignment_SecondPass:
         "logs/STAR_SecondPass/{sample}.log"
     threads: 8
     output:
-        SJout = "Alignments/SecondPass/{sample}/SJ.out.tab",
-        bam = "Alignments/SecondPass/{sample}/Aligned.sortedByCoord.out.bam",
-        bai =  "Alignments/SecondPass/{sample}/Aligned.sortedByCoord.out.bam.bai"
+        SJout = "Alignments/SecondPass_SE/{sample}/SJ.out.tab",
+        bam = "Alignments/SecondPass_SE/{sample}/Aligned.sortedByCoord.out.bam",
+        bai =  "Alignments/SecondPass_SE/{sample}/Aligned.sortedByCoord.out.bam.bai"
     shell:
         """
         ulimit -v 31538428657
