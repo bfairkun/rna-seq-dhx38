@@ -1,30 +1,3 @@
-rule gtf2IntronsBed:
-    input:
-        gtf=config["Human_ref"]["genome_gtf"],
-    output:
-        bedgz = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed.gz",
-        bed = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed",
-        exonsbedgz = "Misc/AnnotatedIntronBeds/Annotated_all_exons.txt.gz"
-    params:
-        leafcutter_path=config["Path_to_leafcutter_repo"]
-    shell:
-        """
-        {params.leafcutter_path}leafviz/gtf2leafcutter.pl -o Misc/AnnotatedIntronBeds/Annotated {input.gtf}
-        zcat {output.bedgz} > {output.bed}
-        """
-
-rule AnnotateSplicingTypes:
-    input:
-        SJout = "Alignments/SecondPass/{sample}/SJ.out.tab",
-        AnnotatedIntrons = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed"
-    output:
-        SJOutASBed = "Alignments/JunctionBeds/{sample}.junc",
-        SJout_AS_annotated = "Alignments/SecondPass/{sample}/SJ.out.annotated.tab"
-    shell:
-        """
-        awk -F'\\t' -v OFS='\\t' '$4=="2" {{print $1,$2-1,$3,".",$7,"-"}} $4=="1" {{print $1,$2-1,$3,".",$7,"+"}}' {input.SJout} | tee {output.SJOutASBed} | scripts/AnnotateSplicingType.py -I - -A {input.AnnotatedIntrons} -O {output.SJout_AS_annotated}
-        """
-
 rule faidx:
     input: config["Human_ref"]["genome_fasta"]
     output: config["Human_ref"]["genome_fasta"] + ".fai"
@@ -145,8 +118,8 @@ rule GetAnnotated_Donor_And_Acceptors:
         AnnotatedAccepterFa = "Misc/MotifScores/PWMs/AnnotatedAcceptors.fa"
     shell:
         """
-        awk -F'\\t' -v OFS='\\t' '$6=="+" {{print $1,$2-3,$2+6,".",".",$6}} $6=="-" {{print $1, $3-7, $3+2, $1"_"$2"_"$3"_"$6, ".", $6}}' {input.bed} | sort | uniq | bedtools sort -i - -faidx {input.fai} | bedtools getfasta -fi {input.fasta} -s -name+ -bed - > {output.AnnotatedDonorFa}
-        awk -F'\\t' -v OFS='\\t' '$6=="+" {{print $1,$3-21,$3+2,".",".",$6}} $6=="-" {{print $1, $2-3, $2+20, ".", ".", $6}}' {input.bed} | sort | uniq | bedtools sort -i - -faidx {input.fai} | bedtools getfasta -fi {input.fasta} -s -name+ -bed - > {output.AnnotatedAccepterFa}
+        awk -F'\\t' -v OFS='\\t' '$6=="+" {{print $1,$2-3,$2+6,".",".",$6}} $6=="-" {{print $1, $3-6, $3+3, $1"_"$2"_"$3"_"$6, ".", $6}}' {input.bed} | sort | uniq | bedtools sort -i - -faidx {input.fai} | bedtools getfasta -fi {input.fasta} -s -name+ -bed - > {output.AnnotatedDonorFa}
+        awk -F'\\t' -v OFS='\\t' '$6=="+" {{print $1,$3-20,$3+3,".",".",$6}} $6=="-" {{print $1, $2-3, $2+20, ".", ".", $6}}' {input.bed} | sort | uniq | bedtools sort -i - -faidx {input.fai} | bedtools getfasta -fi {input.fasta} -s -name+ -bed - > {output.AnnotatedAccepterFa}
         """
 
 rule ScoreDonorAndAcceptorPSSM:

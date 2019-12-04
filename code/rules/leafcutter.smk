@@ -1,3 +1,38 @@
+rule gtf2IntronsBed:
+    """
+    this rule uses a  useful script in the leafcutter repo parses out all
+    intron regions from a gtf. However, it is not correct bed format in that it
+    seems to be not half-closed interval format. In other words, the third
+    column is supposed to be non-inclusive so I had to manually subtract 1 from
+    the third column output of the script from the third column.
+    """
+    input:
+        gtf=config["Human_ref"]["genome_gtf"],
+    output:
+        bedgz = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed.gz",
+        bed = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed",
+        exonsbedgz = "Misc/AnnotatedIntronBeds/Annotated_all_exons.txt.gz"
+    params:
+        leafcutter_path=config["Path_to_leafcutter_repo"]
+    shell:
+        """
+        {params.leafcutter_path}leafviz/gtf2leafcutter.pl -o Misc/AnnotatedIntronBeds/Annotated {input.gtf}
+        zcat Misc/AnnotatedIntronBeds/Annotated_all_introns.bed.gz | awk -F'\\t' -v OFS='\\t' '{{print $1,$2,$3-1,$4,$5,$6}}' > {output.bed}
+        cat {output.bed} | gzip - > {output.bedgz}
+        """
+
+rule AnnotateSplicingTypesAndCreateJuncFiles:
+    input:
+        SJout = "Alignments/SecondPass/{sample}/SJ.out.tab",
+        AnnotatedIntrons = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed"
+    output:
+        SJOutASBed = "Alignments/JunctionBeds/{sample}.junc",
+        SJout_AS_annotated = "Alignments/SecondPass/{sample}/SJ.out.annotated.tab"
+    shell:
+        """
+        awk -F'\\t' -v OFS='\\t' '$4=="2" {{print $1,$2-1,$3,".",$7,"-"}} $4=="1" {{print $1,$2-1,$3,".",$7,"+"}}' {input.SJout} | tee {output.SJOutASBed} | scripts/AnnotateSplicingType.py -I - -A {input.AnnotatedIntrons} -O {output.SJout_AS_annotated}
+        """
+
 rule leacutter_cluster:
     input:
         expand("Alignments/JunctionBeds/{sample}.junc", sample=SampleList)
