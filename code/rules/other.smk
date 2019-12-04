@@ -83,3 +83,97 @@ rule CountsPerBam:
         """
         bash scripts/CountReadsPerBam.sh {output} {input} 2> {log}
         """
+
+rule MergedIntronList:
+    input:
+        SJout_AS_annotated = expand( "Alignments/SecondPass/{sample}/SJ.out.annotated.tab", sample=SampleList),
+        fai =config["Human_ref"]["genome_fasta"] + ".fai"
+    output:
+        "Misc/FullIntronList.bed"
+    shell:
+        """
+        cat {input.SJout_AS_annotated} | awk -F'\\t' -v OFS='\\t' '{{ print $1,$2,$3,$1"_"$2"_"$3"_"$6, "." ,$6,$7 }}' | sort | uniq | bedtools sort -i - -faidx {input.fai} > {output}
+        """
+
+rule GetMergedIntronDonorAndAcceptorSequences:
+    """
+    Will be used later to score donor, acceptor, and branch motifs
+    """
+    input:
+        FullIntronList = "Misc/FullIntronList.bed",
+        fasta=config["Human_ref"]["genome_fasta"],
+    output:
+        DonorFasta = "Misc/FullIntronList.Donors.fasta",
+        BranchRegionFasta = "Misc/FullIntronList.BranchRegion.fasta",
+        AcceptorFasta = "Misc/FullIntronList.Acceptors.fasta"
+    shell:
+        """
+        awk -F'\\t' -v OFS='\\t' '$6=="+" {{print $1,$2-3,$2+6,$4,$5,$6}} $6=="-" {{print $1, $3-6, $3+3, $4, $5, $6}}' {input.FullIntronList} | bedtools getfasta -fi {input.fasta} -s -name -bed - > {output.DonorFasta}
+        awk -F'\\t' -v OFS='\\t' '$6=="+" {{print $1,$3-100,$3,$4,$5,$6}} $6=="-" {{print $1, $2, $2+100, $4, $5, $6}}' {input.FullIntronList} | bedtools getfasta -fi {input.fasta} -s -name -bed - > {output.BranchRegionFasta}
+        awk -F'\\t' -v OFS='\\t' '$6=="+" {{print $1,$3-20,$3+3,$4,$5,$6}} $6=="-" {{print $1, $2-3, $2+20, $4, $5, $6}}' {input.FullIntronList} | bedtools getfasta -fi {input.fasta} -s -name -bed - > {output.AcceptorFasta}
+        """
+
+rule ScoreBranchpoints:
+    input:
+        BranchRegionFasta = "Misc/FullIntronList.BranchRegion.fasta",
+    output:
+        Branchpoints = "Misc/MotifScores/Branchpoints.txt"
+    params:
+        bp_svm_script = config["Path_to_svm_bpfinder"]
+    shell:
+        """
+        {params.bp_svm_script} -i {input.BranchRegionFasta} -s Hsap > {output}
+        """
+
+rule CalculateBestBpPerIntron:
+    input:
+        Branchpoints = "Misc/MotifScores/Branchpoints.txt"
+    output:
+        Branchpoints = "Misc/MotifScores/Branchpoints.bestPerIntron.txt"
+    shell:
+        """
+        perl scripts/calculate_best_BP_per_intron.pl < {input.Branchpoints} > {output.Branchpoints}
+        """
+
+rule GetAnnotated_Donor_And_Acceptors:
+    input:
+        bed = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed",
+        fasta=config["Human_ref"]["genome_fasta"],
+        fai =config["Human_ref"]["genome_fasta"] + ".fai"
+    output:
+        AnnotatedDonorFa = "Misc/MotifScores/PWMs/AnnotatedDonors.fa",
+        AnnotatedAccepterFa = "Misc/MotifScores/PWMs/AnnotatedAcceptors.fa"
+    shell:
+        """
+        awk -F'\\t' -v OFS='\\t' '$6=="+" {{print $1,$2-3,$2+6,".",".",$6}} $6=="-" {{print $1, $3-7, $3+2, $1"_"$2"_"$3"_"$6, ".", $6}}' {input.bed} | sort | uniq | bedtools sort -i - -faidx {input.fai} | bedtools getfasta -fi {input.fasta} -s -name+ -bed - > {output.AnnotatedDonorFa}
+        awk -F'\\t' -v OFS='\\t' '$6=="+" {{print $1,$3-21,$3+2,".",".",$6}} $6=="-" {{print $1, $2-3, $2+20, ".", ".", $6}}' {input.bed} | sort | uniq | bedtools sort -i - -faidx {input.fai} | bedtools getfasta -fi {input.fasta} -s -name+ -bed - > {output.AnnotatedAccepterFa}
+        """
+
+rule ScoreDonorAndAcceptorPSSM:
+    input:
+        AnnotatedDonorFa = "Misc/MotifScores/PWMs/AnnotatedDonors.fa",
+        AnnotatedAccepterFa = "Misc/MotifScores/PWMs/AnnotatedAcceptors.fa",
+        DonorFasta = "Misc/FullIntronList.Donors.fasta",
+        AcceptorFasta = "Misc/FullIntronList.Acceptors.fasta"
+    output:
+        DonorsScored = "Misc/MotifScores/Donors.txt",
+        AcceptorsScored = "Misc/MotifScores/Acceptors.txt"
+    shell:
+        """
+        python3 scripts/CreateDonorAndAcceptorPWM.py {input.AnnotatedDonorFa} {input.AnnotatedAccepterFa} {input.DonorFasta} {input.AcceptorFasta} {output.DonorsScored} {output.AcceptorsScored}
+        """
+
+rule MergeIntronFeatureScores:
+    input:
+        DonorsScored = "Misc/MotifScores/Donors.txt",
+        AcceptorsScored = "Misc/MotifScores/Acceptors.txt",
+        Branchpoints = "Misc/MotifScores/Branchpoints.bestPerIntron.txt",
+        IntronList = "Misc/FullIntronList.bed"
+    output:
+        "../output/IntronFeatures.txt.gz"
+    shell:
+        """
+        Rscript scripts/MergeIntronFeatures.R
+        gzip ../output/IntronFeatures.txt 
+        """
+

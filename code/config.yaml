@@ -11,6 +11,9 @@ Human_ref:
     genome_gtf: "/project2/gilad/bjf79/genomes/GRCh38_Ensembl/Annotations/Homo_sapiens.GRCh38.94.chr.gtf"
     genome_dir: "/project2/gilad/bjf79/genomes/GRCh38_Ensembl/STAR_genomedir/"
 
+
+## DEPENDENCIES NOT IN CONDA ENV
+
 # Install leafcutter in R. Also, clone the leafcutter repository from github
 # https://github.com/davidaknowles/leafcutter
 # and add the repository's path here to allow snakemake to find the sripts in the repo.
@@ -24,3 +27,5 @@ leafcutter_ds_optional_params: "-i 3"
 # https://sourceforge.net/projects/subread/files/subread-1.6.4/
 # and add the featureCounts executable path here
 Path_to_subread_feature_counts_executable: "~/software/subread-1.6.3-Linux-x86_64/bin/featureCounts"
+
+Path_to_svm_bpfinder: "/project2/gilad/bjf79_project1/software/svm-bpfinder/svm_bpfinder.py"
