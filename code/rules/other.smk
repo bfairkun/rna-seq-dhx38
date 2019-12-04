@@ -3,7 +3,8 @@ rule gtf2IntronsBed:
         gtf=config["Human_ref"]["genome_gtf"],
     output:
         bedgz = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed.gz",
-        bed = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed"
+        bed = "Misc/AnnotatedIntronBeds/Annotated_all_introns.bed",
+        exonsbedgz = "Misc/AnnotatedIntronBeds/Annotated_all_exons.txt.gz"
     params:
         leafcutter_path=config["Path_to_leafcutter_repo"]
     shell:

@@ -17,8 +17,8 @@ Human_ref:
 Path_to_leafcutter_repo: "~/software/leafcutter/"
 
 # A file defining the contrasts for differential splicing
-leafcutter_groupfile: "../data/LeafcutterGroups.txt"
-leafcutter_ds_optional_params: ""
+leafcutter_groupfile: "../data/leafcutter.groups.txt"
+leafcutter_ds_optional_params: "-i 3"
 
 # Install featureCounts
 # https://sourceforge.net/projects/subread/files/subread-1.6.4/

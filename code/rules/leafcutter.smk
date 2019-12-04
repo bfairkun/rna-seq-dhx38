@@ -18,11 +18,14 @@ rule leacutter_cluster:
 rule leafcutter_ds:
     input:
         numers = "leafcutter/leafcutter_perind_numers.counts.gz",
-        groupfile = config["leafcutter_groupfile"]
+        groupfile = config["leafcutter_groupfile"],
+        exonsbedgz = "Misc/AnnotatedIntronBeds/Annotated_all_exons.txt.gz"
     output:
         "leafcutter/differential_splicing/leafcutter_effect_sizes.txt",
         "leafcutter/differential_splicing/leafcutter_cluster_significance.txt"
     threads: 4
+    conda:
+        "../envs/leafcutter.yaml"
     params:
         leafcutter_path=config["Path_to_leafcutter_repo"],
         outputprefix = "-o leafcutter/differential_splicing/leafcutter",
@@ -32,5 +35,5 @@ rule leafcutter_ds:
     shell:
         """
         mkdir -p leafcutter/differential_splicing/
-        {params.leafcutter_path}scripts/leafcutter_ds.R -p {threads} {params.outputprefix} {params.extra_params} {input.numers} {input.groupfile} &> {log}
+        /software/R-3.4.3-el7-x86_64/bin/Rscript {params.leafcutter_path}scripts/leafcutter_ds.R -p {threads} -e {input.exonsbedgz} {params.outputprefix} {params.extra_params} {input.numers} {input.groupfile} &> {log}
         """

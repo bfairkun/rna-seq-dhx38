@@ -1,0 +1,6 @@
+Healthy_1	H
+Healthy_2	H
+Healthy_3	H
+Affected_1	A
+Affected_2	A
+Affected_3	A
