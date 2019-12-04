@@ -1,0 +1,113 @@
+---
+title: "Untitled"
+author: "Benjamin Fair"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+## Introduction
+
+Exploratory differential expression analysis comparing RNA-seq from iPSC derived neurons from healthy control vs patient with biallelic mutations in DHX38 that may affect splicing and gene expression. Some things I want to check is what kinds of gene sets are differentially spliced, as well as if there are certain intron features associated with differentially spliced introns (weaker 5'ss motif perhaps)
+
+## Analysis
+
+Raw RNA-seq data has been aligned and collapsed into leafcutter splice junction count table (rows of introns, columns of samples, each cell is exonic read counts) using code in `code` section of this repo. Also, leafcutter has been run to identify differentially spliced clusters of splice junctions, creating output files in `output`. Here I will explore that output and maybe some other exploratory analyses.
+
+First, load necessary libraries
+```{r}
+library(tidyverse)
+library(knitr)
+library(edgeR)
+library(biomaRt)
+library("clusterProfiler")
+library("org.Hs.eg.db")
+library(enrichplot)
+```
+
+load in leafcutter output
+
+```{r}
+sig <- read.table("../output/differential_splicing_significance.txt.gz", sep='\t', header=T)
+
+head(sig) %>% kable()
+
+effect_sizes <- read.table("../output/differential_splicing_effect_sizes.txt.gz", sep='\t', header=T)
+
+head(effect_sizes) %>% kable()
+```
+
+Get a sense of number of intron clusters tested, number significant, etc
+
+```{r}
+#how many clusters tested ("Success")
+table(sig$status)
+
+#histogram of Pvalues
+hist(sig$p)
+
+#how many significant (p.adjust < 0.1)
+table(sig$p.adjust<0.1)
+
+# merge significance and cluster tables
+leafcutter.merged <- effect_sizes %>%
+  mutate(cluster=gsub("(.+?:).+?:.+?:(clu.+?)", "\\1\\2", intron, perl=T)) %>%
+  mutate(junc_id=gsub("(.+?:.+?:.+?):clu.+", "\\1", intron, perl=T)) %>%
+  left_join(sig, by="cluster")
+
+# volcano plot of cluster-pvalues and largest within-cluster-delta-psi
+leafcutter.merged %>%
+  mutate(abs.deltapsi = abs(deltapsi)) %>%
+  group_by(cluster) %>% 
+  top_n(n=1, abs.deltapsi) %>%
+  mutate(sig=p.adjust<0.05) %>%
+  ggplot(aes(x=deltapsi, y=-log10(p), color=sig)) +
+    geom_point(alpha=0.05) +
+    theme_bw()
+```
+
+let's do a gsea to see what genes have differentially spliced clusters of introns. For this, we need an ordered gene list, with each gene appearing once. Since the biological question related to this is what are the genes or gene sets that are getting disrupted to cause the organismal phenotype, i think it is important to consider not just significance (P-value) but also effect size, perhaps as measured by delta-psi. Since significane and effect size can be quite different in a splicing analysis (see volcano plot above) because of low read counts on some junctions, let's first filter out all non-significant splicing changes (to filter out the noisy effect size estimates) Then let's make an ordered list based on the maximum delta-PSI for each gene.
+
+```{r}
+#let's use a fairly permissive significance threshold to be more inclusive. how about FDR>0.3
+hist(leafcutter.merged$p.adjust)
+
+#filter and get max delta-psi for each gene. Keep in mind we need to filter out non-valid genes for the clusters or introns that have more than one gene listed in the genes column
+OrderedGeneList <- leafcutter.merged %>%
+  filter(p.adjust<0.3) %>%
+  mutate(abs.deltapsi = abs(deltapsi)) %>%
+  group_by(genes) %>% 
+  top_n(n=1, abs.deltapsi) %>%
+  filter(!grepl(",",genes)) %>%
+  arrange(desc(abs.deltapsi)) %>%
+  dplyr::select(genes, abs.deltapsi) %>%
+  deframe()
+
+head(OrderedGeneList)
+
+gsea.results <- gseGO(OrderedGeneList, ont="ALL", OrgDb=org.Hs.eg.db, keyType='SYMBOL', nPerm=100000)
+
+gsea.results.df <- as.data.frame(gsea.results)
+
+dim(gsea.results.df)
+
+```
+
+No significant GSEA results at the default P.adjust<0.5 threshold.
+
+Ok, besides identifying the genes (or kinds of genes) through which the disease phenotype is potentially mediated, maybe the other questions I should be asking is what kinds of intron features distinguish differentially spliced introns, which may be more enlightening about general splicing mechanisms in these DHX38 mutants.
+
+## TO DO
+
+- what types of alternative splicing are more differentially spliced (alt 5'ss, exon-skipping, etc)
+
+- splice site motif analysis
+
+## Conclusions
+
+

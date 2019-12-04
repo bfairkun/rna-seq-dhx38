@@ -1,0 +1,1441 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Benjamin Fair" />
+
+<meta name="date" content="2019-12-03" />
+
+<title>Untitled</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myproject</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">Untitled</h1>
+<h4 class="author">Benjamin Fair</h4>
+<h4 class="date">December 03, 2019</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2019-12-03
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>rna-seq-dhx38/analysis/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.5.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20191126code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20191126)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20191126code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20191126)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree0f4f9122fee8e7f4727e1ebae9fbcaf8084d46c8targetblank0f4f912a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/0f4f9122fee8e7f4727e1ebae9fbcaf8084d46c8" target="_blank">0f4f912</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree0f4f9122fee8e7f4727e1ebae9fbcaf8084d46c8targetblank0f4f912a" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
+
+Untracked files:
+    Untracked:  analysis/20191203_DiffExpression.Rmd
+    Untracked:  analysis/20191203_DifferentialSplicing.Rmd
+    Untracked:  output/GeneExpression.DE.tab
+    Untracked:  output/GeneExpression.gsea.tab
+
+Unstaged changes:
+    Modified:   _workflowr.yml
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>Exploratory differential expression analysis comparing RNA-seq from iPSC derived neurons from healthy control vs patient with biallelic mutations in DHX38 that may affect splicing and gene expression. In particular, worth checking whether DHX38 is differentially expressed.</p>
+</div>
+<div id="analysis" class="section level2">
+<h2>Analysis</h2>
+<p>Raw RNA-seq data has been aligned and collapsed into gene count table (rows of genes, columns of samples, each cell is exonic read counts) using code in <code>code</code> section of this repo, creating a count matrix in <code>output</code>. Here I will process that data with edgeR approach that I have used previously.</p>
+<p>First, load necessary libraries</p>
+<pre class="r"><code>library(tidyverse)
+library(knitr)
+library(edgeR)
+library(corrplot)
+library(gplots)
+library(biomaRt)
+library(&quot;clusterProfiler&quot;)
+library(&quot;org.Hs.eg.db&quot;)
+library(enrichplot)</code></pre>
+<p>And read in the count table</p>
+<pre class="r"><code>CountTable &lt;- read.table(&#39;../output/GeneExpressionCountTable.subread.txt.gz&#39;, header=T, check.names=FALSE, skip=1)
+
+
+CountTable.matrix &lt;- CountTable %&gt;%
+  dplyr::select(-c(&quot;Chr&quot;, &quot;Start&quot;, &quot;End&quot;, &quot;Strand&quot;, &quot;Length&quot;)) %&gt;%
+  column_to_rownames(&quot;Geneid&quot;) %&gt;% as.matrix()
+
+#Preview table
+kable(CountTable.matrix[1:10,])</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Affected_3</th>
+<th align="right">Healthy_2</th>
+<th align="right">Affected_1</th>
+<th align="right">Affected_2</th>
+<th align="right">Healthy_1</th>
+<th align="right">Healthy_3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ENSG00000223972</td>
+<td align="right">0</td>
+<td align="right">3</td>
+<td align="right">2</td>
+<td align="right">1</td>
+<td align="right">0</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td>ENSG00000227232</td>
+<td align="right">36</td>
+<td align="right">28</td>
+<td align="right">59</td>
+<td align="right">57</td>
+<td align="right">32</td>
+<td align="right">38</td>
+</tr>
+<tr class="odd">
+<td>ENSG00000278267</td>
+<td align="right">11</td>
+<td align="right">9</td>
+<td align="right">13</td>
+<td align="right">12</td>
+<td align="right">14</td>
+<td align="right">18</td>
+</tr>
+<tr class="even">
+<td>ENSG00000243485</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>ENSG00000284332</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>ENSG00000237613</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>ENSG00000268020</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>ENSG00000240361</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="odd">
+<td>ENSG00000186092</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+<tr class="even">
+<td>ENSG00000238009</td>
+<td align="right">2</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+<td align="right">0</td>
+</tr>
+</tbody>
+</table>
+<p>Plot total exonic gene counts per sample</p>
+<pre class="r"><code>CountTable.matrix %&gt;% colSums() %&gt;% as.data.frame() %&gt;%
+  rownames_to_column(&quot;Sample&quot;) %&gt;%
+  ggplot(aes(x=Sample, y=./1000000)) +
+  geom_col() +
+  ylab(&quot;Exonic read count (Millions)&quot;) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Check correlations between samples</p>
+<pre class="r"><code># CountTable to CountsPerMillion
+cpm &lt;- cpm(CountTable.matrix, log=TRUE, prior.count=0.5)
+kable(cpm[1:10,])</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Affected_3</th>
+<th align="right">Healthy_2</th>
+<th align="right">Affected_1</th>
+<th align="right">Affected_2</th>
+<th align="right">Healthy_1</th>
+<th align="right">Healthy_3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ENSG00000223972</td>
+<td align="right">-5.660565</td>
+<td align="right">-2.6130864</td>
+<td align="right">-3.528788</td>
+<td align="right">-4.317617</td>
+<td align="right">-5.6605654</td>
+<td align="right">-3.9519176</td>
+</tr>
+<tr class="even">
+<td>ENSG00000227232</td>
+<td align="right">0.384709</td>
+<td align="right">0.4444315</td>
+<td align="right">0.994584</td>
+<td align="right">0.808530</td>
+<td align="right">0.8661057</td>
+<td align="right">0.7857677</td>
+</tr>
+<tr class="odd">
+<td>ENSG00000278267</td>
+<td align="right">-1.276970</td>
+<td align="right">-1.1494150</td>
+<td align="right">-1.137837</td>
+<td align="right">-1.379587</td>
+<td align="right">-0.3065598</td>
+<td align="right">-0.2739689</td>
+</tr>
+<tr class="even">
+<td>ENSG00000243485</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.660565</td>
+<td align="right">-3.634338</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.6605654</td>
+</tr>
+<tr class="odd">
+<td>ENSG00000284332</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.6605654</td>
+</tr>
+<tr class="even">
+<td>ENSG00000237613</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.6605654</td>
+</tr>
+<tr class="odd">
+<td>ENSG00000268020</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.6605654</td>
+</tr>
+<tr class="even">
+<td>ENSG00000240361</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.6605654</td>
+</tr>
+<tr class="odd">
+<td>ENSG00000186092</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.6605654</td>
+</tr>
+<tr class="even">
+<td>ENSG00000238009</td>
+<td align="right">-3.454751</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.660565</td>
+<td align="right">-5.6605654</td>
+<td align="right">-5.6605654</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#plot cpm
+median_log2_cpm &lt;- apply(cpm, 1, median)
+hist(median_log2_cpm)</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># check correlations between samples
+CorMat &lt;- cor(cpm)
+kable(CorMat)</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">Affected_3</th>
+<th align="right">Healthy_2</th>
+<th align="right">Affected_1</th>
+<th align="right">Affected_2</th>
+<th align="right">Healthy_1</th>
+<th align="right">Healthy_3</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Affected_3</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9485111</td>
+<td align="right">0.9698672</td>
+<td align="right">0.9708302</td>
+<td align="right">0.9533155</td>
+<td align="right">0.9456574</td>
+</tr>
+<tr class="even">
+<td>Healthy_2</td>
+<td align="right">0.9485111</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9580786</td>
+<td align="right">0.9588884</td>
+<td align="right">0.9602608</td>
+<td align="right">0.9735372</td>
+</tr>
+<tr class="odd">
+<td>Affected_1</td>
+<td align="right">0.9698672</td>
+<td align="right">0.9580786</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9798980</td>
+<td align="right">0.9476967</td>
+<td align="right">0.9585812</td>
+</tr>
+<tr class="even">
+<td>Affected_2</td>
+<td align="right">0.9708302</td>
+<td align="right">0.9588884</td>
+<td align="right">0.9798980</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9482039</td>
+<td align="right">0.9590783</td>
+</tr>
+<tr class="odd">
+<td>Healthy_1</td>
+<td align="right">0.9533155</td>
+<td align="right">0.9602608</td>
+<td align="right">0.9476967</td>
+<td align="right">0.9482039</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9566276</td>
+</tr>
+<tr class="even">
+<td>Healthy_3</td>
+<td align="right">0.9456574</td>
+<td align="right">0.9735372</td>
+<td align="right">0.9585812</td>
+<td align="right">0.9590783</td>
+<td align="right">0.9566276</td>
+<td align="right">1.0000000</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Plot
+heatmap.2(CorMat, trace=&quot;none&quot;)</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Healthy_1 is sort of an outlier sample, and it is probably because it has the least reads. In my experience, this number of reads is still quite high, and the correlations are quite high, so I am not yet concerned. I think it will look like less of an outlier once we filter out the extremely lowly expressed genes that basically are just represented by the 0.5 pseudocount I added.</p>
+<pre class="r"><code># Pick a cutoff for lowly expressed genes to exclude
+hist(median_log2_cpm)
+expr_cutoff &lt;- 2
+abline(v = expr_cutoff, col = &quot;red&quot;, lwd = 3)</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#How many genes pass this threshold
+sum(median_log2_cpm &gt; expr_cutoff)</code></pre>
+<pre><code>[1] 11730</code></pre>
+<pre class="r"><code>CountTable.matrix.filtered &lt;- CountTable.matrix[median_log2_cpm &gt; expr_cutoff, ]
+
+# Recalculate cpm from filtered count table
+cpm &lt;- cpm(CountTable.matrix.filtered, log=TRUE, prior.count=0.5)
+
+# look at correlations from filtered cpm matrix
+cor(cpm) %&gt;%
+heatmap.2(., trace=&quot;none&quot;)</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># Also look at similarity with MDS plot
+plotMDS(cpm)</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-5-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>plotMDS(cpm, dim=c(3,4))</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-5-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>samples primarily segregate by condition (healthy vs affected) as expected</p>
+<p>Now start prepping data for differential expression analysis</p>
+<pre class="r"><code>group &lt;- substr(colnames(CountTable.matrix.filtered), 1, 1)
+
+# A for affected, H for healthy
+group</code></pre>
+<pre><code>[1] &quot;A&quot; &quot;H&quot; &quot;A&quot; &quot;A&quot; &quot;H&quot; &quot;H&quot;</code></pre>
+<pre class="r"><code># y is a DGELIst object contains count table and other metadata
+y &lt;- DGEList(counts = CountTable.matrix.filtered, group = group)
+
+# calculate normalization factors using default TMM method which more accurately scales samples with different library sizes, for example while considering that highly expressed genes between conditions can have undesired effects if just using simple CountsPerMillion normalization.
+
+y &lt;- calcNormFactors(y)
+y$samples %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="left">group</th>
+<th align="right">lib.size</th>
+<th align="right">norm.factors</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>Affected_3</td>
+<td align="left">A</td>
+<td align="right">27530199</td>
+<td align="right">1.0138568</td>
+</tr>
+<tr class="even">
+<td>Healthy_2</td>
+<td align="left">H</td>
+<td align="right">20697090</td>
+<td align="right">0.9721993</td>
+</tr>
+<tr class="odd">
+<td>Affected_1</td>
+<td align="left">A</td>
+<td align="right">29525851</td>
+<td align="right">1.0289830</td>
+</tr>
+<tr class="even">
+<td>Affected_2</td>
+<td align="left">A</td>
+<td align="right">32513479</td>
+<td align="right">1.0053212</td>
+</tr>
+<tr class="odd">
+<td>Healthy_1</td>
+<td align="left">H</td>
+<td align="right">17490838</td>
+<td align="right">1.0187010</td>
+</tr>
+<tr class="even">
+<td>Healthy_3</td>
+<td align="left">H</td>
+<td align="right">22124071</td>
+<td align="right">0.9627384</td>
+</tr>
+</tbody>
+</table>
+<p>Now estimate common, trended, and tagwise dispersion, and test for differential expression</p>
+<pre class="r"><code>#estimate dispersion, common, trended, and tag-wise (a combination of gene-specific dispersion and trend)
+y &lt;- estimateDisp(y)</code></pre>
+<pre><code>Design matrix not provided. Switch to the classic mode.</code></pre>
+<pre class="r"><code>sqrt(y$common.dispersion) # biological coefficient of variation</code></pre>
+<pre><code>[1] 0.1426326</code></pre>
+<pre class="r"><code>#Plot dispersions
+plotBCV(y)</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># by default, the tagwise dispersion is used for DE testing.
+# Perform testing
+et &lt;- exactTest(y, pair=c(&quot;H&quot;,&quot;A&quot;))
+results_edgeR &lt;- topTags(et, n = nrow(CountTable.matrix.filtered), sort.by = &quot;none&quot;)
+
+head(results_edgeR$table) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th></th>
+<th align="right">logFC</th>
+<th align="right">logCPM</th>
+<th align="right">PValue</th>
+<th align="right">FDR</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td>ENSG00000279457</td>
+<td align="right">-0.0019184</td>
+<td align="right">2.294509</td>
+<td align="right">1.0000000</td>
+<td align="right">1.0000000</td>
+</tr>
+<tr class="even">
+<td>ENSG00000248527</td>
+<td align="right">-1.4384558</td>
+<td align="right">3.327765</td>
+<td align="right">0.0005842</td>
+<td align="right">0.0028015</td>
+</tr>
+<tr class="odd">
+<td>ENSG00000228794</td>
+<td align="right">0.0824910</td>
+<td align="right">3.223395</td>
+<td align="right">0.6820905</td>
+<td align="right">0.7909175</td>
+</tr>
+<tr class="even">
+<td>ENSG00000230699</td>
+<td align="right">0.5618857</td>
+<td align="right">2.490896</td>
+<td align="right">0.0208296</td>
+<td align="right">0.0580221</td>
+</tr>
+<tr class="odd">
+<td>ENSG00000188976</td>
+<td align="right">-0.1738289</td>
+<td align="right">6.991208</td>
+<td align="right">0.2377004</td>
+<td align="right">0.3809051</td>
+</tr>
+<tr class="even">
+<td>ENSG00000187961</td>
+<td align="right">-0.0084449</td>
+<td align="right">4.092404</td>
+<td align="right">0.9652432</td>
+<td align="right">0.9806255</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#histogram of nominal P-vals
+hist(results_edgeR$table$PValue)</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-7-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code># how many genes below FDR threshold
+sum(results_edgeR$table$FDR &lt; .1)</code></pre>
+<pre><code>[1] 4847</code></pre>
+<pre class="r"><code>#MA plot showing FDR&lt;0.1
+plotSmear(et, de.tags = rownames(results_edgeR)[results_edgeR$table$FDR &lt; .01])
+abline(h = c(-2, 2), col = &quot;blue&quot;)</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-7-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Ok we did differential testing. Now let’s explore the results</p>
+<p>First add common gene names to the results table</p>
+<pre class="r"><code>#Use biomart to get common gene names and ensembl IDs
+human_mart &lt;- useMart(&quot;ensembl&quot;, dataset=&quot;hsapiens_gene_ensembl&quot;)
+
+MyBioMartQuery &lt;- getBM(attributes = c(&quot;ensembl_gene_id&quot;,&quot;external_gene_name&quot;, &quot;description&quot;), mart=human_mart, filters=&quot;ensembl_gene_id&quot;, values=rownames(results_edgeR))
+
+results.more.descriptive &lt;- results_edgeR$table %&gt;%
+  rownames_to_column(&quot;ensembl_gene_id&quot;) %&gt;%
+  left_join(MyBioMartQuery, by=&quot;ensembl_gene_id&quot;)
+
+head(results.more.descriptive) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ensembl_gene_id</th>
+<th align="right">logFC</th>
+<th align="right">logCPM</th>
+<th align="right">PValue</th>
+<th align="right">FDR</th>
+<th align="left">external_gene_name</th>
+<th align="left">description</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ENSG00000279457</td>
+<td align="right">-0.0019184</td>
+<td align="right">2.294509</td>
+<td align="right">1.0000000</td>
+<td align="right">1.0000000</td>
+<td align="left">WASH9P</td>
+<td align="left">WAS protein family homolog 9, pseudogene [Source:HGNC Symbol;Acc:HGNC:53981]</td>
+</tr>
+<tr class="even">
+<td align="left">ENSG00000248527</td>
+<td align="right">-1.4384558</td>
+<td align="right">3.327765</td>
+<td align="right">0.0005842</td>
+<td align="right">0.0028015</td>
+<td align="left">MTATP6P1</td>
+<td align="left">MT-ATP6 pseudogene 1 [Source:HGNC Symbol;Acc:HGNC:44575]</td>
+</tr>
+<tr class="odd">
+<td align="left">ENSG00000228794</td>
+<td align="right">0.0824910</td>
+<td align="right">3.223395</td>
+<td align="right">0.6820905</td>
+<td align="right">0.7909175</td>
+<td align="left">LINC01128</td>
+<td align="left">long intergenic non-protein coding RNA 1128 [Source:HGNC Symbol;Acc:HGNC:49377]</td>
+</tr>
+<tr class="even">
+<td align="left">ENSG00000230699</td>
+<td align="right">0.5618857</td>
+<td align="right">2.490896</td>
+<td align="right">0.0208296</td>
+<td align="right">0.0580221</td>
+<td align="left">AL645608.2</td>
+<td align="left">novel transcript</td>
+</tr>
+<tr class="odd">
+<td align="left">ENSG00000188976</td>
+<td align="right">-0.1738289</td>
+<td align="right">6.991208</td>
+<td align="right">0.2377004</td>
+<td align="right">0.3809051</td>
+<td align="left">NOC2L</td>
+<td align="left">NOC2 like nucleolar associated transcriptional repressor [Source:HGNC Symbol;Acc:HGNC:24517]</td>
+</tr>
+<tr class="even">
+<td align="left">ENSG00000187961</td>
+<td align="right">-0.0084449</td>
+<td align="right">4.092404</td>
+<td align="right">0.9652432</td>
+<td align="right">0.9806255</td>
+<td align="left">KLHL17</td>
+<td align="left">kelch like family member 17 [Source:HGNC Symbol;Acc:HGNC:24023]</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>results.more.descriptive %&gt;%
+  filter(external_gene_name==&quot;DHX38&quot;)</code></pre>
+<pre><code>  ensembl_gene_id      logFC   logCPM    PValue       FDR external_gene_name
+1 ENSG00000140829 -0.1891905 7.023741 0.1966757 0.3311334              DHX38
+                                               description
+1 DEAH-box helicase 38 [Source:HGNC Symbol;Acc:HGNC:17211]</code></pre>
+<p>Ok good. DHX38 is not differentially expressed. So if the alleles have some affect on splicing through DHX38, is not likely through modulating expression of DHX38 levels, but rather altering function.</p>
+<p>Let’s make some plots to get to know significance testing results a little bit more… Keep in mind we don’t know much about the types of replicates these are (technical, versus biological split before differentiation, split after differentiation, etc), and that all these are from a single healthy and a single affected patient.</p>
+<p>Volcano plot:</p>
+<pre class="r"><code>results.more.descriptive %&gt;%
+  mutate(Significance=FDR&lt;0.1) %&gt;%
+  ggplot(aes(x=logFC, y=-log10(PValue), color=Significance)) +
+  geom_point(alpha=0.2) +
+  theme_bw()</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Plot of original results of a significant gene. Useful to check polarization of the logFC values (I think I set up the <code>exactTest</code> function to be such that positive logFC means more highly expressed in affected, but let’s double check that)</p>
+<pre class="r"><code>Top5DE_Genes &lt;- results.more.descriptive %&gt;%
+  arrange(FDR) %&gt;% head(5) %&gt;%
+  pull(ensembl_gene_id)
+
+results.more.descriptive %&gt;%
+  filter(ensembl_gene_id %in% Top5DE_Genes) %&gt;%
+  dplyr::select(ensembl_gene_id, external_gene_name, logFC) %&gt;%
+  kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">ensembl_gene_id</th>
+<th align="left">external_gene_name</th>
+<th align="right">logFC</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">ENSG00000018625</td>
+<td align="left">ATP1A2</td>
+<td align="right">8.652522</td>
+</tr>
+<tr class="even">
+<td align="left">ENSG00000044524</td>
+<td align="left">EPHA3</td>
+<td align="right">-6.178116</td>
+</tr>
+<tr class="odd">
+<td align="left">ENSG00000096696</td>
+<td align="left">DSP</td>
+<td align="right">11.571066</td>
+</tr>
+<tr class="even">
+<td align="left">ENSG00000196569</td>
+<td align="left">LAMA2</td>
+<td align="right">7.873084</td>
+</tr>
+<tr class="odd">
+<td align="left">ENSG00000198300</td>
+<td align="left">PEG3</td>
+<td align="right">13.352063</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>cpm[Top5DE_Genes,] %&gt;%
+  as.data.frame() %&gt;%
+  rownames_to_column(&quot;ensembl_gene_id&quot;) %&gt;%
+  gather(key=&quot;sample&quot;, value=&quot;log2cpm&quot;, -ensembl_gene_id) %&gt;% 
+  ggplot(aes(x=sample, y=log2cpm)) +
+  geom_col() +
+  facet_wrap(~ensembl_gene_id) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Ok correct, positive FC means higher expressed in affected samples. Now let’s do gene set enrichment analysis (GSEA) to see which types of gene categories are enriched for differentially expressed genes. For this we need an ordered list of genes. We could use absolute value of log-fold change, or maybe -log10(Pvalue). Judging from the volcano plot I’d guess the results would be virtually identical either way</p>
+<pre class="r"><code>#had to add very small number to Pvalue because very significant genes have Pvalues that are 0
+gsea.results &lt;- results.more.descriptive %&gt;%
+  mutate(RankingMetric = -log10(PValue+1E-300)) %&gt;%
+  arrange(desc(RankingMetric)) %&gt;%
+  dplyr::select(ensembl_gene_id, RankingMetric) %&gt;%
+  deframe() %&gt;%
+  gseGO(ont=&quot;ALL&quot;, OrgDb=org.Hs.eg.db, keyType=&#39;ENSEMBL&#39;, nPerm=100000)</code></pre>
+<p>Now let’s explore the GSEA results</p>
+<pre class="r"><code>gsea.results.df &lt;- as.data.frame(gsea.results)
+gsea.results.df %&gt;% 
+  group_by(ONTOLOGY) %&gt;%
+  top_n(n = -5, wt = p.adjust) %&gt;%
+  ggplot(aes(x=enrichmentScore, y=Description, color=p.adjust, size=setSize)) +
+  geom_point() +
+  facet_grid(ONTOLOGY~., scales = &quot;free&quot;) +
+  scale_colour_gradient(low=&quot;red&quot;, high=&quot;black&quot;) +
+  xlab(&quot;Enrichment&quot;) +
+  scale_y_discrete(labels = function(x) lapply(strwrap(x, width = 60, simplify = FALSE), paste, collapse=&quot;\n&quot;)) +
+  labs(color = &quot;Adjusted P-value&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>gsea.results.df %&gt;%
+  arrange(p.adjust) %&gt;% head(10) %&gt;%
+  dplyr::select(ID, Description, ONTOLOGY, p.adjust, setSize, enrichmentScore)</code></pre>
+<pre><code>           ID                                    Description ONTOLOGY
+1  GO:0000904 cell morphogenesis involved in differentiation       BP
+2  GO:0001501                    skeletal system development       BP
+3  GO:0002009                 morphogenesis of an epithelium       BP
+4  GO:0003002                                regionalization       BP
+5  GO:0004888      transmembrane signaling receptor activity       MF
+6  GO:0005887          integral component of plasma membrane       CC
+7  GO:0006935                                     chemotaxis       BP
+8  GO:0007268                 chemical synaptic transmission       BP
+9  GO:0007389                  pattern specification process       BP
+10 GO:0007409                                   axonogenesis       BP
+      p.adjust setSize enrichmentScore
+1  0.001375638     466       0.7726367
+2  0.001375638     257       0.7929044
+3  0.001375638     342       0.7776557
+4  0.001375638     181       0.8086927
+5  0.001375638     207       0.8086970
+6  0.001375638     445       0.7737560
+7  0.001375638     275       0.7840501
+8  0.001375638     347       0.7832492
+9  0.001375638     233       0.7959597
+10 0.001375638     288       0.8064676</code></pre>
+<pre class="r"><code>gsea.results.df %&gt;%
+  arrange(desc(enrichmentScore)) %&gt;% head(10) %&gt;%
+  dplyr::select(ID, Description, ONTOLOGY, p.adjust, setSize)</code></pre>
+<pre><code>           ID
+1  GO:0044065
+2  GO:0031420
+3  GO:0098533
+4  GO:0010881
+5  GO:0010882
+6  GO:0043576
+7  GO:0014808
+8  GO:1903514
+9  GO:0048701
+10 GO:0086009
+                                                                                        Description
+1                                                          regulation of respiratory system process
+2                                                                          alkali metal ion binding
+3                                                  ATPase dependent transmembrane transport complex
+4  regulation of cardiac muscle contraction by regulation of the release of sequestered calcium ion
+5                                 regulation of cardiac muscle contraction by calcium ion signaling
+6                                                        regulation of respiratory gaseous exchange
+7                         release of sequestered calcium ion into cytosol by sarcoplasmic reticulum
+8                          release of sequestered calcium ion into cytosol by endoplasmic reticulum
+9                                                          embryonic cranial skeleton morphogenesis
+10                                                                          membrane repolarization
+   ONTOLOGY   p.adjust setSize
+1        BP 0.01682383      12
+2        MF 0.03480302      10
+3        CC 0.04295128      10
+4        BP 0.03197122      14
+5        BP 0.02119294      17
+6        BP 0.03494372      15
+7        BP 0.03636865      19
+8        BP 0.03636865      19
+9        BP 0.02627471      23
+10       BP 0.03514642      23</code></pre>
+<p>Lot’s of interesting stuff. Let’s write out the full table of results. Here is a plot of a few terms that catch’s the eye (<a href="GO:0007409" class="uri">GO:0007409</a>, axonogenesis). Though, another term that might point towards the interpretation of these differences being more related to the ipsc differentiation differences with n=1 (or maybe n=3; I still don’t fully understand the experiment design).</p>
+<p>This plot captures the essence of how GSEA works. A rug depicting instances of genes belonging to sets is shown on x-axis. Some gene sets are enriched for genes at the top of the ordered list, leading to more enrichment than you expect by chance as you move from the top (left) to bottom (right) of the ordered list.</p>
+<pre class="r"><code>gseaplot2(gsea.results, geneSetID = c(&quot;GO:0007409&quot;, &quot;GO:0007268&quot;, &quot;GO:0000904&quot;, &quot;GO:0086009&quot;), pvalue_table = F)</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Another thing to keep in mind with this and any GSEA is that there is a lot of overlap in some gene set terms, as is clear above in the rug plot along the x-axis. Some sets are huge (hundreds of terms).</p>
+<pre class="r"><code>#Write out gsea results
+write.table(gsea.results.df, file=&quot;../output/GeneExpression.gsea.tab&quot;, quote=F, sep=&#39;\t&#39;, row.names = F)
+
+#write differential expression results
+write.table(results.more.descriptive, file=&quot;../output/GeneExpression.DE.tab&quot;, quote=F, sep=&#39;\t&#39;, row.names = F)</code></pre>
+</div>
+<div id="conclusions" class="section level2">
+<h2>Conclusions</h2>
+<p>Perhaps some neuronal related gene sets enriched, though with small sample sizes and confounding DHX38 genotype with other individual genetic differences in this study design, it is difficult to draw strong conclusions about the effect of these DHX38 mutations.</p>
+<p>At the very least we can be sure DHX38 is not very differently expresesed.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.1 (2019-07-05)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS Catalina 10.15.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] parallel  stats4    stats     graphics  grDevices utils     datasets 
+[8] methods   base     
+
+other attached packages:
+ [1] enrichplot_1.4.0       org.Hs.eg.db_3.8.2     AnnotationDbi_1.46.1  
+ [4] IRanges_2.18.3         S4Vectors_0.22.1       Biobase_2.44.0        
+ [7] BiocGenerics_0.30.0    clusterProfiler_3.12.0 biomaRt_2.40.5        
+[10] gplots_3.0.1.1         corrplot_0.84          edgeR_3.26.8          
+[13] limma_3.40.6           knitr_1.26             forcats_0.4.0         
+[16] stringr_1.4.0          dplyr_0.8.3            purrr_0.3.3           
+[19] readr_1.3.1            tidyr_1.0.0            tibble_2.1.3          
+[22] ggplot2_3.2.1          tidyverse_1.2.1       
+
+loaded via a namespace (and not attached):
+  [1] fgsea_1.10.1        colorspace_1.4-1    ellipsis_0.3.0     
+  [4] ggridges_0.5.1      rprojroot_1.3-2     qvalue_2.16.0      
+  [7] fs_1.3.1            rstudioapi_0.10     farver_1.1.0       
+ [10] urltools_1.7.3      graphlayouts_0.5.0  ggrepel_0.8.1      
+ [13] bit64_0.9-7         lubridate_1.7.4     xml2_1.2.2         
+ [16] splines_3.6.1       GOSemSim_2.10.0     polyclip_1.10-0    
+ [19] zeallot_0.1.0       jsonlite_1.6        workflowr_1.5.0    
+ [22] broom_0.5.2         GO.db_3.8.2         ggforce_0.3.1      
+ [25] BiocManager_1.30.9  compiler_3.6.1      httr_1.4.1         
+ [28] rvcheck_0.1.6       backports_1.1.5     assertthat_0.2.1   
+ [31] Matrix_1.2-17       lazyeval_0.2.2      cli_1.1.0          
+ [34] later_1.0.0         tweenr_1.0.1        htmltools_0.4.0    
+ [37] prettyunits_1.0.2   tools_3.6.1         igraph_1.2.4.1     
+ [40] gtable_0.3.0        glue_1.3.1          reshape2_1.4.3     
+ [43] DO.db_2.9           fastmatch_1.1-0     Rcpp_1.0.2         
+ [46] cellranger_1.1.0    vctrs_0.2.0         gdata_2.18.0       
+ [49] nlme_3.1-142        ggraph_2.0.0        xfun_0.11          
+ [52] rvest_0.3.5         lifecycle_0.1.0     gtools_3.8.1       
+ [55] XML_3.98-1.20       DOSE_3.10.2         europepmc_0.3      
+ [58] MASS_7.3-51.4       scales_1.0.0        tidygraph_1.1.2    
+ [61] hms_0.5.2           promises_1.1.0      RColorBrewer_1.1-2 
+ [64] curl_4.2            yaml_2.2.0          memoise_1.1.0      
+ [67] gridExtra_2.3       UpSetR_1.4.0        triebeard_0.3.0    
+ [70] stringi_1.4.3       RSQLite_2.1.2       highr_0.8          
+ [73] caTools_1.17.1.2    BiocParallel_1.18.1 rlang_0.4.1        
+ [76] pkgconfig_2.0.3     bitops_1.0-6        evaluate_0.14      
+ [79] lattice_0.20-38     labeling_0.3        cowplot_1.0.0      
+ [82] bit_1.1-14          tidyselect_0.2.5    plyr_1.8.4         
+ [85] magrittr_1.5        R6_2.4.1            generics_0.0.2     
+ [88] DBI_1.0.0           pillar_1.4.2        haven_2.2.0        
+ [91] withr_2.1.2         RCurl_1.95-4.12     modelr_0.1.5       
+ [94] crayon_1.3.4        KernSmooth_2.23-16  rmarkdown_1.17     
+ [97] viridis_0.5.1       progress_1.2.2      locfit_1.5-9.1     
+[100] grid_3.6.1          readxl_1.3.1        data.table_1.12.6  
+[103] blob_1.2.0          git2r_0.26.1        digest_0.6.22      
+[106] httpuv_1.5.2        gridGraphics_0.4-1  munsell_0.5.0      
+[109] ggplotify_0.0.4     viridisLite_0.3.0  </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>
