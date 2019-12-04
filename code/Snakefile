@@ -14,7 +14,8 @@ rule all:
         "leafcutter/differential_splicing/leafcutter_effect_sizes.txt",
         expand("UnstrandedBigwigs/{sample}.bw", sample=SampleList),
         expand("Junctions/{sample}.junctions.bed.gz", sample=SampleList),
-        Output = "GeneExpression/GeneExpressionCountTable.subread.txt.gz",
+        "GeneExpression/GeneExpressionCountTable.subread.txt.gz",
+        "../output/differential_splicing_effect_sizes.txt.gz",
 
 include: "rules/DownloadReference.smk"
 include: "rules/DownloadAndMergeFastq.smk"

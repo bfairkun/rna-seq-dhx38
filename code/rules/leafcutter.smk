@@ -24,8 +24,6 @@ rule leafcutter_ds:
         "leafcutter/differential_splicing/leafcutter_effect_sizes.txt",
         "leafcutter/differential_splicing/leafcutter_cluster_significance.txt"
     threads: 4
-    conda:
-        "../envs/leafcutter.yaml"
     params:
         leafcutter_path=config["Path_to_leafcutter_repo"],
         outputprefix = "-o leafcutter/differential_splicing/leafcutter",
@@ -36,4 +34,17 @@ rule leafcutter_ds:
         """
         mkdir -p leafcutter/differential_splicing/
         /software/R-3.4.3-el7-x86_64/bin/Rscript {params.leafcutter_path}scripts/leafcutter_ds.R -p {threads} -e {input.exonsbedgz} {params.outputprefix} {params.extra_params} {input.numers} {input.groupfile} &> {log}
+        """
+
+rule move_leafcutter_results:
+    input:
+        effects = "leafcutter/differential_splicing/leafcutter_effect_sizes.txt",
+        sig = "leafcutter/differential_splicing/leafcutter_cluster_significance.txt",
+    output:
+        effects = "../output/differential_splicing_effect_sizes.txt.gz",
+        sig = "../output/differential_splicing_significance.txt.gz"
+    shell:
+        """
+        cat {input.effects} | gzip - > {output.effects}
+        cat {input.sig} | gzip - > {output.sig}
         """
