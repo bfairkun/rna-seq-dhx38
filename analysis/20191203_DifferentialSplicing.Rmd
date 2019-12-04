@@ -195,6 +195,8 @@ The null hypothesis here is that any given type of splicing will not significant
 
 
 ```{r}
+
+## are alt 5'ss upregulated?
 wilcox.test(
   leafcutter.merged.w.features %>%
   filter(type=="Alt5ss") %>% pull(deltapsi)
@@ -205,9 +207,20 @@ wilcox.test(
   filter(type=="Alt5ss") %>% pull(logef)
     )
 
+## are alt 3'ss upregulated?
+wilcox.test(
+  leafcutter.merged.w.features %>%
+  filter(type=="Alt3ss") %>% pull(deltapsi)
+    )
+
+wilcox.test(
+  leafcutter.merged.w.features %>%
+  filter(type=="Alt3ss") %>% pull(logef)
+    )
+
 ```
 
-Hmm. maybe there is something here. Considering all the exploration I've been doing, and without multiple hypothesis correction in many cases this might or might not be real.
+Hmm. maybe there is something here with alt 5'ss. Considering all the exploration I've been doing, and without multiple hypothesis correction in many cases this might or might not be real.
 
 ## TODO
 - should look at the alt 5'ss and see if there is any distance constraint with the annotated 5'ss, similar to the SF3B1 mutants that have a very specific distance constraint to the usual splice sites that get activated
