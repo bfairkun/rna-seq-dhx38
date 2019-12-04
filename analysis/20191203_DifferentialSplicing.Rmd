@@ -28,6 +28,8 @@ library(biomaRt)
 library("clusterProfiler")
 library("org.Hs.eg.db")
 library(enrichplot)
+library(psych)
+library(corrplot)
 ```
 
 load in leafcutter output
@@ -102,11 +104,113 @@ No significant GSEA results at the default P.adjust<0.5 threshold.
 
 Ok, besides identifying the genes (or kinds of genes) through which the disease phenotype is potentially mediated, maybe the other questions I should be asking is what kinds of intron features distinguish differentially spliced introns, which may be more enlightening about general splicing mechanisms in these DHX38 mutants.
 
-## TO DO
+I have scored the 5'ss and 3'ss motifs for each intron tested using a position specific score matrix based on annotated introns. I additionally used [svm-bpfinder](http://regulatorygenomics.upf.edu/Software/SVM_BP/) to score the best computationally predicted branch for each intron. I also annotated whether each intron is annotated, alt3'ss, alt5'ss, new pairing of splice sites, or new intron. All of that work is hidden in the `code` section and output into a file in `output`. 
 
-- what types of alternative splicing are more differentially spliced (alt 5'ss, exon-skipping, etc)
+Let's see if any of those features correlate with differentially expressed introns. If there is the DHX38 mutations preferentially activates less consensus splice sites for example, I expect the directionality to be consistent. Therefore, I will correlate those scores with either the logFC for each intron, for significant introns.
 
-- splice site motif analysis
+```{r}
+#read intron features
+IntronFeatures <- read.table("../output/IntronFeatures.txt.gz", sep='\t', header=T)
+
+head(IntronFeatures) %>% kable()
+
+# Check that the number of types of unannotated splicing is similar in both strands. Sometimes bugs related to coordinates produce wonky results
+IntronFeatures %>%
+  filter(strand=="-") %>%
+  pull(type) %>% table()
+
+IntronFeatures %>%
+  filter(strand=="+") %>%
+  pull(type) %>% table()
+
+# merge the intron features with the leafcutter results and filter for the significantly differentially spliced introns that have the greatest effect size within cluster
+leafcutter.merged.w.features <- leafcutter.merged %>%
+  separate(junc_id, c("chrom", "start", "stop"), sep = ":") %>%
+  mutate(newChrom=sub("chr", "", chrom),
+         newStop=as.numeric(stop)-1,
+         strand=str_sub(intron, start=-1)) %>%
+  mutate(IntronID=str_c(newChrom, start, newStop, strand, sep="_")) %>%
+  dplyr::select(-c("chrom", "start", "stop", "newStop", "newChrom")) %>%
+  mutate(abs.effectsize = abs(logef)) %>%
+  group_by(cluster) %>% 
+  top_n(n=1, abs.effectsize) %>%
+  ungroup() %>%
+  filter(p.adjust<0.2) %>%
+  left_join(IntronFeatures, by=c("IntronID"="Intron"))
+
+# Are specific types of unannotated splicing more prevalent?
+leafcutter.merged.w.features %>%
+  pull(type) %>% table()
+
+colnames(leafcutter.merged.w.features)
+
+# Set up features and effect sizes into a cleaner data frame
+IntronFeaturesAndEffectSizes <- leafcutter.merged.w.features %>%
+  dplyr::select(IntronID, logef, DonorScore, AcceptorScore, ss_dist, bp_scr, ppt_len, ppt_scr, svm_scr) %>%
+  column_to_rownames("IntronID")
+
+# See if there is any correlations
+CorrelationsWithFeatures <- corr.test(x=IntronFeaturesAndEffectSizes[,1],
+                         y=IntronFeaturesAndEffectSizes[,-1],
+                         method="spearman",
+                         adjust="none")
+
+# table of spearmans r, pvalue, and n
+data.frame(r= t(CorrelationsWithFeatures$r), p=t(CorrelationsWithFeatures$p), n=t(CorrelationsWithFeatures$n)) %>% kable()
+```
+
+None of the features tested seem to correlate with the effect size of largest-effect introns in significant clusters.
+
+
+Check if the significant positive effect-size splicing changes have more cryptic 5'ss, or more cryptic 3'ss than negative effect-size splicing changes.
+
+When doing this analysis, some people think in terms of deltapsi, some people might think in terms of a different metric of effect size. Let's look at both.
+
+
+```{r}
+# leafcutter's logef effect size, versus deltapsi
+qplot(leafcutter.merged.w.features$logef, leafcutter.merged.w.features$deltapsi) + theme_bw()
+
+#significant positive deltapsi introns
+leafcutter.merged.w.features %>%
+  filter(deltapsi > 0) %>%
+  pull(type) %>% table()
+
+#significant negative deltapsi introns
+leafcutter.merged.w.features %>%
+  filter(deltapsi < 0) %>%
+  pull(type) %>% table()
+
+leafcutter.merged.w.features %>%
+  ggplot(aes(x=deltapsi, color=type)) +
+    stat_ecdf(geom = "step") +
+    ylab("Cumulative frequency") +
+    theme_bw()
+```
+
+Maybe 5'ss stick out? Let's test it more explicitly.
+
+
+The null hypothesis here is that any given type of splicing will not significantly deviate from median of 0 effect size (similar number of positive effects as negative effects). Wilcox.test to test with null as mu=0 should work.
+
+
+```{r}
+wilcox.test(
+  leafcutter.merged.w.features %>%
+  filter(type=="Alt5ss") %>% pull(deltapsi)
+    )
+
+wilcox.test(
+  leafcutter.merged.w.features %>%
+  filter(type=="Alt5ss") %>% pull(logef)
+    )
+
+```
+
+Hmm. maybe there is something here. Considering all the exploration I've been doing, and without multiple hypothesis correction in many cases this might or might not be real.
+
+## TODO
+- should look at the alt 5'ss and see if there is any distance constraint with the annotated 5'ss, similar to the SF3B1 mutants that have a very specific distance constraint to the usual splice sites that get activated
 
 ## Conclusions
 
