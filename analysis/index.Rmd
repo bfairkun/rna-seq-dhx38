@@ -9,3 +9,7 @@ editor_options:
 ---
 
 Welcome to my research website.
+
+- [Differential gene expression](20191203_DiffExpression.html)
+- [Differential splicing](20191203_DifferentialSplicing.html)
+

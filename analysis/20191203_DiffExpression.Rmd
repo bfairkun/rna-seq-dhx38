@@ -1,0 +1,278 @@
+---
+title: "Untitled"
+author: "Benjamin Fair"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+## Introduction
+
+Exploratory differential expression analysis comparing RNA-seq from iPSC derived neurons from healthy control vs patient with biallelic mutations in DHX38 that may affect splicing and gene expression. In particular, worth checking whether DHX38 is differentially expressed.
+
+## Analysis
+
+Raw RNA-seq data has been aligned and collapsed into gene count table (rows of genes, columns of samples, each cell is exonic read counts) using code in `code` section of this repo, creating a count matrix in `output`. Here I will process that data with edgeR approach that I have used previously.
+
+First, load necessary libraries
+```{r}
+library(tidyverse)
+library(knitr)
+library(edgeR)
+library(corrplot)
+library(gplots)
+library(biomaRt)
+library("clusterProfiler")
+library("org.Hs.eg.db")
+library(enrichplot)
+```
+
+And read in the count table
+
+```{r}
+CountTable <- read.table('../output/GeneExpressionCountTable.subread.txt.gz', header=T, check.names=FALSE, skip=1)
+
+
+CountTable.matrix <- CountTable %>%
+  dplyr::select(-c("Chr", "Start", "End", "Strand", "Length")) %>%
+  column_to_rownames("Geneid") %>% as.matrix()
+
+#Preview table
+kable(CountTable.matrix[1:10,])
+```
+
+Plot total exonic gene counts per sample
+
+```{r}
+CountTable.matrix %>% colSums() %>% as.data.frame() %>%
+  rownames_to_column("Sample") %>%
+  ggplot(aes(x=Sample, y=./1000000)) +
+  geom_col() +
+  ylab("Exonic read count (Millions)") +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+Check correlations between samples
+
+```{r}
+# CountTable to CountsPerMillion
+cpm <- cpm(CountTable.matrix, log=TRUE, prior.count=0.5)
+kable(cpm[1:10,])
+
+#plot cpm
+median_log2_cpm <- apply(cpm, 1, median)
+hist(median_log2_cpm)
+
+# check correlations between samples
+CorMat <- cor(cpm)
+kable(CorMat)
+
+# Plot
+heatmap.2(CorMat, trace="none")
+```
+
+Healthy_1 is sort of an outlier sample, and it is probably because it has the least reads. In my experience, this number of reads is still quite high, and the correlations are quite high, so I am not yet concerned. I think it will look like less of an outlier once we filter out the extremely lowly expressed genes that basically are just represented by the 0.5 pseudocount I added.
+
+```{r}
+# Pick a cutoff for lowly expressed genes to exclude
+hist(median_log2_cpm)
+expr_cutoff <- 2
+abline(v = expr_cutoff, col = "red", lwd = 3)
+
+#How many genes pass this threshold
+sum(median_log2_cpm > expr_cutoff)
+
+
+CountTable.matrix.filtered <- CountTable.matrix[median_log2_cpm > expr_cutoff, ]
+
+# Recalculate cpm from filtered count table
+cpm <- cpm(CountTable.matrix.filtered, log=TRUE, prior.count=0.5)
+
+# look at correlations from filtered cpm matrix
+cor(cpm) %>%
+heatmap.2(., trace="none")
+
+# Also look at similarity with MDS plot
+plotMDS(cpm)
+plotMDS(cpm, dim=c(3,4))
+```
+
+samples primarily segregate by condition (healthy vs affected) as expected
+
+Now start prepping data for differential expression analysis
+
+```{r}
+group <- substr(colnames(CountTable.matrix.filtered), 1, 1)
+
+# A for affected, H for healthy
+group
+
+# y is a DGELIst object contains count table and other metadata
+y <- DGEList(counts = CountTable.matrix.filtered, group = group)
+
+# calculate normalization factors using default TMM method which more accurately scales samples with different library sizes, for example while considering that highly expressed genes between conditions can have undesired effects if just using simple CountsPerMillion normalization.
+
+y <- calcNormFactors(y)
+y$samples %>% kable()
+```
+
+Now estimate common, trended, and tagwise dispersion, and test for differential expression
+
+```{r}
+#estimate dispersion, common, trended, and tag-wise (a combination of gene-specific dispersion and trend)
+y <- estimateDisp(y)
+sqrt(y$common.dispersion) # biological coefficient of variation
+
+#Plot dispersions
+plotBCV(y)
+
+# by default, the tagwise dispersion is used for DE testing.
+# Perform testing
+et <- exactTest(y, pair=c("H","A"))
+results_edgeR <- topTags(et, n = nrow(CountTable.matrix.filtered), sort.by = "none")
+
+head(results_edgeR$table) %>% kable()
+
+#histogram of nominal P-vals
+hist(results_edgeR$table$PValue)
+
+# how many genes below FDR threshold
+sum(results_edgeR$table$FDR < .1)
+
+#MA plot showing FDR<0.1
+plotSmear(et, de.tags = rownames(results_edgeR)[results_edgeR$table$FDR < .01])
+abline(h = c(-2, 2), col = "blue")
+```
+
+Ok we did differential testing. Now let's explore the results
+
+First add common gene names to the results table
+
+```{r}
+#Use biomart to get common gene names and ensembl IDs
+human_mart <- useMart("ensembl", dataset="hsapiens_gene_ensembl")
+
+MyBioMartQuery <- getBM(attributes = c("ensembl_gene_id","external_gene_name", "description"), mart=human_mart, filters="ensembl_gene_id", values=rownames(results_edgeR))
+
+results.more.descriptive <- results_edgeR$table %>%
+  rownames_to_column("ensembl_gene_id") %>%
+  left_join(MyBioMartQuery, by="ensembl_gene_id")
+
+head(results.more.descriptive) %>% kable()
+
+results.more.descriptive %>%
+  filter(external_gene_name=="DHX38")
+```
+
+Ok good. DHX38 is not differentially expressed. So if the alleles have some affect on splicing through DHX38, is not likely through modulating expression of DHX38 levels, but rather altering function.
+
+
+Let's make some plots to get to know significance testing results a little bit more... Keep in mind we don't know much about the types of replicates these are (technical, versus biological split before differentiation, split after differentiation, etc), and that all these are from a single healthy and a single affected patient.
+
+Volcano plot:
+
+```{r}
+results.more.descriptive %>%
+  mutate(Significance=FDR<0.1) %>%
+  ggplot(aes(x=logFC, y=-log10(PValue), color=Significance)) +
+  geom_point(alpha=0.2) +
+  theme_bw()
+```
+
+Plot of original results of a significant gene. Useful to check polarization of the logFC values (I think I set up the `exactTest` function to be such that positive logFC means more highly expressed in affected, but let's double check that)
+
+```{r}
+
+Top5DE_Genes <- results.more.descriptive %>%
+  arrange(FDR) %>% head(5) %>%
+  pull(ensembl_gene_id)
+
+results.more.descriptive %>%
+  filter(ensembl_gene_id %in% Top5DE_Genes) %>%
+  dplyr::select(ensembl_gene_id, external_gene_name, logFC) %>%
+  kable()
+
+cpm[Top5DE_Genes,] %>%
+  as.data.frame() %>%
+  rownames_to_column("ensembl_gene_id") %>%
+  gather(key="sample", value="log2cpm", -ensembl_gene_id) %>% 
+  ggplot(aes(x=sample, y=log2cpm)) +
+  geom_col() +
+  facet_wrap(~ensembl_gene_id) +
+  theme_bw() +
+  theme(axis.text.x = element_text(angle = 45, hjust = 1))
+```
+
+Ok correct, positive FC means higher expressed in affected samples. Now let's do gene set enrichment analysis (GSEA) to see which types of gene categories are enriched for differentially expressed genes. For this we need an ordered list of genes. We could use absolute value of log-fold change, or maybe -log10(Pvalue). Judging from the volcano plot I'd guess the results would be virtually identical either way
+
+```{r}
+
+#had to add very small number to Pvalue because very significant genes have Pvalues that are 0
+gsea.results <- results.more.descriptive %>%
+  mutate(RankingMetric = -log10(PValue+1E-300)) %>%
+  arrange(desc(RankingMetric)) %>%
+  dplyr::select(ensembl_gene_id, RankingMetric) %>%
+  deframe() %>%
+  gseGO(ont="ALL", OrgDb=org.Hs.eg.db, keyType='ENSEMBL', nPerm=100000)
+```
+
+Now let's explore the GSEA results
+
+```{r}
+gsea.results.df <- as.data.frame(gsea.results)
+gsea.results.df %>% 
+  group_by(ONTOLOGY) %>%
+  top_n(n = -5, wt = p.adjust) %>%
+  ggplot(aes(x=enrichmentScore, y=Description, color=p.adjust, size=setSize)) +
+  geom_point() +
+  facet_grid(ONTOLOGY~., scales = "free") +
+  scale_colour_gradient(low="red", high="black") +
+  xlab("Enrichment") +
+  scale_y_discrete(labels = function(x) lapply(strwrap(x, width = 60, simplify = FALSE), paste, collapse="\n")) +
+  labs(color = "Adjusted P-value") +
+  theme_bw()
+
+
+gsea.results.df %>%
+  arrange(p.adjust) %>% head(10) %>%
+  dplyr::select(ID, Description, ONTOLOGY, p.adjust, setSize, enrichmentScore)
+
+gsea.results.df %>%
+  arrange(desc(enrichmentScore)) %>% head(10) %>%
+  dplyr::select(ID, Description, ONTOLOGY, p.adjust, setSize)
+
+```
+
+Lot's of interesting stuff. Let's write out the full table of results.
+Here is a plot of a few terms that catch's the eye (GO:0007409, axonogenesis). Though, another term that might point towards the interpretation of these differences being more related to the ipsc differentiation differences with n=1 (or maybe n=3; I still don't fully understand the experiment design).
+
+This plot captures the essence of how GSEA works. A rug depicting instances of genes belonging to sets is shown on x-axis. Some gene sets are enriched for genes at the top of the ordered list, leading to more enrichment than you expect by chance as you move from the top (left) to bottom (right) of the ordered list.
+
+
+```{r}
+gseaplot2(gsea.results, geneSetID = c("GO:0007409", "GO:0007268", "GO:0000904", "GO:0086009"), pvalue_table = F)
+```
+
+Another thing to keep in mind with this and any GSEA is that there is a lot of overlap in some gene set terms, as is clear above in the rug plot along the x-axis. Some sets are huge (hundreds of terms).
+
+```{r}
+#Write out gsea results
+write.table(gsea.results.df, file="../output/GeneExpression.gsea.tab", quote=F, sep='\t', row.names = F)
+
+#write differential expression results
+write.table(results.more.descriptive, file="../output/GeneExpression.DE.tab", quote=F, sep='\t', row.names = F)
+```
+
+
+## Conclusions
+
+Perhaps some neuronal related gene sets enriched, though with small sample sizes and confounding DHX38 genotype with other individual genetic differences in this study design, it is difficult to draw strong conclusions about the effect of these DHX38 mutations.
+
+At the very least we can be sure DHX38 is not very differently expresesed.
+
