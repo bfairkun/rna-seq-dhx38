@@ -1,0 +1,1309 @@
+<!DOCTYPE html>
+
+<html xmlns="http://www.w3.org/1999/xhtml">
+
+<head>
+
+<meta charset="utf-8" />
+<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
+<meta name="generator" content="pandoc" />
+<meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
+
+
+<meta name="author" content="Benjamin Fair" />
+
+<meta name="date" content="2019-12-06" />
+
+<title>sf3b1 positive control analysis</title>
+
+<script src="site_libs/jquery-1.11.3/jquery.min.js"></script>
+<meta name="viewport" content="width=device-width, initial-scale=1" />
+<link href="site_libs/bootstrap-3.3.5/css/cosmo.min.css" rel="stylesheet" />
+<script src="site_libs/bootstrap-3.3.5/js/bootstrap.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/html5shiv.min.js"></script>
+<script src="site_libs/bootstrap-3.3.5/shim/respond.min.js"></script>
+<script src="site_libs/jqueryui-1.11.4/jquery-ui.min.js"></script>
+<link href="site_libs/tocify-1.9.1/jquery.tocify.css" rel="stylesheet" />
+<script src="site_libs/tocify-1.9.1/jquery.tocify.js"></script>
+<script src="site_libs/navigation-1.1/tabsets.js"></script>
+<link href="site_libs/highlightjs-9.12.0/textmate.css" rel="stylesheet" />
+<script src="site_libs/highlightjs-9.12.0/highlight.js"></script>
+
+<style type="text/css">code{white-space: pre;}</style>
+<style type="text/css">
+  pre:not([class]) {
+    background-color: white;
+  }
+</style>
+<script type="text/javascript">
+if (window.hljs) {
+  hljs.configure({languages: []});
+  hljs.initHighlightingOnLoad();
+  if (document.readyState && document.readyState === "complete") {
+    window.setTimeout(function() { hljs.initHighlighting(); }, 0);
+  }
+}
+</script>
+
+
+
+<style type="text/css">
+h1 {
+  font-size: 34px;
+}
+h1.title {
+  font-size: 38px;
+}
+h2 {
+  font-size: 30px;
+}
+h3 {
+  font-size: 24px;
+}
+h4 {
+  font-size: 18px;
+}
+h5 {
+  font-size: 16px;
+}
+h6 {
+  font-size: 12px;
+}
+.table th:not([align]) {
+  text-align: left;
+}
+</style>
+
+
+
+
+<style type = "text/css">
+.main-container {
+  max-width: 940px;
+  margin-left: auto;
+  margin-right: auto;
+}
+code {
+  color: inherit;
+  background-color: rgba(0, 0, 0, 0.04);
+}
+img {
+  max-width:100%;
+}
+.tabbed-pane {
+  padding-top: 12px;
+}
+.html-widget {
+  margin-bottom: 20px;
+}
+button.code-folding-btn:focus {
+  outline: none;
+}
+summary {
+  display: list-item;
+}
+</style>
+
+
+<style type="text/css">
+/* padding for bootstrap navbar */
+body {
+  padding-top: 51px;
+  padding-bottom: 40px;
+}
+/* offset scroll position for anchor links (for fixed navbar)  */
+.section h1 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h2 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h3 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h4 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h5 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.section h6 {
+  padding-top: 56px;
+  margin-top: -56px;
+}
+.dropdown-submenu {
+  position: relative;
+}
+.dropdown-submenu>.dropdown-menu {
+  top: 0;
+  left: 100%;
+  margin-top: -6px;
+  margin-left: -1px;
+  border-radius: 0 6px 6px 6px;
+}
+.dropdown-submenu:hover>.dropdown-menu {
+  display: block;
+}
+.dropdown-submenu>a:after {
+  display: block;
+  content: " ";
+  float: right;
+  width: 0;
+  height: 0;
+  border-color: transparent;
+  border-style: solid;
+  border-width: 5px 0 5px 5px;
+  border-left-color: #cccccc;
+  margin-top: 5px;
+  margin-right: -10px;
+}
+.dropdown-submenu:hover>a:after {
+  border-left-color: #ffffff;
+}
+.dropdown-submenu.pull-left {
+  float: none;
+}
+.dropdown-submenu.pull-left>.dropdown-menu {
+  left: -100%;
+  margin-left: 10px;
+  border-radius: 6px 0 6px 6px;
+}
+</style>
+
+<script>
+// manage active state of menu based on current page
+$(document).ready(function () {
+  // active menu anchor
+  href = window.location.pathname
+  href = href.substr(href.lastIndexOf('/') + 1)
+  if (href === "")
+    href = "index.html";
+  var menuAnchor = $('a[href="' + href + '"]');
+
+  // mark it active
+  menuAnchor.parent().addClass('active');
+
+  // if it's got a parent navbar menu mark it active as well
+  menuAnchor.closest('li.dropdown').addClass('active');
+});
+</script>
+
+<!-- tabsets -->
+
+<style type="text/css">
+.tabset-dropdown > .nav-tabs {
+  display: inline-table;
+  max-height: 500px;
+  min-height: 44px;
+  overflow-y: auto;
+  background: white;
+  border: 1px solid #ddd;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs > li.active:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li.active:before {
+  content: "&#xe258;";
+  border: none;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open:before {
+  content: "";
+  font-family: 'Glyphicons Halflings';
+  display: inline-block;
+  padding: 10px;
+  border-right: 1px solid #ddd;
+}
+
+.tabset-dropdown > .nav-tabs > li.active {
+  display: block;
+}
+
+.tabset-dropdown > .nav-tabs > li > a,
+.tabset-dropdown > .nav-tabs > li > a:focus,
+.tabset-dropdown > .nav-tabs > li > a:hover {
+  border: none;
+  display: inline-block;
+  border-radius: 4px;
+}
+
+.tabset-dropdown > .nav-tabs.nav-tabs-open > li {
+  display: block;
+  float: none;
+}
+
+.tabset-dropdown > .nav-tabs > li {
+  display: none;
+}
+</style>
+
+<!-- code folding -->
+
+
+
+<style type="text/css">
+
+#TOC {
+  margin: 25px 0px 20px 0px;
+}
+@media (max-width: 768px) {
+#TOC {
+  position: relative;
+  width: 100%;
+}
+}
+
+@media print {
+.toc-content {
+  /* see https://github.com/w3c/csswg-drafts/issues/4434 */
+  float: right;
+}
+}
+
+.toc-content {
+  padding-left: 30px;
+  padding-right: 40px;
+}
+
+div.main-container {
+  max-width: 1200px;
+}
+
+div.tocify {
+  width: 20%;
+  max-width: 260px;
+  max-height: 85%;
+}
+
+@media (min-width: 768px) and (max-width: 991px) {
+  div.tocify {
+    width: 25%;
+  }
+}
+
+@media (max-width: 767px) {
+  div.tocify {
+    width: 100%;
+    max-width: none;
+  }
+}
+
+.tocify ul, .tocify li {
+  line-height: 20px;
+}
+
+.tocify-subheader .tocify-item {
+  font-size: 0.90em;
+}
+
+.tocify .list-group-item {
+  border-radius: 0px;
+}
+
+
+</style>
+
+
+
+</head>
+
+<body>
+
+
+<div class="container-fluid main-container">
+
+
+<!-- setup 3col/9col grid for toc_float and main content  -->
+<div class="row-fluid">
+<div class="col-xs-12 col-sm-4 col-md-3">
+<div id="TOC" class="tocify">
+</div>
+</div>
+
+<div class="toc-content col-xs-12 col-sm-8 col-md-9">
+
+
+
+
+<div class="navbar navbar-default  navbar-fixed-top" role="navigation">
+  <div class="container">
+    <div class="navbar-header">
+      <button type="button" class="navbar-toggle collapsed" data-toggle="collapse" data-target="#navbar">
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+        <span class="icon-bar"></span>
+      </button>
+      <a class="navbar-brand" href="index.html">myproject</a>
+    </div>
+    <div id="navbar" class="navbar-collapse collapse">
+      <ul class="nav navbar-nav">
+        <li>
+  <a href="index.html">Home</a>
+</li>
+<li>
+  <a href="about.html">About</a>
+</li>
+<li>
+  <a href="license.html">License</a>
+</li>
+      </ul>
+      <ul class="nav navbar-nav navbar-right">
+        
+      </ul>
+    </div><!--/.nav-collapse -->
+  </div><!--/.container -->
+</div><!--/.navbar -->
+
+<!-- Add a small amount of space between sections. -->
+<style type="text/css">
+div.section {
+  padding-top: 12px;
+}
+</style>
+
+<div class="fluid-row" id="header">
+
+
+
+<h1 class="title toc-ignore">sf3b1 positive control analysis</h1>
+<h4 class="author">Benjamin Fair</h4>
+<h4 class="date">December 06, 2019</h4>
+
+</div>
+
+
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-report" data-toggle="collapse" data-target="#workflowr-report">
+<span class="glyphicon glyphicon-list" aria-hidden="true"></span> workflowr <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span>
+</button>
+</p>
+<div id="workflowr-report" class="collapse">
+<ul class="nav nav-tabs">
+<li class="active">
+<a data-toggle="tab" href="#summary">Summary</a>
+</li>
+<li>
+<a data-toggle="tab" href="#checks"> Checks <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> </a>
+</li>
+<li>
+<a data-toggle="tab" href="#versions">Past versions</a>
+</li>
+</ul>
+<div class="tab-content">
+<div id="summary" class="tab-pane fade in active">
+<p>
+<strong>Last updated:</strong> 2019-12-06
+</p>
+<p>
+<strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
+</p>
+<p>
+<strong>Knit directory:</strong> <code>rna-seq-dhx38/analysis/</code> <span class="glyphicon glyphicon-question-sign" aria-hidden="true" title="This is the local directory in which the code in this file was executed."> </span>
+</p>
+<p>
+This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis was created with <a
+  href="https://github.com/jdblischak/workflowr">workflowr</a> (version 1.5.0). The <em>Checks</em> tab describes the reproducibility checks that were applied when the results were created. The <em>Past versions</em> tab lists the development history.
+</p>
+<hr>
+</div>
+<div id="checks" class="tab-pane fade">
+<div id="workflowr-checks" class="panel-group">
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRMarkdownfilestronguncommittedchanges"> <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> <strong>R Markdown file:</strong> uncommitted changes </a>
+</p>
+</div>
+<div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongEnvironmentstrongempty"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Environment:</strong> empty </a>
+</p>
+</div>
+<div id="strongEnvironmentstrongempty" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! The global environment was empty. Objects defined in the global environment can affect the analysis in your R Markdown file in unknown ways. For reproduciblity it’s best to always run the code in an empty environment.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSeedstrongcodesetseed20191126code"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Seed:</strong> <code>set.seed(20191126)</code> </a>
+</p>
+</div>
+<div id="strongSeedstrongcodesetseed20191126code" class="panel-collapse collapse">
+<div class="panel-body">
+<p>The command <code>set.seed(20191126)</code> was run prior to running the code in the R Markdown file. Setting a seed ensures that any results that rely on randomness, e.g. subsampling or permutations, are reproducible.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongSessioninformationstrongrecorded"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Session information:</strong> recorded </a>
+</p>
+</div>
+<div id="strongSessioninformationstrongrecorded" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Recording the operating system, R version, and package versions is critical for reproducibility.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongCachestrongnone"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Cache:</strong> none </a>
+</p>
+</div>
+<div id="strongCachestrongnone" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Nice! There were no cached chunks for this analysis, so you can be confident that you successfully produced the results during this run.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongFilepathsstrongrelative"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>File paths:</strong> relative </a>
+</p>
+</div>
+<div id="strongFilepathsstrongrelative" class="panel-collapse collapse">
+<div class="panel-body">
+<p>Great job! Using relative paths to the files within your workflowr project makes it easier to run your code on other machines.</p>
+</div>
+</div>
+</div>
+<div class="panel panel-default">
+<div class="panel-heading">
+<p class="panel-title">
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree98a59fa2a9dc86e77a13a9665365e2f439cdceb2targetblank98a59faa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/98a59fa2a9dc86e77a13a9665365e2f439cdceb2" target="_blank">98a59fa</a> </a>
+</p>
+</div>
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree98a59fa2a9dc86e77a13a9665365e2f439cdceb2targetblank98a59faa" class="panel-collapse collapse">
+<div class="panel-body">
+<p>
+Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
+</p>
+<pre><code>
+Ignored files:
+    Ignored:    .Rhistory
+    Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/20191206_DifferentialSplicingControl.Rmd
+    Untracked:  data/sf3b1_data/
+
+Unstaged changes:
+    Modified:   analysis/20191203_DifferentialSplicing.Rmd
+
+</code></pre>
+<p>
+Note that any generated files, e.g. HTML, png, CSS, etc., are not included in this status report because it is ok for generated content to have uncommitted changes.
+</p>
+</div>
+</div>
+</div>
+</div>
+<hr>
+</div>
+<div id="versions" class="tab-pane fade">
+<p>
+There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+</p>
+<hr>
+</div>
+</div>
+</div>
+<div id="introduction" class="section level2">
+<h2>Introduction</h2>
+<p>To go along with the analysis I did on DHX38 samples, I wanted to also do something that could serve as a positive control to make sure my analyses is sound and sensitive to pick up on effects that we know to be real. So here, I did a brief differential splicing analysis of samples which should give a known phenotype. SF3B1 mutants cause increased alt 3’ss usage. I took data from <a href="https://www.ncbi.nlm.nih.gov/pubmed/26565915">Darman et al</a> (pre-processed into junction counts by <a href="http://snaptron.cs.jhu.edu">snaptron</a> and analyzed in with the same leafcutter pipeline for Chris’ DHX38 samples. The samples were Nalm6 isogenic cell lines with and without a SF3B1 K700E knockin allele; 3 replicates of mutant (K700E) and 2 replicates of WT.</p>
+</div>
+<div id="analysis" class="section level2">
+<h2>Analysis</h2>
+<p>First, load necessary libraries</p>
+<pre class="r"><code>library(tidyverse)
+library(knitr)</code></pre>
+<p>Load in leafcutter processed data.</p>
+<pre class="r"><code>sig &lt;- read.table(&quot;../data/sf3b1_data/leafcutter.ds.cluster_sig.txt.gz&quot;, sep=&#39;\t&#39;, header=T)
+
+head(sig) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">cluster</th>
+<th align="left">status</th>
+<th align="right">loglr</th>
+<th align="right">df</th>
+<th align="right">p</th>
+<th align="right">p.adjust</th>
+<th align="left">genes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">chr1:clu_1_-</td>
+<td align="left">&lt;=1 sample with coverage&gt;min_coverage</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="right">NA</td>
+<td align="left">NA</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:clu_10_-</td>
+<td align="left">Success</td>
+<td align="right">2.1179106</td>
+<td align="right">4</td>
+<td align="right">0.3750307</td>
+<td align="right">0.7816801</td>
+<td align="left">UBE2J2</td>
+</tr>
+<tr class="odd">
+<td align="left">chr1:clu_100_-</td>
+<td align="left">Success</td>
+<td align="right">0.8541075</td>
+<td align="right">2</td>
+<td align="right">0.4256629</td>
+<td align="right">0.8071348</td>
+<td align="left">CROCCP2</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:clu_1000_+</td>
+<td align="left">Success</td>
+<td align="right">0.1793576</td>
+<td align="right">2</td>
+<td align="right">0.8358069</td>
+<td align="right">0.9578327</td>
+<td align="left">CCDC28B</td>
+</tr>
+<tr class="odd">
+<td align="left">chr1:clu_1001_+</td>
+<td align="left">Success</td>
+<td align="right">6.0030493</td>
+<td align="right">8</td>
+<td align="right">0.1509320</td>
+<td align="right">0.5946918</td>
+<td align="left">EIF3I</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:clu_1002_+</td>
+<td align="left">Success</td>
+<td align="right">1.9161822</td>
+<td align="right">3</td>
+<td align="right">0.2801440</td>
+<td align="right">0.7219076</td>
+<td align="left">EIF3I</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>effect_sizes &lt;- read.table(&quot;../data/sf3b1_data/leafcutter.ds.effect_sizes.txt.gz&quot;, sep=&#39;\t&#39;, header=T)
+
+head(effect_sizes) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">intron</th>
+<th align="right">logef</th>
+<th align="right">K700E</th>
+<th align="right">WT</th>
+<th align="right">deltapsi</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">chr1:1263387:1267733:clu_10_-</td>
+<td align="right">0.5730873</td>
+<td align="right">0.0078501</td>
+<td align="right">0.0165023</td>
+<td align="right">0.0086522</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:1263387:1267862:clu_10_-</td>
+<td align="right">-0.2769173</td>
+<td align="right">0.4876222</td>
+<td align="right">0.4381295</td>
+<td align="right">-0.0494928</td>
+</tr>
+<tr class="odd">
+<td align="left">chr1:1263387:1273666:clu_10_-</td>
+<td align="right">0.0681116</td>
+<td align="right">0.0230059</td>
+<td align="right">0.0291878</td>
+<td align="right">0.0061820</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:1267993:1272853:clu_10_-</td>
+<td align="right">-0.2715277</td>
+<td align="right">0.0223636</td>
+<td align="right">0.0202023</td>
+<td align="right">-0.0021613</td>
+</tr>
+<tr class="odd">
+<td align="left">chr1:1267993:1273666:clu_10_-</td>
+<td align="right">-0.0927539</td>
+<td align="right">0.4591583</td>
+<td align="right">0.4959782</td>
+<td align="right">0.0368199</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:16626006:16626353:clu_100_-</td>
+<td align="right">-0.1590048</td>
+<td align="right">0.6370657</td>
+<td align="right">0.5707452</td>
+<td align="right">-0.0663206</td>
+</tr>
+</tbody>
+</table>
+<p>Check some basic things about the data.</p>
+<pre class="r"><code>#how many introns for each cluster
+effect_sizes %&gt;%
+  mutate(Cluster=sub(&quot;.+?:(clu_.+?_.+?)&quot;,&quot;\\1&quot;,intron)) %&gt;%
+  group_by(Cluster) %&gt;%
+  tally() %&gt;%
+  ggplot(aes(x=n)) +
+  geom_bar(breaks=40) +
+  xlab(&quot;Num introns per cluster&quot;) +
+  ylab(&quot;Freq&quot;) +
+  theme_bw()</code></pre>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#histogram of Pvalues
+hist(sig$p)</code></pre>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#how many significant (p.adjust &lt; 0.1)
+table(sig$p.adjust&lt;0.1) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Var1</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">14313</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">579</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># merge significance and cluster tables
+leafcutter.merged &lt;- effect_sizes %&gt;%
+  mutate(cluster=gsub(&quot;(.+?:).+?:.+?:(clu.+?)&quot;, &quot;\\1\\2&quot;, intron, perl=T)) %&gt;%
+  mutate(junc_id=gsub(&quot;(.+?:.+?:.+?):clu.+&quot;, &quot;\\1&quot;, intron, perl=T)) %&gt;%
+  left_join(sig, by=&quot;cluster&quot;)
+
+# volcano plot of cluster-pvalues and largest within-cluster-delta-psi
+leafcutter.merged %&gt;%
+  mutate(abs.deltapsi = abs(deltapsi)) %&gt;%
+  group_by(cluster) %&gt;% 
+  top_n(n=1, abs.deltapsi) %&gt;%
+  mutate(sig=p.adjust&lt;0.05) %&gt;%
+  ggplot(aes(x=deltapsi, y=-log10(p), color=sig)) +
+    geom_point(alpha=0.05) +
+    theme_bw()</code></pre>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Now check that differential splicing analysis works.</p>
+<p>Here I will load the list of all ~800 splice junctions Darman et al identified as significantly differntially spliced and check that this leafcutter pipeline also identifies them as significantly differentially spliced.</p>
+<p>Note that Darman et al did a bunch of separate analyses of SF3B1 mutants in various tissue or cell types and combined the list of differentially spliced junctions into a single large list (which I am loading here), even though I just used a subset of their samples to redo differential splicing analysis. Therefore, based on the fact that I am using only a small subset of their data in only one cell type (as opposed to the many analyses they combined), I may not expect to recover all of their significant introns.</p>
+<pre class="r"><code>#Load list of differential junctions
+DarmanJunctionsList &lt;- read.table(&#39;../data/sf3b1_data/DarmanDiffJunctions.LiftedToHg38.bed.txt&#39;, header=F)
+
+# Make new id, for easier use in later filtering. Note that coordinates may need to add 1, compared to leafcutter coordinates
+DarmanJunctionsList$junc_id &lt;- paste(DarmanJunctionsList$V1, DarmanJunctionsList$V2 + 1, DarmanJunctionsList$V3 + 1, sep=&quot;:&quot;)
+
+NotInDarman&lt;-leafcutter.merged %&gt;%
+  filter(!junc_id %in% DarmanJunctionsList$junc_id) %&gt;%
+  dplyr::distinct(cluster, .keep_all=T)
+InDarman&lt;-leafcutter.merged %&gt;% 
+  filter(junc_id %in% DarmanJunctionsList$junc_id) %&gt;%
+  dplyr::distinct(cluster, .keep_all=T)
+
+#histogram of P-values for not containing introns siginificant in Darman et al
+hist(NotInDarman$p)</code></pre>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#histogram of P-values for clusters with introns sig in Darman
+hist(InDarman$p)</code></pre>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>## QQ-plot of cluster P-vals, grouped by whether cluster contains in intron identified as differentially spliced in Daraman et al.
+ggplot(NotInDarman, aes(color=&quot;NotInDarman&quot;, y=-log10(sort(p)), x=-log10(1:length(p)/length(p)))) +
+  geom_point() +
+  geom_point(data=InDarman, aes(color=&quot;InDarman&quot;)) +
+  xlab(&quot;-log10(Theoretical-Pvalues)&quot;) +
+  ylab(&quot;-log10(Observed-Pvalues)&quot;) +
+  geom_abline() +
+  theme_bw() +
+  theme(legend.position=&quot;bottom&quot;) +
+  theme(legend.title=element_blank())</code></pre>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Ok good. The introns Darman found to be significant, I also found to be significant with smaller P-values.</p>
+<p>Now classify splicing types as I did in the DHX38 analysis.</p>
+<pre class="r"><code>#Reclassify splicing types
+leafcutter.merged.AS.reclassified &lt;- leafcutter.merged %&gt;% 
+  dplyr::select(intron) %&gt;%
+  separate(intron, into=c(&quot;chrom&quot;, &quot;start&quot;, &quot;stop&quot;, &quot;cluster&quot;), sep=&quot;:&quot;, remove=F) %&gt;%
+  mutate(strand=sub(&quot;clu_\\d+_(.+)&quot;, &quot;\\1&quot;, cluster)) %&gt;%
+  mutate(
+    SpliceDonorCoord=case_when(
+      strand==&quot;+&quot; ~ paste(chrom, start, strand),
+      strand==&quot;-&quot; ~ paste(chrom, stop, strand)),
+    SpliceAcceptorCoord=case_when(
+      strand==&quot;+&quot; ~ paste(chrom, stop, strand),
+      strand==&quot;-&quot; ~ paste(chrom, start, strand))) %&gt;%
+  dplyr::select(intron, cluster, SpliceDonorCoord,SpliceAcceptorCoord) %&gt;%
+  add_count(cluster, name=&quot;IntronsPerCluster&quot;) %&gt;%
+  add_count(SpliceDonorCoord, name=&quot;SpliceDonorCount&quot;) %&gt;%
+  add_count(SpliceAcceptorCoord, name=&quot;SpliceAcceptorCount&quot;) %&gt;%
+  mutate(SplicingType=case_when(
+    IntronsPerCluster==2 &amp; SpliceDonorCount==2 ~ &quot;Alt3ss&quot;,
+    IntronsPerCluster==2 &amp; SpliceAcceptorCount==2 ~ &quot;Alt5ss&quot;,
+    IntronsPerCluster==3 &amp; SpliceDonorCount==2 &amp; SpliceAcceptorCount==2 ~ &quot;CassetteExonSkipped&quot;,
+    IntronsPerCluster==3 &amp; SpliceDonorCount==1 &amp; SpliceAcceptorCount==2 ~ &quot;CassetteExonIncluded.DownstreamIntron&quot;,
+    IntronsPerCluster==3 &amp; SpliceDonorCount==2 &amp; SpliceAcceptorCount==1 ~ &quot;CassetteExonIncluded.UpstreamIntron&quot;,
+    IntronsPerCluster==3 &amp; SpliceDonorCount==3 &amp; SpliceAcceptorCount==1 ~ &quot;Alt3ss&quot;,
+    IntronsPerCluster==3 &amp; SpliceDonorCount==1 &amp; SpliceAcceptorCount==3 ~ &quot;Alt5ss&quot;,
+    IntronsPerCluster&gt;=4 ~ &quot;Complex&quot;
+  )) %&gt;%
+  dplyr::select(intron, SplicingType) %&gt;%
+  left_join(leafcutter.merged, by=&quot;intron&quot;)
+
+#Number of splicing types
+table(leafcutter.merged.AS.reclassified$SplicingType) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Var1</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alt3ss</td>
+<td align="right">286</td>
+</tr>
+<tr class="even">
+<td align="left">Alt5ss</td>
+<td align="right">199</td>
+</tr>
+<tr class="odd">
+<td align="left">CassetteExonIncluded.DownstreamIntron</td>
+<td align="right">177</td>
+</tr>
+<tr class="even">
+<td align="left">CassetteExonIncluded.UpstreamIntron</td>
+<td align="right">177</td>
+</tr>
+<tr class="odd">
+<td align="left">CassetteExonSkipped</td>
+<td align="right">177</td>
+</tr>
+<tr class="even">
+<td align="left">Complex</td>
+<td align="right">45266</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Check that the classifications make sense by manually inspecting some intron coordinates for a few clusters
+head(leafcutter.merged.AS.reclassified) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">intron</th>
+<th align="left">SplicingType</th>
+<th align="right">logef</th>
+<th align="right">K700E</th>
+<th align="right">WT</th>
+<th align="right">deltapsi</th>
+<th align="left">cluster</th>
+<th align="left">junc_id</th>
+<th align="left">status</th>
+<th align="right">loglr</th>
+<th align="right">df</th>
+<th align="right">p</th>
+<th align="right">p.adjust</th>
+<th align="left">genes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">chr1:1263387:1267733:clu_10_-</td>
+<td align="left">Complex</td>
+<td align="right">0.5730873</td>
+<td align="right">0.0078501</td>
+<td align="right">0.0165023</td>
+<td align="right">0.0086522</td>
+<td align="left">chr1:clu_10_-</td>
+<td align="left">chr1:1263387:1267733</td>
+<td align="left">Success</td>
+<td align="right">2.1179106</td>
+<td align="right">4</td>
+<td align="right">0.3750307</td>
+<td align="right">0.7816801</td>
+<td align="left">UBE2J2</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:1263387:1267862:clu_10_-</td>
+<td align="left">Complex</td>
+<td align="right">-0.2769173</td>
+<td align="right">0.4876222</td>
+<td align="right">0.4381295</td>
+<td align="right">-0.0494928</td>
+<td align="left">chr1:clu_10_-</td>
+<td align="left">chr1:1263387:1267862</td>
+<td align="left">Success</td>
+<td align="right">2.1179106</td>
+<td align="right">4</td>
+<td align="right">0.3750307</td>
+<td align="right">0.7816801</td>
+<td align="left">UBE2J2</td>
+</tr>
+<tr class="odd">
+<td align="left">chr1:1263387:1273666:clu_10_-</td>
+<td align="left">Complex</td>
+<td align="right">0.0681116</td>
+<td align="right">0.0230059</td>
+<td align="right">0.0291878</td>
+<td align="right">0.0061820</td>
+<td align="left">chr1:clu_10_-</td>
+<td align="left">chr1:1263387:1273666</td>
+<td align="left">Success</td>
+<td align="right">2.1179106</td>
+<td align="right">4</td>
+<td align="right">0.3750307</td>
+<td align="right">0.7816801</td>
+<td align="left">UBE2J2</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:1267993:1272853:clu_10_-</td>
+<td align="left">Complex</td>
+<td align="right">-0.2715277</td>
+<td align="right">0.0223636</td>
+<td align="right">0.0202023</td>
+<td align="right">-0.0021613</td>
+<td align="left">chr1:clu_10_-</td>
+<td align="left">chr1:1267993:1272853</td>
+<td align="left">Success</td>
+<td align="right">2.1179106</td>
+<td align="right">4</td>
+<td align="right">0.3750307</td>
+<td align="right">0.7816801</td>
+<td align="left">UBE2J2</td>
+</tr>
+<tr class="odd">
+<td align="left">chr1:1267993:1273666:clu_10_-</td>
+<td align="left">Complex</td>
+<td align="right">-0.0927539</td>
+<td align="right">0.4591583</td>
+<td align="right">0.4959782</td>
+<td align="right">0.0368199</td>
+<td align="left">chr1:clu_10_-</td>
+<td align="left">chr1:1267993:1273666</td>
+<td align="left">Success</td>
+<td align="right">2.1179106</td>
+<td align="right">4</td>
+<td align="right">0.3750307</td>
+<td align="right">0.7816801</td>
+<td align="left">UBE2J2</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:16626006:16626353:clu_100_-</td>
+<td align="left">Complex</td>
+<td align="right">-0.1590048</td>
+<td align="right">0.6370657</td>
+<td align="right">0.5707452</td>
+<td align="right">-0.0663206</td>
+<td align="left">chr1:clu_100_-</td>
+<td align="left">chr1:16626006:16626353</td>
+<td align="left">Success</td>
+<td align="right">0.8541075</td>
+<td align="right">2</td>
+<td align="right">0.4256629</td>
+<td align="right">0.8071348</td>
+<td align="left">CROCCP2</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>MinorIsoforms &lt;- leafcutter.merged.AS.reclassified %&gt;%
+  filter(p.adjust&lt;0.3) %&gt;%
+  group_by(cluster) %&gt;%
+  top_n(-1, WT) %&gt;%
+  ungroup()
+
+#histogram of splicing fraction of minor isoforms (intron with smallest splicing fraction within cluster)
+hist(MinorIsoforms$WT)</code></pre>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>MajorIsoforms &lt;- leafcutter.merged.AS.reclassified %&gt;%
+  filter(p.adjust&lt;0.3) %&gt;%
+  group_by(cluster) %&gt;%
+  top_n(1, WT) %&gt;%
+  ungroup()
+
+#histogram of splicing fraction of major isoforms (intron with largest splicing fraction within cluster)
+hist(MajorIsoforms$WT)</code></pre>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Now let’s check that we see the expected effect on alt 3’ss usage.</p>
+<pre class="r"><code>#table of splicing types of all clusters
+table(leafcutter.merged.AS.reclassified$SplicingType) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Var1</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alt3ss</td>
+<td align="right">286</td>
+</tr>
+<tr class="even">
+<td align="left">Alt5ss</td>
+<td align="right">199</td>
+</tr>
+<tr class="odd">
+<td align="left">CassetteExonIncluded.DownstreamIntron</td>
+<td align="right">177</td>
+</tr>
+<tr class="even">
+<td align="left">CassetteExonIncluded.UpstreamIntron</td>
+<td align="right">177</td>
+</tr>
+<tr class="odd">
+<td align="left">CassetteExonSkipped</td>
+<td align="right">177</td>
+</tr>
+<tr class="even">
+<td align="left">Complex</td>
+<td align="right">45266</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#splicing types of significant clusters only
+leafcutter.merged.AS.reclassified %&gt;%
+  filter(p.adjust&lt;0.3) %&gt;% pull(SplicingType) %&gt;% table() %&gt;%
+  kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">.</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alt3ss</td>
+<td align="right">31</td>
+</tr>
+<tr class="even">
+<td align="left">Alt5ss</td>
+<td align="right">6</td>
+</tr>
+<tr class="odd">
+<td align="left">CassetteExonIncluded.DownstreamIntron</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="left">CassetteExonIncluded.UpstreamIntron</td>
+<td align="right">11</td>
+</tr>
+<tr class="odd">
+<td align="left">CassetteExonSkipped</td>
+<td align="right">11</td>
+</tr>
+<tr class="even">
+<td align="left">Complex</td>
+<td align="right">4575</td>
+</tr>
+</tbody>
+</table>
+<p>Ok as expected, there does seem to be an enrichment for alt3ss.</p>
+<p>Now let’s check the sign of the effect size. We expect mostly negative effect sizes (the way I coded this differential splicing analysis was such that splicing increases in the SF3B1 mutant samples have negative effect sizes)</p>
+<pre class="r"><code>#Note the sign of logef, compared the splicing ratios in WT and SF3B1 K700E
+head(leafcutter.merged) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">intron</th>
+<th align="right">logef</th>
+<th align="right">K700E</th>
+<th align="right">WT</th>
+<th align="right">deltapsi</th>
+<th align="left">cluster</th>
+<th align="left">junc_id</th>
+<th align="left">status</th>
+<th align="right">loglr</th>
+<th align="right">df</th>
+<th align="right">p</th>
+<th align="right">p.adjust</th>
+<th align="left">genes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">chr1:1263387:1267733:clu_10_-</td>
+<td align="right">0.5730873</td>
+<td align="right">0.0078501</td>
+<td align="right">0.0165023</td>
+<td align="right">0.0086522</td>
+<td align="left">chr1:clu_10_-</td>
+<td align="left">chr1:1263387:1267733</td>
+<td align="left">Success</td>
+<td align="right">2.1179106</td>
+<td align="right">4</td>
+<td align="right">0.3750307</td>
+<td align="right">0.7816801</td>
+<td align="left">UBE2J2</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:1263387:1267862:clu_10_-</td>
+<td align="right">-0.2769173</td>
+<td align="right">0.4876222</td>
+<td align="right">0.4381295</td>
+<td align="right">-0.0494928</td>
+<td align="left">chr1:clu_10_-</td>
+<td align="left">chr1:1263387:1267862</td>
+<td align="left">Success</td>
+<td align="right">2.1179106</td>
+<td align="right">4</td>
+<td align="right">0.3750307</td>
+<td align="right">0.7816801</td>
+<td align="left">UBE2J2</td>
+</tr>
+<tr class="odd">
+<td align="left">chr1:1263387:1273666:clu_10_-</td>
+<td align="right">0.0681116</td>
+<td align="right">0.0230059</td>
+<td align="right">0.0291878</td>
+<td align="right">0.0061820</td>
+<td align="left">chr1:clu_10_-</td>
+<td align="left">chr1:1263387:1273666</td>
+<td align="left">Success</td>
+<td align="right">2.1179106</td>
+<td align="right">4</td>
+<td align="right">0.3750307</td>
+<td align="right">0.7816801</td>
+<td align="left">UBE2J2</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:1267993:1272853:clu_10_-</td>
+<td align="right">-0.2715277</td>
+<td align="right">0.0223636</td>
+<td align="right">0.0202023</td>
+<td align="right">-0.0021613</td>
+<td align="left">chr1:clu_10_-</td>
+<td align="left">chr1:1267993:1272853</td>
+<td align="left">Success</td>
+<td align="right">2.1179106</td>
+<td align="right">4</td>
+<td align="right">0.3750307</td>
+<td align="right">0.7816801</td>
+<td align="left">UBE2J2</td>
+</tr>
+<tr class="odd">
+<td align="left">chr1:1267993:1273666:clu_10_-</td>
+<td align="right">-0.0927539</td>
+<td align="right">0.4591583</td>
+<td align="right">0.4959782</td>
+<td align="right">0.0368199</td>
+<td align="left">chr1:clu_10_-</td>
+<td align="left">chr1:1267993:1273666</td>
+<td align="left">Success</td>
+<td align="right">2.1179106</td>
+<td align="right">4</td>
+<td align="right">0.3750307</td>
+<td align="right">0.7816801</td>
+<td align="left">UBE2J2</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:16626006:16626353:clu_100_-</td>
+<td align="right">-0.1590048</td>
+<td align="right">0.6370657</td>
+<td align="right">0.5707452</td>
+<td align="right">-0.0663206</td>
+<td align="left">chr1:clu_100_-</td>
+<td align="left">chr1:16626006:16626353</td>
+<td align="left">Success</td>
+<td align="right">0.8541075</td>
+<td align="right">2</td>
+<td align="right">0.4256629</td>
+<td align="right">0.8071348</td>
+<td align="left">CROCCP2</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#Now make plots to get to know if minor isoform alt5&#39;ss have generally gone down. Same for alt 3&#39;ss.
+MinorIsoforms %&gt;%
+  filter(SplicingType %in% c(&quot;Alt5ss&quot;, &quot;Alt3ss&quot;)) %&gt;%
+ggplot(aes(x=deltapsi, color=SplicingType)) +
+    stat_ecdf(geom = &quot;step&quot;) +
+    xlim(c(-1,1))+
+    ylab(&quot;Cumulative frequency&quot;) +
+    theme_bw()</code></pre>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>MinorIsoforms %&gt;%
+  filter(SplicingType %in% c(&quot;Alt3ss&quot;)) %&gt;% pull(deltapsi) %&gt;%
+  wilcox.test()</code></pre>
+<pre><code>
+    Wilcoxon signed rank test
+
+data:  .
+V = 11, p-value = 0.003357
+alternative hypothesis: true location is not equal to 0</code></pre>
+<p>For minor isoforms of alt3’ss, the effect size (deltapsi) is negative in ~80% of significant cases, meaning upregulated in the K700E mutant. This is more than expected by chance.</p>
+</div>
+<div id="conclusions" class="section level2">
+<h2>Conclusions</h2>
+<p>This analyses seems to have worked as expected.</p>
+<br>
+<p>
+<button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
+<span class="glyphicon glyphicon-wrench" aria-hidden="true"></span> Session information
+</button>
+</p>
+<div id="workflowr-sessioninfo" class="collapse">
+<pre class="r"><code>sessionInfo()</code></pre>
+<pre><code>R version 3.6.1 (2019-07-05)
+Platform: x86_64-apple-darwin15.6.0 (64-bit)
+Running under: macOS Catalina 10.15.1
+
+Matrix products: default
+BLAS:   /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRblas.0.dylib
+LAPACK: /Library/Frameworks/R.framework/Versions/3.6/Resources/lib/libRlapack.dylib
+
+locale:
+[1] en_US.UTF-8/en_US.UTF-8/en_US.UTF-8/C/en_US.UTF-8/en_US.UTF-8
+
+attached base packages:
+[1] stats     graphics  grDevices utils     datasets  methods   base     
+
+other attached packages:
+ [1] knitr_1.26      forcats_0.4.0   stringr_1.4.0   dplyr_0.8.3    
+ [5] purrr_0.3.3     readr_1.3.1     tidyr_1.0.0     tibble_2.1.3   
+ [9] ggplot2_3.2.1   tidyverse_1.2.1
+
+loaded via a namespace (and not attached):
+ [1] tidyselect_0.2.5 xfun_0.11        haven_2.2.0      lattice_0.20-38 
+ [5] colorspace_1.4-1 vctrs_0.2.0      generics_0.0.2   htmltools_0.4.0 
+ [9] yaml_2.2.0       rlang_0.4.1      later_1.0.0      pillar_1.4.2    
+[13] withr_2.1.2      glue_1.3.1       modelr_0.1.5     readxl_1.3.1    
+[17] lifecycle_0.1.0  munsell_0.5.0    gtable_0.3.0     workflowr_1.5.0 
+[21] cellranger_1.1.0 rvest_0.3.5      evaluate_0.14    labeling_0.3    
+[25] httpuv_1.5.2     highr_0.8        broom_0.5.2      Rcpp_1.0.2      
+[29] promises_1.1.0   backports_1.1.5  scales_1.0.0     jsonlite_1.6    
+[33] fs_1.3.1         hms_0.5.2        digest_0.6.22    stringi_1.4.3   
+[37] grid_3.6.1       rprojroot_1.3-2  cli_1.1.0        tools_3.6.1     
+[41] magrittr_1.5     lazyeval_0.2.2   crayon_1.3.4     pkgconfig_2.0.3 
+[45] zeallot_0.1.0    ellipsis_0.3.0   xml2_1.2.2       lubridate_1.7.4 
+[49] assertthat_0.2.1 rmarkdown_1.17   httr_1.4.1       rstudioapi_0.10 
+[53] R6_2.4.1         nlme_3.1-142     git2r_0.26.1     compiler_3.6.1  </code></pre>
+</div>
+</div>
+
+
+<!-- Adjust MathJax settings so that all math formulae are shown using
+TeX fonts only; see
+http://docs.mathjax.org/en/latest/configuration.html.  This will make
+the presentation more consistent at the cost of the webpage sometimes
+taking slightly longer to load. Note that this only works because the
+footer is added to webpages before the MathJax javascript. -->
+<script type="text/x-mathjax-config">
+  MathJax.Hub.Config({
+    "HTML-CSS": { availableFonts: ["TeX"] }
+  });
+</script>
+
+
+</div>
+</div>
+
+</div>
+
+<script>
+
+// add bootstrap table styles to pandoc tables
+function bootstrapStylePandocTables() {
+  $('tr.header').parent('thead').parent('table').addClass('table table-condensed');
+}
+$(document).ready(function () {
+  bootstrapStylePandocTables();
+});
+
+
+</script>
+
+<!-- tabsets -->
+
+<script>
+$(document).ready(function () {
+  window.buildTabsets("TOC");
+});
+
+$(document).ready(function () {
+  $('.tabset-dropdown > .nav-tabs > li').click(function () {
+    $(this).parent().toggleClass('nav-tabs-open')
+  });
+});
+</script>
+
+<!-- code folding -->
+
+<script>
+$(document).ready(function ()  {
+
+    // move toc-ignore selectors from section div to header
+    $('div.section.toc-ignore')
+        .removeClass('toc-ignore')
+        .children('h1,h2,h3,h4,h5').addClass('toc-ignore');
+
+    // establish options
+    var options = {
+      selectors: "h1,h2,h3",
+      theme: "bootstrap3",
+      context: '.toc-content',
+      hashGenerator: function (text) {
+        return text.replace(/[.\\/?&!#<>]/g, '').replace(/\s/g, '_').toLowerCase();
+      },
+      ignoreSelector: ".toc-ignore",
+      scrollTo: 0
+    };
+    options.showAndHide = true;
+    options.smoothScroll = true;
+
+    // tocify
+    var toc = $("#TOC").tocify(options).data("toc-tocify");
+});
+</script>
+
+<!-- dynamically load mathjax for compatibility with self-contained -->
+<script>
+  (function () {
+    var script = document.createElement("script");
+    script.type = "text/javascript";
+    script.src  = "https://mathjax.rstudio.com/latest/MathJax.js?config=TeX-AMS-MML_HTMLorMML";
+    document.getElementsByTagName("head")[0].appendChild(script);
+  })();
+</script>
+
+</body>
+</html>

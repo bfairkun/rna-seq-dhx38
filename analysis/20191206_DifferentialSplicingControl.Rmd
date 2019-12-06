@@ -1,0 +1,220 @@
+---
+title: "sf3b1 positive control analysis"
+author: "Benjamin Fair"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+## Introduction
+
+To go along with the analysis I did on DHX38 samples, I wanted to also do something that could serve as a positive control to make sure my analyses is sound and sensitive to pick up on effects that we know to be real. So here, I did a brief differential splicing analysis of samples which should give a known phenotype. SF3B1 mutants cause increased alt 3'ss usage. I took data from [Darman et al](https://www.ncbi.nlm.nih.gov/pubmed/26565915) (pre-processed into junction counts by [snaptron](http://snaptron.cs.jhu.edu) and analyzed in with the same leafcutter pipeline for Chris' DHX38 samples. The samples were Nalm6 isogenic cell lines with and without a SF3B1 K700E knockin allele; 3 replicates of mutant (K700E) and 2 replicates of WT.
+
+## Analysis
+
+First, load necessary libraries
+```{r}
+library(tidyverse)
+library(knitr)
+
+```
+
+Load in leafcutter processed data.
+
+```{r}
+sig <- read.table("../data/sf3b1_data/leafcutter.ds.cluster_sig.txt.gz", sep='\t', header=T)
+
+head(sig) %>% kable()
+
+effect_sizes <- read.table("../data/sf3b1_data/leafcutter.ds.effect_sizes.txt.gz", sep='\t', header=T)
+
+head(effect_sizes) %>% kable()
+```
+
+Check some basic things about the data.
+
+```{r}
+#how many introns for each cluster
+effect_sizes %>%
+  mutate(Cluster=sub(".+?:(clu_.+?_.+?)","\\1",intron)) %>%
+  group_by(Cluster) %>%
+  tally() %>%
+  ggplot(aes(x=n)) +
+  geom_bar(breaks=40) +
+  xlab("Num introns per cluster") +
+  ylab("Freq") +
+  theme_bw()
+
+#histogram of Pvalues
+hist(sig$p)
+
+#how many significant (p.adjust < 0.1)
+table(sig$p.adjust<0.1) %>% kable()
+
+
+# merge significance and cluster tables
+leafcutter.merged <- effect_sizes %>%
+  mutate(cluster=gsub("(.+?:).+?:.+?:(clu.+?)", "\\1\\2", intron, perl=T)) %>%
+  mutate(junc_id=gsub("(.+?:.+?:.+?):clu.+", "\\1", intron, perl=T)) %>%
+  left_join(sig, by="cluster")
+
+# volcano plot of cluster-pvalues and largest within-cluster-delta-psi
+leafcutter.merged %>%
+  mutate(abs.deltapsi = abs(deltapsi)) %>%
+  group_by(cluster) %>% 
+  top_n(n=1, abs.deltapsi) %>%
+  mutate(sig=p.adjust<0.05) %>%
+  ggplot(aes(x=deltapsi, y=-log10(p), color=sig)) +
+    geom_point(alpha=0.05) +
+    theme_bw()
+```
+
+
+Now check that differential splicing analysis works. 
+
+Here I will load the list of all ~800 splice junctions Darman et al identified as significantly differntially spliced and check that this leafcutter pipeline also identifies them as significantly differentially spliced.
+
+Note that Darman et al did a bunch of separate analyses of SF3B1 mutants in various tissue or cell types and combined the list of differentially spliced junctions into a single large list (which I am loading here), even though I just used a subset of their samples to redo differential splicing analysis. Therefore, based on the fact that I am using only a small subset of their data in only one cell type (as opposed to the many analyses they combined), I may not expect to recover all of their significant introns.
+
+```{r}
+#Load list of differential junctions
+DarmanJunctionsList <- read.table('../data/sf3b1_data/DarmanDiffJunctions.LiftedToHg38.bed.txt', header=F)
+
+# Make new id, for easier use in later filtering. Note that coordinates may need to add 1, compared to leafcutter coordinates
+DarmanJunctionsList$junc_id <- paste(DarmanJunctionsList$V1, DarmanJunctionsList$V2 + 1, DarmanJunctionsList$V3 + 1, sep=":")
+
+NotInDarman<-leafcutter.merged %>%
+  filter(!junc_id %in% DarmanJunctionsList$junc_id) %>%
+  dplyr::distinct(cluster, .keep_all=T)
+InDarman<-leafcutter.merged %>% 
+  filter(junc_id %in% DarmanJunctionsList$junc_id) %>%
+  dplyr::distinct(cluster, .keep_all=T)
+
+#histogram of P-values for not containing introns siginificant in Darman et al
+hist(NotInDarman$p)
+
+#histogram of P-values for clusters with introns sig in Darman
+hist(InDarman$p)
+
+
+## QQ-plot of cluster P-vals, grouped by whether cluster contains in intron identified as differentially spliced in Daraman et al.
+ggplot(NotInDarman, aes(color="NotInDarman", y=-log10(sort(p)), x=-log10(1:length(p)/length(p)))) +
+  geom_point() +
+  geom_point(data=InDarman, aes(color="InDarman")) +
+  xlab("-log10(Theoretical-Pvalues)") +
+  ylab("-log10(Observed-Pvalues)") +
+  geom_abline() +
+  theme_bw() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank())
+```
+
+Ok good. The introns Darman found to be significant, I also found to be significant with smaller P-values.
+
+Now classify splicing types as I did in the DHX38 analysis.
+
+```{r}
+#Reclassify splicing types
+leafcutter.merged.AS.reclassified <- leafcutter.merged %>% 
+  dplyr::select(intron) %>%
+  separate(intron, into=c("chrom", "start", "stop", "cluster"), sep=":", remove=F) %>%
+  mutate(strand=sub("clu_\\d+_(.+)", "\\1", cluster)) %>%
+  mutate(
+    SpliceDonorCoord=case_when(
+      strand=="+" ~ paste(chrom, start, strand),
+      strand=="-" ~ paste(chrom, stop, strand)),
+    SpliceAcceptorCoord=case_when(
+      strand=="+" ~ paste(chrom, stop, strand),
+      strand=="-" ~ paste(chrom, start, strand))) %>%
+  dplyr::select(intron, cluster, SpliceDonorCoord,SpliceAcceptorCoord) %>%
+  add_count(cluster, name="IntronsPerCluster") %>%
+  add_count(SpliceDonorCoord, name="SpliceDonorCount") %>%
+  add_count(SpliceAcceptorCoord, name="SpliceAcceptorCount") %>%
+  mutate(SplicingType=case_when(
+    IntronsPerCluster==2 & SpliceDonorCount==2 ~ "Alt3ss",
+    IntronsPerCluster==2 & SpliceAcceptorCount==2 ~ "Alt5ss",
+    IntronsPerCluster==3 & SpliceDonorCount==2 & SpliceAcceptorCount==2 ~ "CassetteExonSkipped",
+    IntronsPerCluster==3 & SpliceDonorCount==1 & SpliceAcceptorCount==2 ~ "CassetteExonIncluded.DownstreamIntron",
+    IntronsPerCluster==3 & SpliceDonorCount==2 & SpliceAcceptorCount==1 ~ "CassetteExonIncluded.UpstreamIntron",
+    IntronsPerCluster==3 & SpliceDonorCount==3 & SpliceAcceptorCount==1 ~ "Alt3ss",
+    IntronsPerCluster==3 & SpliceDonorCount==1 & SpliceAcceptorCount==3 ~ "Alt5ss",
+    IntronsPerCluster>=4 ~ "Complex"
+  )) %>%
+  dplyr::select(intron, SplicingType) %>%
+  left_join(leafcutter.merged, by="intron")
+
+#Number of splicing types
+table(leafcutter.merged.AS.reclassified$SplicingType) %>% kable()
+
+# Check that the classifications make sense by manually inspecting some intron coordinates for a few clusters
+head(leafcutter.merged.AS.reclassified) %>% kable()
+
+
+MinorIsoforms <- leafcutter.merged.AS.reclassified %>%
+  filter(p.adjust<0.3) %>%
+  group_by(cluster) %>%
+  top_n(-1, WT) %>%
+  ungroup()
+
+#histogram of splicing fraction of minor isoforms (intron with smallest splicing fraction within cluster)
+hist(MinorIsoforms$WT)
+
+MajorIsoforms <- leafcutter.merged.AS.reclassified %>%
+  filter(p.adjust<0.3) %>%
+  group_by(cluster) %>%
+  top_n(1, WT) %>%
+  ungroup()
+
+#histogram of splicing fraction of major isoforms (intron with largest splicing fraction within cluster)
+hist(MajorIsoforms$WT)
+```
+
+
+Now let's check that we see the expected effect on alt 3'ss usage.
+
+
+```{r}
+#table of splicing types of all clusters
+table(leafcutter.merged.AS.reclassified$SplicingType) %>% kable()
+
+#splicing types of significant clusters only
+leafcutter.merged.AS.reclassified %>%
+  filter(p.adjust<0.3) %>% pull(SplicingType) %>% table() %>%
+  kable()
+```
+
+Ok as expected, there does seem to be an enrichment for alt3ss.
+
+Now let's check the sign of the effect size. We expect mostly negative effect sizes (the way I coded this differential splicing analysis was such that splicing increases in the SF3B1 mutant samples have negative effect sizes)
+
+```{r}
+#Note the sign of logef, compared the splicing ratios in WT and SF3B1 K700E
+head(leafcutter.merged) %>% kable()
+
+#Now make plots to get to know if minor isoform alt5'ss have generally gone down. Same for alt 3'ss.
+MinorIsoforms %>%
+  filter(SplicingType %in% c("Alt5ss", "Alt3ss")) %>%
+ggplot(aes(x=deltapsi, color=SplicingType)) +
+    stat_ecdf(geom = "step") +
+    xlim(c(-1,1))+
+    ylab("Cumulative frequency") +
+    theme_bw()
+
+MinorIsoforms %>%
+  filter(SplicingType %in% c("Alt3ss")) %>% pull(deltapsi) %>%
+  wilcox.test()
+```
+
+For minor isoforms of alt3'ss, the effect size (deltapsi) is negative in ~80% of significant cases, meaning upregulated in the K700E mutant. This is more than expected by chance.
+
+
+## Conclusions
+
+This analyses seems to have worked as expected.
+
+

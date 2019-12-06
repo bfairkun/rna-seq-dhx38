@@ -23,8 +23,6 @@ First, load necessary libraries
 ```{r}
 library(tidyverse)
 library(knitr)
-library(edgeR)
-library(biomaRt)
 library("clusterProfiler")
 library("org.Hs.eg.db")
 library(enrichplot)
@@ -32,7 +30,7 @@ library(psych)
 library(corrplot)
 ```
 
-load in leafcutter output
+load in leafcutter output. leafcutter clusters overlapping introns and analyzes all introns within a cluster and jointly tests them for differential splicing. This analysis is intron-centric (So if there is an increase in an exon-skipping event, that will be listed as a decrease in splicing of the flanking introns, and increase in the splicing of the intron-exon-intron junction). Each intron gets an estimated effect size difference between affected and healthy (which can be communicated logef or delta-psi), a estimate of the splicing fraction (number of junctions for a particular intron divided by total junctions in the cluster) and each cluster gets a P-value for whether these effect size differences are significant. 
 
 ```{r}
 sig <- read.table("../output/differential_splicing_significance.txt.gz", sep='\t', header=T)
@@ -44,17 +42,36 @@ effect_sizes <- read.table("../output/differential_splicing_effect_sizes.txt.gz"
 head(effect_sizes) %>% kable()
 ```
 
-Get a sense of number of intron clusters tested, number significant, etc
+Get a basic sense of the data. Like the number of intron clusters tested, number significant, etc
 
 ```{r}
+#Splice fractions within each cluster should sum to 1
+effect_sizes %>%
+  mutate(Cluster=sub(".+?:(clu_.+?_.+?)","\\1",intron)) %>%
+  group_by(Cluster) %>%
+  summarise(clustersum=sum(A)) %>% head() %>% kable()
+
 #how many clusters tested ("Success")
-table(sig$status)
+table(sig$status) %>% kable()
+
+#how many introns for each cluster
+effect_sizes %>%
+  mutate(Cluster=sub(".+?:(clu_.+?_.+?)","\\1",intron)) %>%
+  group_by(Cluster) %>%
+  tally() %>%
+  ggplot(aes(x=n)) +
+  geom_histogram() +
+  scale_x_continuous(breaks = seq(1, 10, by = 1)) +
+  xlab("Num introns per cluster") +
+  ylab("Freq") +
+  theme_bw()
 
 #histogram of Pvalues
 hist(sig$p)
 
 #how many significant (p.adjust < 0.1)
-table(sig$p.adjust<0.1)
+table(sig$p.adjust<0.1) %>% kable()
+
 
 # merge significance and cluster tables
 leafcutter.merged <- effect_sizes %>%
@@ -102,17 +119,28 @@ dim(gsea.results.df)
 
 No significant GSEA results at the default P.adjust<0.5 threshold.
 
-Ok, besides identifying the genes (or kinds of genes) through which the disease phenotype is potentially mediated, maybe the other questions I should be asking is what kinds of intron features distinguish differentially spliced introns, which may be more enlightening about general splicing mechanisms in these DHX38 mutants.
+Ok, besides identifying the genes (or kinds of genes) through which the disease phenotype is potentially mediated, maybe the other questions I should be asking is what kinds of intron features distinguish differentially spliced introns, which may be more enlightening about general splicing mechanisms due to this DHX38 genotype.
 
-I have scored the 5'ss and 3'ss motifs for each intron tested using a position specific score matrix based on annotated introns. I additionally used [svm-bpfinder](http://regulatorygenomics.upf.edu/Software/SVM_BP/) to score the best computationally predicted branch for each intron. I also annotated whether each intron is annotated, alt3'ss, alt5'ss, new pairing of splice sites, or new intron. All of that work is hidden in the `code` section and output into a file in `output`. 
+I have scored the 5'ss and 3'ss motifs for each intron tested using a position specific score matrix based on annotated introns. I additionally used [svm-bpfinder](http://regulatorygenomics.upf.edu/Software/SVM_BP/) to score the best computationally predicted branch for each intron. I also annotated whether each intron is annotated, an unanottated alt3'ss, an unanotated alt5'ss, an unannotated new pairing of splice sites, or new intron (unannotated 5' and unannotated 3'ss). All of that work is hidden in the `code` section and output into a file in `output`. 
 
-Let's see if any of those features correlate with differentially expressed introns. If there is the DHX38 mutations preferentially activates less consensus splice sites for example, I expect the directionality to be consistent. Therefore, I will correlate those scores with either the logFC for each intron, for significant introns.
+Let's see if any of those features correlate with differentially expressed introns. If there is the DHX38 mutations preferentially activates less consensus splice sites for example, I expect the directionality to be consistent. Therefore, I will correlate those scores with the logeff (polarized effect size) for each intron, for significant introns.
 
 ```{r}
 #read intron features
 IntronFeatures <- read.table("../output/IntronFeatures.txt.gz", sep='\t', header=T)
 
 head(IntronFeatures) %>% kable()
+
+#Check an example of a good donor score and a bad donor score
+#Good splice donor (positions -3 to +6)
+IntronFeatures %>%
+  top_n(1, DonorScore) %>% head(1) %>%
+  dplyr::select(donor_seq, DonorScore)
+
+#Bad splice donor
+IntronFeatures %>%
+  top_n(-1, DonorScore) %>% head(1) %>%
+  dplyr::select(donor_seq, DonorScore)
 
 # Check that the number of types of unannotated splicing is similar in both strands. Sometimes bugs related to coordinates produce wonky results
 IntronFeatures %>%
@@ -188,24 +216,23 @@ leafcutter.merged.w.features %>%
     theme_bw()
 ```
 
-Maybe 5'ss stick out? Let's test it more explicitly.
+Maybe cryptic (unannotated) 5'ss stick out? In other words, for cryptic 5'ss, ~65% have negative effect sizes, and ~35% have positive effect sizes. For most other unannotated splicing types it is closer to 50/50. Let's more explicitly if this difference is significant.
 
 
-The null hypothesis here is that any given type of splicing will not significantly deviate from median of 0 effect size (similar number of positive effects as negative effects). Wilcox.test to test with null as mu=0 should work.
+The null hypothesis here is that any given type of splicing will not significantly deviate from median of 0 effect size (equal number of positive effects as negative effects). Wilcox.test to test with null as mu=0 should work.
 
 
 ```{r}
 
-## are alt 5'ss upregulated?
+## are alt 5'ss downregulated?
 wilcox.test(
   leafcutter.merged.w.features %>%
-  filter(type=="Alt5ss") %>% pull(deltapsi)
-    )
+  filter(type=="Alt5ss") %>% pull(deltapsi))
 
+# same test but using logef instead of deltapsi
 wilcox.test(
   leafcutter.merged.w.features %>%
-  filter(type=="Alt5ss") %>% pull(logef)
-    )
+  filter(type=="Alt5ss") %>% pull(logef))
 
 ## are alt 3'ss upregulated?
 wilcox.test(
@@ -213,6 +240,7 @@ wilcox.test(
   filter(type=="Alt3ss") %>% pull(deltapsi)
     )
 
+# same test but using logef instead of deltapsi
 wilcox.test(
   leafcutter.merged.w.features %>%
   filter(type=="Alt3ss") %>% pull(logef)
@@ -220,11 +248,137 @@ wilcox.test(
 
 ```
 
-Hmm. maybe there is something here with alt 5'ss. Considering all the exploration I've been doing, and without multiple hypothesis correction in many cases this might or might not be real.
+Hmm. maybe there is something here with alt 5'ss. Looks like cryptic (unannotated) 5'ss have a more negative effect size than expected by chance, meaning less cryptic 5'ss in the affected sample. Considering all the exploration I've been doing, and without multiple hypothesis correction in many cases this might or might not be real.
 
-## TODO
-- should look at the alt 5'ss and see if there is any distance constraint with the annotated 5'ss, similar to the SF3B1 mutants that have a very specific distance constraint to the usual splice sites that get activated
+
+Note that thus far, all my alternative splicing type classifications are based on identifying splice donors and splice acceptors that aren't in annotated transcripts (Ensembl annotations)... In other words, alternative 5'ss events that are annotated (most identified alternative splicing is annotated), are simply classified as "annotated". But if the effect about downregulation of cryptic 5'ss is real, I also expect the minor intron for annotated alternative 5'ss to decrease in the affected. So let's try to classify splicing types regardless of annotations, at least for clusters with only two or three introns where this is relatively straightforward:
+
+For example, for a cluster with two introns, if the splice donor coordinates is listed twice in the dataset and the splice acceptor coordinates is listed once, we know it is alternative 5'ss usage.
+
+
+```{r}
+#Reclassify splicing types
+leafcutter.merged.AS.reclassified <- leafcutter.merged %>% 
+  dplyr::select(intron) %>%
+  separate(intron, into=c("chrom", "start", "stop", "cluster"), sep=":", remove=F) %>%
+  mutate(strand=sub("clu_\\d+_(.+)", "\\1", cluster)) %>%
+  mutate(
+    SpliceDonorCoord=case_when(
+      strand=="+" ~ paste(chrom, start, strand),
+      strand=="-" ~ paste(chrom, stop, strand)),
+    SpliceAcceptorCoord=case_when(
+      strand=="+" ~ paste(chrom, stop, strand),
+      strand=="-" ~ paste(chrom, start, strand))) %>%
+  dplyr::select(intron, cluster, SpliceDonorCoord,SpliceAcceptorCoord) %>%
+  add_count(cluster, name="IntronsPerCluster") %>%
+  add_count(SpliceDonorCoord, name="SpliceDonorCount") %>%
+  add_count(SpliceAcceptorCoord, name="SpliceAcceptorCount") %>%
+  mutate(SplicingType=case_when(
+    IntronsPerCluster==2 & SpliceDonorCount==2 ~ "Alt3ss",
+    IntronsPerCluster==2 & SpliceAcceptorCount==2 ~ "Alt5ss",
+    IntronsPerCluster==3 & SpliceDonorCount==2 & SpliceAcceptorCount==2 ~ "CassetteExonSkipped",
+    IntronsPerCluster==3 & SpliceDonorCount==1 & SpliceAcceptorCount==2 ~ "CassetteExonIncluded.DownstreamIntron",
+    IntronsPerCluster==3 & SpliceDonorCount==2 & SpliceAcceptorCount==1 ~ "CassetteExonIncluded.UpstreamIntron",
+    IntronsPerCluster==3 & SpliceDonorCount==3 & SpliceAcceptorCount==1 ~ "Alt3ss",
+    IntronsPerCluster==3 & SpliceDonorCount==1 & SpliceAcceptorCount==3 ~ "Alt5ss",
+    IntronsPerCluster>=4 ~ "Complex"
+  )) %>%
+  dplyr::select(intron, SplicingType) %>%
+  left_join(leafcutter.merged, by="intron")
+
+#Number of splicing types
+table(leafcutter.merged.AS.reclassified$SplicingType) %>% kable()
+
+# Check that the classifications make sense by manually inspecting some intron coordinates for a few clusters
+head(leafcutter.merged.AS.reclassified) %>% kable()
+
+# Check that the classifications make sense in that the fraction of junction reads for introns upstream of cassette exons should strongly positively correlate with the fraction for introns downstream of cassette exons
+PlotExonSkippingSpliceRatios <- leafcutter.merged.AS.reclassified %>%
+  dplyr::select(cluster, SplicingType, H) %>%
+  filter(SplicingType %in% c("CassetteExonIncluded.DownstreamIntron", "CassetteExonIncluded.UpstreamIntron", "CassetteExonSkipped")) %>%
+  spread(key="SplicingType", value="H")
+
+ggplot(PlotExonSkippingSpliceRatios, aes(x=CassetteExonIncluded.DownstreamIntron, y=CassetteExonIncluded.UpstreamIntron)) +
+    geom_point()
+
+#And there should generally be anti correlation with the exon skipped isoform and either of the exon included introns
+ggplot(PlotExonSkippingSpliceRatios, aes(x=CassetteExonIncluded.DownstreamIntron, y=CassetteExonSkipped)) +
+    geom_point()
+```
+
+Okay from that it seems my classification of alternative splicing types makes sense. Now let's check if the minor isoform (as assessed in healthy samples) for each splicing type is has a general polarity to effect size. Specifically, if alt5'ss have negative effect sizes.
+
+```{r}
+MinorIsoforms <- leafcutter.merged.AS.reclassified %>%
+  filter(p.adjust<0.3) %>%
+  group_by(cluster) %>%
+  top_n(-1, H) %>%
+  ungroup()
+
+#histogram of splicing fraction of minor isoforms (intron with smallest splicing fraction within cluster)
+hist(MinorIsoforms$H)
+
+MajorIsoforms <- leafcutter.merged.AS.reclassified %>%
+  filter(p.adjust<0.3) %>%
+  group_by(cluster) %>%
+  top_n(1, H) %>%
+  ungroup()
+
+#histogram of splicing fraction of major isoforms (intron with largest splicing fraction within cluster)
+hist(MajorIsoforms$H)
+
+#Now make plots to get to know if minor isoform alt5'ss have generally gone down. Same for alt 3'ss.
+MinorIsoforms %>%
+  filter(SplicingType %in% c("Alt5ss", "Alt3ss")) %>%
+ggplot(aes(x=deltapsi, color=SplicingType)) +
+    stat_ecdf(geom = "step") +
+    xlim(c(-1,1))+
+    ylab("Cumulative frequency") +
+    theme_bw()
+
+#Mirrored plot for major isoforms.
+MajorIsoforms %>%
+    filter(SplicingType %in% c("Alt5ss", "Alt3ss")) %>%
+ggplot(aes(x=deltapsi, color=SplicingType)) +
+    stat_ecdf(geom = "step") +
+    xlim(c(-1,1))+
+    ylab("Cumulative frequency") +
+    theme_bw()
+
+#Try exon skipping
+leafcutter.merged.AS.reclassified %>%
+  filter(p.adjust<0.3) %>%
+  filter(SplicingType %in% c("CassetteExonSkipped", "CassetteExonIncluded.DownstreamIntron", "CassetteExonIncluded.UpstreamIntron")) %>%
+  ggplot(aes(x=deltapsi, color=SplicingType)) +
+    stat_ecdf(geom = "step") +
+    xlim(c(-1,1))+
+    ylab("Cumulative frequency") +
+    theme_bw()
+  
+
+```
+
+So there is no apparent difference in alt5'ss or alt3'ss usage when I considered all easily classifiable introns, regardless of annotation. In other words, the minor isoforms for 5'ss were equally up and down regulated. This is mirrored in when looking at major isoforms.
+
+
+Finally, since all of this type of analysis didn't return anything very interesting with confidence, I should browse the raw aligned read data in IGV to explore patterns that I might not have picked up on this differential splicing analysis. To aid in IGV exploration, let's write out a bed file of the most significant clusters so we can quickly jump to the regions of interest that are differentially spliced
+
+```{r}
+#bed file, with chromosome, start, stop, name, score, strand, extra info
+
+BedFile <- leafcutter.merged.AS.reclassified %>%
+  dplyr::select(intron, SplicingType, logef, deltapsi, p) %>%
+  separate(intron, into=c("chrom", "start", "stop", "cluster"), remove=F) %>%
+  mutate(extra=paste(logef, deltapsi, SplicingType), score=-log10(p), strand=".") %>%
+  
+  dplyr::select(chrom, start, stop, intron, score, strand, extra )
+
+head(BedFile) %>% kable()
+
+write.table(BedFile, file="../output/DiffSplicingRegions.bed", sep='\t', row.names = F, col.names = F, quote=F)
+```
 
 ## Conclusions
 
+Found a fair number of alternative splicing events significantly different between the two groups of samples. Though, with the given study design it is unclear which if any of these is due to the DHX38 mutations. Couldn't find any type of alternative splicing that is particularly enriched. Didn't find any correlations with splice site motif strength.
 

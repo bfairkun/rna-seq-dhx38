@@ -12,7 +12,7 @@
 
 <meta name="author" content="Benjamin Fair" />
 
-<meta name="date" content="2019-12-04" />
+<meta name="date" content="2019-12-06" />
 
 <title>Untitled</title>
 
@@ -379,7 +379,7 @@ div.section {
 
 <h1 class="title toc-ignore">Untitled</h1>
 <h4 class="author">Benjamin Fair</h4>
-<h4 class="date">December 04, 2019</h4>
+<h4 class="date">December 06, 2019</h4>
 
 </div>
 
@@ -404,7 +404,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2019-12-04
+<strong>Last updated:</strong> 2019-12-06
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -495,20 +495,27 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree0d7521b0051dd8fd31ed5857d788357da9fdd302targetblank0d7521ba"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/0d7521b0051dd8fd31ed5857d788357da9fdd302" target="_blank">0d7521b</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree98a59fa2a9dc86e77a13a9665365e2f439cdceb2targetblank98a59faa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/98a59fa2a9dc86e77a13a9665365e2f439cdceb2" target="_blank">98a59fa</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree0d7521b0051dd8fd31ed5857d788357da9fdd302targetblank0d7521ba" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree98a59fa2a9dc86e77a13a9665365e2f439cdceb2targetblank98a59faa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
 </p>
 <pre><code>
 Ignored files:
+    Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+
+Untracked files:
+    Untracked:  analysis/20191206_DifferentialSplicingControl.Rmd
+    Untracked:  data/sf3b1_data/
+    Untracked:  output/DiffSplicingRegions.bed
 
 Unstaged changes:
     Modified:   analysis/20191203_DifferentialSplicing.Rmd
+    Modified:   analysis/index.Rmd
 
 </code></pre>
 <p>
@@ -547,6 +554,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/98a59fa2a9dc86e77a13a9665365e2f439cdceb2/analysis/20191203_DifferentialSplicing.Rmd" target="_blank">98a59fa</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-04
+</td>
+<td>
+update site
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/bfairkun/rna-seq-dhx38/98a59fa2a9dc86e77a13a9665365e2f439cdceb2/docs/20191203_DifferentialSplicing.html" target="_blank">98a59fa</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-04
+</td>
+<td>
+update site
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -632,14 +673,12 @@ initialize site
 <p>First, load necessary libraries</p>
 <pre class="r"><code>library(tidyverse)
 library(knitr)
-library(edgeR)
-library(biomaRt)
 library(&quot;clusterProfiler&quot;)
 library(&quot;org.Hs.eg.db&quot;)
 library(enrichplot)
 library(psych)
 library(corrplot)</code></pre>
-<p>load in leafcutter output</p>
+<p>load in leafcutter output. leafcutter clusters overlapping introns and analyzes all introns within a cluster and jointly tests them for differential splicing. This analysis is intron-centric (So if there is an increase in an exon-skipping event, that will be listed as a decrease in splicing of the flanking introns, and increase in the splicing of the intron-exon-intron junction). Each intron gets an estimated effect size difference between affected and healthy (which can be communicated logef or delta-psi), a estimate of the splicing fraction (number of junctions for a particular intron divided by total junctions in the cluster) and each cluster gets a P-value for whether these effect size differences are significant.</p>
 <pre class="r"><code>sig &lt;- read.table(&quot;../output/differential_splicing_significance.txt.gz&quot;, sep=&#39;\t&#39;, header=T)
 
 head(sig) %&gt;% kable()</code></pre>
@@ -770,16 +809,81 @@ head(effect_sizes) %&gt;% kable()</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Get a sense of number of intron clusters tested, number significant, etc</p>
+<p>Get a basic sense of the data. Like the number of intron clusters tested, number significant, etc</p>
+<pre class="r"><code>#Splice fractions within each cluster should sum to 1
+effect_sizes %&gt;%
+  mutate(Cluster=sub(&quot;.+?:(clu_.+?_.+?)&quot;,&quot;\\1&quot;,intron)) %&gt;%
+  group_by(Cluster) %&gt;%
+  summarise(clustersum=sum(A)) %&gt;% head() %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Cluster</th>
+<th align="right">clustersum</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">clu_1_+</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">clu_10_+</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">clu_100_+</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">clu_1000_-</td>
+<td align="right">1</td>
+</tr>
+<tr class="odd">
+<td align="left">clu_1001_-</td>
+<td align="right">1</td>
+</tr>
+<tr class="even">
+<td align="left">clu_1002_-</td>
+<td align="right">1</td>
+</tr>
+</tbody>
+</table>
 <pre class="r"><code>#how many clusters tested (&quot;Success&quot;)
-table(sig$status)</code></pre>
-<pre><code>
-&lt;=1 sample with coverage&gt;min_coverage              Not enough valid samples 
-                                  212                                  1278 
-                              Success 
-                                 3619 </code></pre>
-<pre class="r"><code>#histogram of Pvalues
-hist(sig$p)</code></pre>
+table(sig$status) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Var1</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">&lt;=1 sample with coverage&gt;min_coverage</td>
+<td align="right">212</td>
+</tr>
+<tr class="even">
+<td align="left">Not enough valid samples</td>
+<td align="right">1278</td>
+</tr>
+<tr class="odd">
+<td align="left">Success</td>
+<td align="right">3619</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>#how many introns for each cluster
+effect_sizes %&gt;%
+  mutate(Cluster=sub(&quot;.+?:(clu_.+?_.+?)&quot;,&quot;\\1&quot;,intron)) %&gt;%
+  group_by(Cluster) %&gt;%
+  tally() %&gt;%
+  ggplot(aes(x=n)) +
+  geom_histogram() +
+  scale_x_continuous(breaks = seq(1, 10, by = 1)) +
+  xlab(&quot;Num introns per cluster&quot;) +
+  ylab(&quot;Freq&quot;) +
+  theme_bw()</code></pre>
 <p><img src="figure/20191203_DifferentialSplicing.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
@@ -818,26 +922,8 @@ Benjmain Fair
 </table>
 </div>
 </div>
-<pre class="r"><code>#how many significant (p.adjust &lt; 0.1)
-table(sig$p.adjust&lt;0.1)</code></pre>
-<pre><code>
-FALSE  TRUE 
- 2860   759 </code></pre>
-<pre class="r"><code># merge significance and cluster tables
-leafcutter.merged &lt;- effect_sizes %&gt;%
-  mutate(cluster=gsub(&quot;(.+?:).+?:.+?:(clu.+?)&quot;, &quot;\\1\\2&quot;, intron, perl=T)) %&gt;%
-  mutate(junc_id=gsub(&quot;(.+?:.+?:.+?):clu.+&quot;, &quot;\\1&quot;, intron, perl=T)) %&gt;%
-  left_join(sig, by=&quot;cluster&quot;)
-
-# volcano plot of cluster-pvalues and largest within-cluster-delta-psi
-leafcutter.merged %&gt;%
-  mutate(abs.deltapsi = abs(deltapsi)) %&gt;%
-  group_by(cluster) %&gt;% 
-  top_n(n=1, abs.deltapsi) %&gt;%
-  mutate(sig=p.adjust&lt;0.05) %&gt;%
-  ggplot(aes(x=deltapsi, y=-log10(p), color=sig)) +
-    geom_point(alpha=0.05) +
-    theme_bw()</code></pre>
+<pre class="r"><code>#histogram of Pvalues
+hist(sig$p)</code></pre>
 <p><img src="figure/20191203_DifferentialSplicing.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
@@ -887,6 +973,42 @@ Benjmain Fair
 </table>
 </div>
 </div>
+<pre class="r"><code>#how many significant (p.adjust &lt; 0.1)
+table(sig$p.adjust&lt;0.1) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Var1</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">FALSE</td>
+<td align="right">2860</td>
+</tr>
+<tr class="even">
+<td align="left">TRUE</td>
+<td align="right">759</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># merge significance and cluster tables
+leafcutter.merged &lt;- effect_sizes %&gt;%
+  mutate(cluster=gsub(&quot;(.+?:).+?:.+?:(clu.+?)&quot;, &quot;\\1\\2&quot;, intron, perl=T)) %&gt;%
+  mutate(junc_id=gsub(&quot;(.+?:.+?:.+?):clu.+&quot;, &quot;\\1&quot;, intron, perl=T)) %&gt;%
+  left_join(sig, by=&quot;cluster&quot;)
+
+# volcano plot of cluster-pvalues and largest within-cluster-delta-psi
+leafcutter.merged %&gt;%
+  mutate(abs.deltapsi = abs(deltapsi)) %&gt;%
+  group_by(cluster) %&gt;% 
+  top_n(n=1, abs.deltapsi) %&gt;%
+  mutate(sig=p.adjust&lt;0.05) %&gt;%
+  ggplot(aes(x=deltapsi, y=-log10(p), color=sig)) +
+    geom_point(alpha=0.05) +
+    theme_bw()</code></pre>
+<p><img src="figure/20191203_DifferentialSplicing.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /></p>
 <p>let’s do a gsea to see what genes have differentially spliced clusters of introns. For this, we need an ordered gene list, with each gene appearing once. Since the biological question related to this is what are the genes or gene sets that are getting disrupted to cause the organismal phenotype, i think it is important to consider not just significance (P-value) but also effect size, perhaps as measured by delta-psi. Since significane and effect size can be quite different in a splicing analysis (see volcano plot above) because of low read counts on some junctions, let’s first filter out all non-significant splicing changes (to filter out the noisy effect size estimates) Then let’s make an ordered list based on the maximum delta-PSI for each gene.</p>
 <pre class="r"><code>#let&#39;s use a fairly permissive significance threshold to be more inclusive. how about FDR&gt;0.3
 hist(leafcutter.merged$p.adjust)</code></pre>
@@ -949,9 +1071,9 @@ gsea.results.df &lt;- as.data.frame(gsea.results)
 dim(gsea.results.df)</code></pre>
 <pre><code>[1] 0 9</code></pre>
 <p>No significant GSEA results at the default P.adjust&lt;0.5 threshold.</p>
-<p>Ok, besides identifying the genes (or kinds of genes) through which the disease phenotype is potentially mediated, maybe the other questions I should be asking is what kinds of intron features distinguish differentially spliced introns, which may be more enlightening about general splicing mechanisms in these DHX38 mutants.</p>
-<p>I have scored the 5’ss and 3’ss motifs for each intron tested using a position specific score matrix based on annotated introns. I additionally used <a href="http://regulatorygenomics.upf.edu/Software/SVM_BP/">svm-bpfinder</a> to score the best computationally predicted branch for each intron. I also annotated whether each intron is annotated, alt3’ss, alt5’ss, new pairing of splice sites, or new intron. All of that work is hidden in the <code>code</code> section and output into a file in <code>output</code>.</p>
-<p>Let’s see if any of those features correlate with differentially expressed introns. If there is the DHX38 mutations preferentially activates less consensus splice sites for example, I expect the directionality to be consistent. Therefore, I will correlate those scores with either the logFC for each intron, for significant introns.</p>
+<p>Ok, besides identifying the genes (or kinds of genes) through which the disease phenotype is potentially mediated, maybe the other questions I should be asking is what kinds of intron features distinguish differentially spliced introns, which may be more enlightening about general splicing mechanisms due to this DHX38 genotype.</p>
+<p>I have scored the 5’ss and 3’ss motifs for each intron tested using a position specific score matrix based on annotated introns. I additionally used <a href="http://regulatorygenomics.upf.edu/Software/SVM_BP/">svm-bpfinder</a> to score the best computationally predicted branch for each intron. I also annotated whether each intron is annotated, an unanottated alt3’ss, an unanotated alt5’ss, an unannotated new pairing of splice sites, or new intron (unannotated 5’ and unannotated 3’ss). All of that work is hidden in the <code>code</code> section and output into a file in <code>output</code>.</p>
+<p>Let’s see if any of those features correlate with differentially expressed introns. If there is the DHX38 mutations preferentially activates less consensus splice sites for example, I expect the directionality to be consistent. Therefore, I will correlate those scores with the logeff (polarized effect size) for each intron, for significant introns.</p>
 <pre class="r"><code>#read intron features
 IntronFeatures &lt;- read.table(&quot;../output/IntronFeatures.txt.gz&quot;, sep=&#39;\t&#39;, header=T)
 
@@ -1088,6 +1210,19 @@ head(IntronFeatures) %&gt;% kable()</code></pre>
 </tr>
 </tbody>
 </table>
+<pre class="r"><code>#Check an example of a good donor score and a bad donor score
+#Good splice donor (positions -3 to +6)
+IntronFeatures %&gt;%
+  top_n(1, DonorScore) %&gt;% head(1) %&gt;%
+  dplyr::select(donor_seq, DonorScore)</code></pre>
+<pre><code>  donor_seq DonorScore
+1 CAGGTAAGT       12.6</code></pre>
+<pre class="r"><code>#Bad splice donor
+IntronFeatures %&gt;%
+  top_n(-1, DonorScore) %&gt;% head(1) %&gt;%
+  dplyr::select(donor_seq, DonorScore)</code></pre>
+<pre><code>  donor_seq DonorScore
+1 TTCATTCCA     -15.08</code></pre>
 <pre class="r"><code># Check that the number of types of unannotated splicing is similar in both strands. Sometimes bugs related to coordinates produce wonky results
 IntronFeatures %&gt;%
   filter(strand==&quot;-&quot;) %&gt;%
@@ -1308,23 +1443,22 @@ Benjmain Fair
 </table>
 </div>
 </div>
-<p>Maybe 5’ss stick out? Let’s test it more explicitly.</p>
-<p>The null hypothesis here is that any given type of splicing will not significantly deviate from median of 0 effect size (similar number of positive effects as negative effects). Wilcox.test to test with null as mu=0 should work.</p>
-<pre class="r"><code>## are alt 5&#39;ss upregulated?
+<p>Maybe cryptic (unannotated) 5’ss stick out? In other words, for cryptic 5’ss, ~65% have negative effect sizes, and ~35% have positive effect sizes. For most other unannotated splicing types it is closer to 50/50. Let’s more explicitly if this difference is significant.</p>
+<p>The null hypothesis here is that any given type of splicing will not significantly deviate from median of 0 effect size (equal number of positive effects as negative effects). Wilcox.test to test with null as mu=0 should work.</p>
+<pre class="r"><code>## are alt 5&#39;ss downregulated?
 wilcox.test(
   leafcutter.merged.w.features %&gt;%
-  filter(type==&quot;Alt5ss&quot;) %&gt;% pull(deltapsi)
-    )</code></pre>
+  filter(type==&quot;Alt5ss&quot;) %&gt;% pull(deltapsi))</code></pre>
 <pre><code>
     Wilcoxon signed rank test with continuity correction
 
 data:  leafcutter.merged.w.features %&gt;% filter(type == &quot;Alt5ss&quot;) %&gt;%     pull(deltapsi)
 V = 150.5, p-value = 0.01226
 alternative hypothesis: true location is not equal to 0</code></pre>
-<pre class="r"><code>wilcox.test(
+<pre class="r"><code># same test but using logef instead of deltapsi
+wilcox.test(
   leafcutter.merged.w.features %&gt;%
-  filter(type==&quot;Alt5ss&quot;) %&gt;% pull(logef)
-    )</code></pre>
+  filter(type==&quot;Alt5ss&quot;) %&gt;% pull(logef))</code></pre>
 <pre><code>
     Wilcoxon signed rank test with continuity correction
 
@@ -1342,7 +1476,8 @@ wilcox.test(
 data:  leafcutter.merged.w.features %&gt;% filter(type == &quot;Alt3ss&quot;) %&gt;%     pull(deltapsi)
 V = 1001, p-value = 0.2947
 alternative hypothesis: true location is not equal to 0</code></pre>
-<pre class="r"><code>wilcox.test(
+<pre class="r"><code># same test but using logef instead of deltapsi
+wilcox.test(
   leafcutter.merged.w.features %&gt;%
   filter(type==&quot;Alt3ss&quot;) %&gt;% pull(logef)
     )</code></pre>
@@ -1352,16 +1487,340 @@ alternative hypothesis: true location is not equal to 0</code></pre>
 data:  leafcutter.merged.w.features %&gt;% filter(type == &quot;Alt3ss&quot;) %&gt;%     pull(logef)
 V = 1058, p-value = 0.4842
 alternative hypothesis: true location is not equal to 0</code></pre>
-<p>Hmm. maybe there is something here with alt 5’ss. Considering all the exploration I’ve been doing, and without multiple hypothesis correction in many cases this might or might not be real.</p>
-</div>
-<div id="todo" class="section level2">
-<h2>TODO</h2>
-<ul>
-<li>should look at the alt 5’ss and see if there is any distance constraint with the annotated 5’ss, similar to the SF3B1 mutants that have a very specific distance constraint to the usual splice sites that get activated</li>
-</ul>
+<p>Hmm. maybe there is something here with alt 5’ss. Looks like cryptic (unannotated) 5’ss have a more negative effect size than expected by chance, meaning less cryptic 5’ss in the affected sample. Considering all the exploration I’ve been doing, and without multiple hypothesis correction in many cases this might or might not be real.</p>
+<p>Note that thus far, all my alternative splicing type classifications are based on identifying splice donors and splice acceptors that aren’t in annotated transcripts (Ensembl annotations)… In other words, alternative 5’ss events that are annotated (most identified alternative splicing is annotated), are simply classified as “annotated”. But if the effect about downregulation of cryptic 5’ss is real, I also expect the minor intron for annotated alternative 5’ss to decrease in the affected. So let’s try to classify splicing types regardless of annotations, at least for clusters with only two or three introns where this is relatively straightforward:</p>
+<p>For example, for a cluster with two introns, if the splice donor coordinates is listed twice in the dataset and the splice acceptor coordinates is listed once, we know it is alternative 5’ss usage.</p>
+<pre class="r"><code>#Reclassify splicing types
+leafcutter.merged.AS.reclassified &lt;- leafcutter.merged %&gt;% 
+  dplyr::select(intron) %&gt;%
+  separate(intron, into=c(&quot;chrom&quot;, &quot;start&quot;, &quot;stop&quot;, &quot;cluster&quot;), sep=&quot;:&quot;, remove=F) %&gt;%
+  mutate(strand=sub(&quot;clu_\\d+_(.+)&quot;, &quot;\\1&quot;, cluster)) %&gt;%
+  mutate(
+    SpliceDonorCoord=case_when(
+      strand==&quot;+&quot; ~ paste(chrom, start, strand),
+      strand==&quot;-&quot; ~ paste(chrom, stop, strand)),
+    SpliceAcceptorCoord=case_when(
+      strand==&quot;+&quot; ~ paste(chrom, stop, strand),
+      strand==&quot;-&quot; ~ paste(chrom, start, strand))) %&gt;%
+  dplyr::select(intron, cluster, SpliceDonorCoord,SpliceAcceptorCoord) %&gt;%
+  add_count(cluster, name=&quot;IntronsPerCluster&quot;) %&gt;%
+  add_count(SpliceDonorCoord, name=&quot;SpliceDonorCount&quot;) %&gt;%
+  add_count(SpliceAcceptorCoord, name=&quot;SpliceAcceptorCount&quot;) %&gt;%
+  mutate(SplicingType=case_when(
+    IntronsPerCluster==2 &amp; SpliceDonorCount==2 ~ &quot;Alt3ss&quot;,
+    IntronsPerCluster==2 &amp; SpliceAcceptorCount==2 ~ &quot;Alt5ss&quot;,
+    IntronsPerCluster==3 &amp; SpliceDonorCount==2 &amp; SpliceAcceptorCount==2 ~ &quot;CassetteExonSkipped&quot;,
+    IntronsPerCluster==3 &amp; SpliceDonorCount==1 &amp; SpliceAcceptorCount==2 ~ &quot;CassetteExonIncluded.DownstreamIntron&quot;,
+    IntronsPerCluster==3 &amp; SpliceDonorCount==2 &amp; SpliceAcceptorCount==1 ~ &quot;CassetteExonIncluded.UpstreamIntron&quot;,
+    IntronsPerCluster==3 &amp; SpliceDonorCount==3 &amp; SpliceAcceptorCount==1 ~ &quot;Alt3ss&quot;,
+    IntronsPerCluster==3 &amp; SpliceDonorCount==1 &amp; SpliceAcceptorCount==3 ~ &quot;Alt5ss&quot;,
+    IntronsPerCluster&gt;=4 ~ &quot;Complex&quot;
+  )) %&gt;%
+  dplyr::select(intron, SplicingType) %&gt;%
+  left_join(leafcutter.merged, by=&quot;intron&quot;)
+
+#Number of splicing types
+table(leafcutter.merged.AS.reclassified$SplicingType) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">Var1</th>
+<th align="right">Freq</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">Alt3ss</td>
+<td align="right">2019</td>
+</tr>
+<tr class="even">
+<td align="left">Alt5ss</td>
+<td align="right">1677</td>
+</tr>
+<tr class="odd">
+<td align="left">CassetteExonIncluded.DownstreamIntron</td>
+<td align="right">1444</td>
+</tr>
+<tr class="even">
+<td align="left">CassetteExonIncluded.UpstreamIntron</td>
+<td align="right">1444</td>
+</tr>
+<tr class="odd">
+<td align="left">CassetteExonSkipped</td>
+<td align="right">1444</td>
+</tr>
+<tr class="even">
+<td align="left">Complex</td>
+<td align="right">1828</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Check that the classifications make sense by manually inspecting some intron coordinates for a few clusters
+head(leafcutter.merged.AS.reclassified) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">intron</th>
+<th align="left">SplicingType</th>
+<th align="right">logef</th>
+<th align="right">H</th>
+<th align="right">A</th>
+<th align="right">deltapsi</th>
+<th align="left">cluster</th>
+<th align="left">junc_id</th>
+<th align="left">status</th>
+<th align="right">loglr</th>
+<th align="right">df</th>
+<th align="right">p</th>
+<th align="right">p.adjust</th>
+<th align="left">genes</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">chr1:1787053:1787322:clu_1000_-</td>
+<td align="left">Alt5ss</td>
+<td align="right">0.2136016</td>
+<td align="right">0.9383983</td>
+<td align="right">0.9589358</td>
+<td align="right">0.0205375</td>
+<td align="left">chr1:clu_1000_-</td>
+<td align="left">chr1:1787053:1787322</td>
+<td align="left">Success</td>
+<td align="right">1.9730317</td>
+<td align="right">1</td>
+<td align="right">0.0469812</td>
+<td align="right">0.1628228</td>
+<td align="left">GNB1</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:1787053:1787326:clu_1000_-</td>
+<td align="left">Alt5ss</td>
+<td align="right">-0.2136016</td>
+<td align="right">0.0616017</td>
+<td align="right">0.0410642</td>
+<td align="right">-0.0205375</td>
+<td align="left">chr1:clu_1000_-</td>
+<td align="left">chr1:1787053:1787326</td>
+<td align="left">Success</td>
+<td align="right">1.9730317</td>
+<td align="right">1</td>
+<td align="right">0.0469812</td>
+<td align="right">0.1628228</td>
+<td align="left">GNB1</td>
+</tr>
+<tr class="odd">
+<td align="left">chr1:1815862:1817837:clu_1001_-</td>
+<td align="left">CassetteExonIncluded.DownstreamIntron</td>
+<td align="right">-0.0975622</td>
+<td align="right">0.4873418</td>
+<td align="right">0.4832734</td>
+<td align="right">-0.0040684</td>
+<td align="left">chr1:clu_1001_-</td>
+<td align="left">chr1:1815862:1817837</td>
+<td align="left">Success</td>
+<td align="right">0.2795714</td>
+<td align="right">2</td>
+<td align="right">0.7561078</td>
+<td align="right">0.8609193</td>
+<td align="left">GNB1</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:1815862:1825397:clu_1001_-</td>
+<td align="left">CassetteExonSkipped</td>
+<td align="right">0.1824135</td>
+<td align="right">0.0059958</td>
+<td align="right">0.0078669</td>
+<td align="right">0.0018710</td>
+<td align="left">chr1:clu_1001_-</td>
+<td align="left">chr1:1815862:1825397</td>
+<td align="left">Success</td>
+<td align="right">0.2795714</td>
+<td align="right">2</td>
+<td align="right">0.7561078</td>
+<td align="right">0.8609193</td>
+<td align="left">GNB1</td>
+</tr>
+<tr class="odd">
+<td align="left">chr1:1817875:1825397:clu_1001_-</td>
+<td align="left">CassetteExonIncluded.UpstreamIntron</td>
+<td align="right">-0.0848513</td>
+<td align="right">0.5066623</td>
+<td align="right">0.5088598</td>
+<td align="right">0.0021974</td>
+<td align="left">chr1:clu_1001_-</td>
+<td align="left">chr1:1817875:1825397</td>
+<td align="left">Success</td>
+<td align="right">0.2795714</td>
+<td align="right">2</td>
+<td align="right">0.7561078</td>
+<td align="right">0.8609193</td>
+<td align="left">GNB1</td>
+</tr>
+<tr class="even">
+<td align="left">chr1:1825499:1839190:clu_1002_-</td>
+<td align="left">Complex</td>
+<td align="right">0.0350052</td>
+<td align="right">0.5886054</td>
+<td align="right">0.6221619</td>
+<td align="right">0.0335565</td>
+<td align="left">chr1:clu_1002_-</td>
+<td align="left">chr1:1825499:1839190</td>
+<td align="left">Success</td>
+<td align="right">4.1659670</td>
+<td align="right">3</td>
+<td align="right">0.0396273</td>
+<td align="right">0.1455953</td>
+<td align="left">GNB1</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code># Check that the classifications make sense in that the fraction of junction reads for introns upstream of cassette exons should strongly positively correlate with the fraction for introns downstream of cassette exons
+PlotExonSkippingSpliceRatios &lt;- leafcutter.merged.AS.reclassified %&gt;%
+  dplyr::select(cluster, SplicingType, H) %&gt;%
+  filter(SplicingType %in% c(&quot;CassetteExonIncluded.DownstreamIntron&quot;, &quot;CassetteExonIncluded.UpstreamIntron&quot;, &quot;CassetteExonSkipped&quot;)) %&gt;%
+  spread(key=&quot;SplicingType&quot;, value=&quot;H&quot;)
+
+ggplot(PlotExonSkippingSpliceRatios, aes(x=CassetteExonIncluded.DownstreamIntron, y=CassetteExonIncluded.UpstreamIntron)) +
+    geom_point()</code></pre>
+<p><img src="figure/20191203_DifferentialSplicing.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#And there should generally be anti correlation with the exon skipped isoform and either of the exon included introns
+ggplot(PlotExonSkippingSpliceRatios, aes(x=CassetteExonIncluded.DownstreamIntron, y=CassetteExonSkipped)) +
+    geom_point()</code></pre>
+<p><img src="figure/20191203_DifferentialSplicing.Rmd/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Okay from that it seems my classification of alternative splicing types makes sense. Now let’s check if the minor isoform (as assessed in healthy samples) for each splicing type is has a general polarity to effect size. Specifically, if alt5’ss have negative effect sizes.</p>
+<pre class="r"><code>MinorIsoforms &lt;- leafcutter.merged.AS.reclassified %&gt;%
+  filter(p.adjust&lt;0.3) %&gt;%
+  group_by(cluster) %&gt;%
+  top_n(-1, H) %&gt;%
+  ungroup()
+
+#histogram of splicing fraction of minor isoforms (intron with smallest splicing fraction within cluster)
+hist(MinorIsoforms$H)</code></pre>
+<p><img src="figure/20191203_DifferentialSplicing.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>MajorIsoforms &lt;- leafcutter.merged.AS.reclassified %&gt;%
+  filter(p.adjust&lt;0.3) %&gt;%
+  group_by(cluster) %&gt;%
+  top_n(1, H) %&gt;%
+  ungroup()
+
+#histogram of splicing fraction of major isoforms (intron with largest splicing fraction within cluster)
+hist(MajorIsoforms$H)</code></pre>
+<p><img src="figure/20191203_DifferentialSplicing.Rmd/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#Now make plots to get to know if minor isoform alt5&#39;ss have generally gone down. Same for alt 3&#39;ss.
+MinorIsoforms %&gt;%
+  filter(SplicingType %in% c(&quot;Alt5ss&quot;, &quot;Alt3ss&quot;)) %&gt;%
+ggplot(aes(x=deltapsi, color=SplicingType)) +
+    stat_ecdf(geom = &quot;step&quot;) +
+    xlim(c(-1,1))+
+    ylab(&quot;Cumulative frequency&quot;) +
+    theme_bw()</code></pre>
+<p><img src="figure/20191203_DifferentialSplicing.Rmd/unnamed-chunk-9-3.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#Mirrored plot for major isoforms.
+MajorIsoforms %&gt;%
+    filter(SplicingType %in% c(&quot;Alt5ss&quot;, &quot;Alt3ss&quot;)) %&gt;%
+ggplot(aes(x=deltapsi, color=SplicingType)) +
+    stat_ecdf(geom = &quot;step&quot;) +
+    xlim(c(-1,1))+
+    ylab(&quot;Cumulative frequency&quot;) +
+    theme_bw()</code></pre>
+<p><img src="figure/20191203_DifferentialSplicing.Rmd/unnamed-chunk-9-4.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>#Try exon skipping
+leafcutter.merged.AS.reclassified %&gt;%
+  filter(p.adjust&lt;0.3) %&gt;%
+  filter(SplicingType %in% c(&quot;CassetteExonSkipped&quot;, &quot;CassetteExonIncluded.DownstreamIntron&quot;, &quot;CassetteExonIncluded.UpstreamIntron&quot;)) %&gt;%
+  ggplot(aes(x=deltapsi, color=SplicingType)) +
+    stat_ecdf(geom = &quot;step&quot;) +
+    xlim(c(-1,1))+
+    ylab(&quot;Cumulative frequency&quot;) +
+    theme_bw()</code></pre>
+<p><img src="figure/20191203_DifferentialSplicing.Rmd/unnamed-chunk-9-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p>So there is no apparent difference in alt5’ss or alt3’ss usage when I considered all easily classifiable introns, regardless of annotation. In other words, the minor isoforms for 5’ss were equally up and down regulated. This is mirrored in when looking at major isoforms.</p>
+<p>Finally, since all of this type of analysis didn’t return anything very interesting with confidence, I should browse the raw aligned read data in IGV to explore patterns that I might not have picked up on this differential splicing analysis. To aid in IGV exploration, let’s write out a bed file of the most significant clusters so we can quickly jump to the regions of interest that are differentially spliced</p>
+<pre class="r"><code>#bed file, with chromosome, start, stop, name, score, strand, extra info
+
+BedFile &lt;- leafcutter.merged.AS.reclassified %&gt;%
+  dplyr::select(intron, SplicingType, logef, deltapsi, p) %&gt;%
+  separate(intron, into=c(&quot;chrom&quot;, &quot;start&quot;, &quot;stop&quot;, &quot;cluster&quot;), remove=F) %&gt;%
+  mutate(extra=paste(logef, deltapsi, SplicingType), score=-log10(p), strand=&quot;.&quot;) %&gt;%
+  
+  dplyr::select(chrom, start, stop, intron, score, strand, extra )
+
+head(BedFile) %&gt;% kable()</code></pre>
+<table>
+<thead>
+<tr class="header">
+<th align="left">chrom</th>
+<th align="left">start</th>
+<th align="left">stop</th>
+<th align="left">intron</th>
+<th align="right">score</th>
+<th align="left">strand</th>
+<th align="left">extra</th>
+</tr>
+</thead>
+<tbody>
+<tr class="odd">
+<td align="left">chr1</td>
+<td align="left">1787053</td>
+<td align="left">1787322</td>
+<td align="left">chr1:1787053:1787322:clu_1000_-</td>
+<td align="right">1.3280764</td>
+<td align="left">.</td>
+<td align="left">0.213601616865169 0.0205375290648846 Alt5ss</td>
+</tr>
+<tr class="even">
+<td align="left">chr1</td>
+<td align="left">1787053</td>
+<td align="left">1787326</td>
+<td align="left">chr1:1787053:1787326:clu_1000_-</td>
+<td align="right">1.3280764</td>
+<td align="left">.</td>
+<td align="left">-0.213601616865169 -0.0205375290648847 Alt5ss</td>
+</tr>
+<tr class="odd">
+<td align="left">chr1</td>
+<td align="left">1815862</td>
+<td align="left">1817837</td>
+<td align="left">chr1:1815862:1817837:clu_1001_-</td>
+<td align="right">0.1214163</td>
+<td align="left">.</td>
+<td align="left">-0.097562244907946 -0.00406844605505857 CassetteExonIncluded.DownstreamIntron</td>
+</tr>
+<tr class="even">
+<td align="left">chr1</td>
+<td align="left">1815862</td>
+<td align="left">1825397</td>
+<td align="left">chr1:1815862:1825397:clu_1001_-</td>
+<td align="right">0.1214163</td>
+<td align="left">.</td>
+<td align="left">0.182413519865342 0.00187101753656291 CassetteExonSkipped</td>
+</tr>
+<tr class="odd">
+<td align="left">chr1</td>
+<td align="left">1817875</td>
+<td align="left">1825397</td>
+<td align="left">chr1:1817875:1825397:clu_1001_-</td>
+<td align="right">0.1214163</td>
+<td align="left">.</td>
+<td align="left">-0.0848512749573959 0.00219742851849558 CassetteExonIncluded.UpstreamIntron</td>
+</tr>
+<tr class="even">
+<td align="left">chr1</td>
+<td align="left">1825499</td>
+<td align="left">1839190</td>
+<td align="left">chr1:1825499:1839190:clu_1002_-</td>
+<td align="right">1.4020050</td>
+<td align="left">.</td>
+<td align="left">0.0350051514604137 0.0335565204053495 Complex</td>
+</tr>
+</tbody>
+</table>
+<pre class="r"><code>write.table(BedFile, file=&quot;../output/DiffSplicingRegions.bed&quot;, sep=&#39;\t&#39;, row.names = F, col.names = F, quote=F)</code></pre>
 </div>
 <div id="conclusions" class="section level2">
 <h2>Conclusions</h2>
+<p>Found a fair number of alternative splicing events significantly different between the two groups of samples. Though, with the given study design it is unclear which if any of these is due to the DHX38 mutations. Couldn’t find any type of alternative splicing that is particularly enriched. Didn’t find any correlations with splice site motif strength.</p>
 <br>
 <p>
 <button type="button" class="btn btn-default btn-workflowr btn-workflowr-sessioninfo" data-toggle="collapse" data-target="#workflowr-sessioninfo" style="display: block;">
@@ -1389,11 +1848,10 @@ other attached packages:
  [1] corrplot_0.84          psych_1.8.12           enrichplot_1.4.0      
  [4] org.Hs.eg.db_3.8.2     AnnotationDbi_1.46.1   IRanges_2.18.3        
  [7] S4Vectors_0.22.1       Biobase_2.44.0         BiocGenerics_0.30.0   
-[10] clusterProfiler_3.12.0 biomaRt_2.40.5         edgeR_3.26.8          
-[13] limma_3.40.6           knitr_1.26             forcats_0.4.0         
-[16] stringr_1.4.0          dplyr_0.8.3            purrr_0.3.3           
-[19] readr_1.3.1            tidyr_1.0.0            tibble_2.1.3          
-[22] ggplot2_3.2.1          tidyverse_1.2.1       
+[10] clusterProfiler_3.12.0 knitr_1.26             forcats_0.4.0         
+[13] stringr_1.4.0          dplyr_0.8.3            purrr_0.3.3           
+[16] readr_1.3.1            tidyr_1.0.0            tibble_2.1.3          
+[19] ggplot2_3.2.1          tidyverse_1.2.1       
 
 loaded via a namespace (and not attached):
   [1] fgsea_1.10.1        colorspace_1.4-1    ellipsis_0.3.0     
@@ -1413,25 +1871,24 @@ loaded via a namespace (and not attached):
  [43] reshape2_1.4.3      DO.db_2.9           fastmatch_1.1-0    
  [46] Rcpp_1.0.2          cellranger_1.1.0    vctrs_0.2.0        
  [49] nlme_3.1-142        ggraph_2.0.0        xfun_0.11          
- [52] rvest_0.3.5         lifecycle_0.1.0     XML_3.98-1.20      
- [55] DOSE_3.10.2         europepmc_0.3       MASS_7.3-51.4      
- [58] scales_1.0.0        tidygraph_1.1.2     hms_0.5.2          
- [61] promises_1.1.0      RColorBrewer_1.1-2  yaml_2.2.0         
- [64] memoise_1.1.0       gridExtra_2.3       UpSetR_1.4.0       
- [67] triebeard_0.3.0     stringi_1.4.3       RSQLite_2.1.2      
- [70] highr_0.8           BiocParallel_1.18.1 rlang_0.4.1        
- [73] pkgconfig_2.0.3     bitops_1.0-6        evaluate_0.14      
- [76] lattice_0.20-38     labeling_0.3        cowplot_1.0.0      
- [79] bit_1.1-14          tidyselect_0.2.5    plyr_1.8.4         
- [82] magrittr_1.5        R6_2.4.1            generics_0.0.2     
- [85] DBI_1.0.0           foreign_0.8-72      pillar_1.4.2       
- [88] haven_2.2.0         whisker_0.4         withr_2.1.2        
- [91] RCurl_1.95-4.12     modelr_0.1.5        crayon_1.3.4       
- [94] rmarkdown_1.17      viridis_0.5.1       progress_1.2.2     
- [97] locfit_1.5-9.1      grid_3.6.1          readxl_1.3.1       
-[100] data.table_1.12.6   blob_1.2.0          git2r_0.26.1       
-[103] digest_0.6.22       httpuv_1.5.2        gridGraphics_0.4-1 
-[106] munsell_0.5.0       ggplotify_0.0.4     viridisLite_0.3.0  </code></pre>
+ [52] rvest_0.3.5         lifecycle_0.1.0     DOSE_3.10.2        
+ [55] europepmc_0.3       MASS_7.3-51.4       scales_1.0.0       
+ [58] tidygraph_1.1.2     hms_0.5.2           promises_1.1.0     
+ [61] RColorBrewer_1.1-2  yaml_2.2.0          memoise_1.1.0      
+ [64] gridExtra_2.3       UpSetR_1.4.0        triebeard_0.3.0    
+ [67] stringi_1.4.3       RSQLite_2.1.2       highr_0.8          
+ [70] BiocParallel_1.18.1 rlang_0.4.1         pkgconfig_2.0.3    
+ [73] evaluate_0.14       lattice_0.20-38     labeling_0.3       
+ [76] cowplot_1.0.0       bit_1.1-14          tidyselect_0.2.5   
+ [79] plyr_1.8.4          magrittr_1.5        R6_2.4.1           
+ [82] generics_0.0.2      DBI_1.0.0           foreign_0.8-72     
+ [85] pillar_1.4.2        haven_2.2.0         whisker_0.4        
+ [88] withr_2.1.2         modelr_0.1.5        crayon_1.3.4       
+ [91] rmarkdown_1.17      viridis_0.5.1       progress_1.2.2     
+ [94] grid_3.6.1          readxl_1.3.1        data.table_1.12.6  
+ [97] blob_1.2.0          git2r_0.26.1        digest_0.6.22      
+[100] httpuv_1.5.2        gridGraphics_0.4-1  munsell_0.5.0      
+[103] viridisLite_0.3.0   ggplotify_0.0.4    </code></pre>
 </div>
 </div>
 
