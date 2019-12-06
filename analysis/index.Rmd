@@ -12,5 +12,5 @@ Welcome to my research website.
 
 - [Differential gene expression](20191203_DiffExpression.html)
 - [Differential splicing](20191203_DifferentialSplicing.html)
-- [Differential splicing pos control analysis](20191206_DifferentialSplicingControl.Rmd)
+- [Differential splicing pos control analysis](20191206_DifferentialSplicingControl.html)
 
