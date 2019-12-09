@@ -12,5 +12,5 @@ This analysis is largely exploratory, we do not have strong prior expectations t
 
 ## Analysis steps
 
-Code to execute the analysis described in the `code/README.md`. See [site]() for more description of analysis and results.
+Code to execute the analysis described in the `code/README.md`. See [site](https://bfairkun.github.io/rna-seq-dhx38/) for more description of analysis and results.
 
