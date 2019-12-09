@@ -38,7 +38,7 @@ head(effect_sizes) %>% kable()
 
 ```
 
-Note the sign of logef, compared the splicing ratios in WT and SF3B1 K700E.
+Note the sign of logef, compared to the splicing ratios in WT and SF3B1 K700E.
 
 So that means that this differential splicing analysis was encoded such that positive effectsizes mean decrease in the mutant. That is a little counter-intuitive so let's reverse that.
 

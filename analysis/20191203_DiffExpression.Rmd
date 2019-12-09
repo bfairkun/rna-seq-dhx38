@@ -181,7 +181,7 @@ PlotSmear <- results.more.descriptive %>%
       FDR>0.1 ~ "Not significant",
       external_gene_name=="DHX38" ~ "DHX38"),
     Label=case_when(
-      external_gene_name=="DHX38" ~ paste0("DHX38\nP=", signif(DHX38.results$PValue)),
+      external_gene_name=="DHX38" ~ paste0("DHX38\nP=", signif(DHX38.results$PValue, 3)),
       !external_gene_name=="DHX38" ~ ""),
   ) %>% 
   arrange(FDR)
@@ -189,8 +189,12 @@ PlotSmear <- results.more.descriptive %>%
 DHX38.results <- PlotSmear %>%
   filter(external_gene_name=="DHX38")
 
-
-
+ggplot(PlotSmear, aes(x=logCPM, y=logFC, color=Significance, label=Label)) +
+    geom_point() +
+    geom_point(data=DHX38.results, color="black", show.legend = F) +
+    geom_text_repel(data=DHX38.results, color="black", show.legend = F) +
+    theme_bw() +
+    theme(legend.title = element_blank())
 ```
 
 Ok good. DHX38 is not differentially expressed. So if the alleles have some affect on splicing through DHX38, is not likely through modulating expression of DHX38 levels, but rather altering function.
@@ -242,7 +246,7 @@ gsea.results <- results.more.descriptive %>%
   arrange(desc(RankingMetric)) %>%
   dplyr::select(ensembl_gene_id, RankingMetric) %>%
   deframe() %>%
-  gseGO(ont="ALL", OrgDb=org.Hs.eg.db, keyType='ENSEMBL', nPerm=100000)
+  gseGO(ont="ALL", OrgDb=org.Hs.eg.db, keyType='ENSEMBL', nPerm=500000)
 ```
 
 Now let's explore the GSEA results
@@ -255,7 +259,7 @@ gsea.results.df %>%
   ggplot(aes(x=enrichmentScore, y=Description, color=p.adjust, size=setSize)) +
   geom_point() +
   facet_grid(ONTOLOGY~., scales = "free") +
-  scale_colour_gradient(low="red", high="black", trans="log10", limits=c(1E-3, 1)) +
+  scale_colour_viridis_c(trans="log10", limits=c(2E-4, 1), direction=-1, option="D") +
   xlab("Enrichment") +
   scale_y_discrete(labels = function(x) lapply(strwrap(x, width = 60, simplify = FALSE), paste, collapse="\n")) +
   labs(color = "Adjusted P-value") +

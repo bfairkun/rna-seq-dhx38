@@ -495,10 +495,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treedae5a41a927b43bfabe80dcee3a43944d0f0c432targetblankdae5a41a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/dae5a41a927b43bfabe80dcee3a43944d0f0c432" target="_blank">dae5a41</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree2edbe6f5fc585ef00298285fd5ea968a2f6312d3targetblank2edbe6fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/2edbe6f5fc585ef00298285fd5ea968a2f6312d3" target="_blank">2edbe6f</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treedae5a41a927b43bfabe80dcee3a43944d0f0c432targetblankdae5a41a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree2edbe6f5fc585ef00298285fd5ea968a2f6312d3targetblank2edbe6fa" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -511,7 +511,6 @@ Ignored files:
 
 Unstaged changes:
     Modified:   analysis/20191203_DiffExpression.Rmd
-    Modified:   analysis/20191203_DifferentialSplicing.Rmd
     Modified:   analysis/20191206_DifferentialSplicingControl.Rmd
 
 </code></pre>
@@ -551,6 +550,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/a0c762759c7f066dc175ebf7988a53401ad16cc8/analysis/20191203_DiffExpression.Rmd" target="_blank">a0c7627</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-09
+</td>
+<td>
+update site
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/bfairkun/rna-seq-dhx38/a0c762759c7f066dc175ebf7988a53401ad16cc8/docs/20191203_DiffExpression.html" target="_blank">a0c7627</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-09
+</td>
+<td>
+update site
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1575,13 +1608,21 @@ PlotSmear &lt;- results.more.descriptive %&gt;%
       FDR&gt;0.1 ~ &quot;Not significant&quot;,
       external_gene_name==&quot;DHX38&quot; ~ &quot;DHX38&quot;),
     Label=case_when(
-      external_gene_name==&quot;DHX38&quot; ~ paste0(&quot;DHX38\nP=&quot;, signif(DHX38.results$PValue)),
+      external_gene_name==&quot;DHX38&quot; ~ paste0(&quot;DHX38\nP=&quot;, signif(DHX38.results$PValue, 3)),
       !external_gene_name==&quot;DHX38&quot; ~ &quot;&quot;),
   ) %&gt;% 
   arrange(FDR)
 
 DHX38.results &lt;- PlotSmear %&gt;%
-  filter(external_gene_name==&quot;DHX38&quot;)</code></pre>
+  filter(external_gene_name==&quot;DHX38&quot;)
+
+ggplot(PlotSmear, aes(x=logCPM, y=logFC, color=Significance, label=Label)) +
+    geom_point() +
+    geom_point(data=DHX38.results, color=&quot;black&quot;, show.legend = F) +
+    geom_text_repel(data=DHX38.results, color=&quot;black&quot;, show.legend = F) +
+    theme_bw() +
+    theme(legend.title = element_blank())</code></pre>
+<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Ok good. DHX38 is not differentially expressed. So if the alleles have some affect on splicing through DHX38, is not likely through modulating expression of DHX38 levels, but rather altering function.</p>
 <p>Let’s make some plots to get to know significance testing results a little bit more… Keep in mind we don’t know much about the types of replicates these are (technical, versus biological split before differentiation, split after differentiation, etc), and that all these are from a single healthy and a single affected patient.</p>
 <p>Volcano plot:</p>
@@ -1727,7 +1768,7 @@ gsea.results &lt;- results.more.descriptive %&gt;%
   arrange(desc(RankingMetric)) %&gt;%
   dplyr::select(ensembl_gene_id, RankingMetric) %&gt;%
   deframe() %&gt;%
-  gseGO(ont=&quot;ALL&quot;, OrgDb=org.Hs.eg.db, keyType=&#39;ENSEMBL&#39;, nPerm=100000)</code></pre>
+  gseGO(ont=&quot;ALL&quot;, OrgDb=org.Hs.eg.db, keyType=&#39;ENSEMBL&#39;, nPerm=500000)</code></pre>
 <p>Now let’s explore the GSEA results</p>
 <pre class="r"><code>gsea.results.df &lt;- as.data.frame(gsea.results)
 gsea.results.df %&gt;% 
@@ -1736,7 +1777,7 @@ gsea.results.df %&gt;%
   ggplot(aes(x=enrichmentScore, y=Description, color=p.adjust, size=setSize)) +
   geom_point() +
   facet_grid(ONTOLOGY~., scales = &quot;free&quot;) +
-  scale_colour_gradient(low=&quot;red&quot;, high=&quot;black&quot;, trans=&quot;log10&quot;, limits=c(1E-3, 1)) +
+  scale_colour_viridis_c(trans=&quot;log10&quot;, limits=c(2E-4, 1), direction=-1, option=&quot;D&quot;) +
   xlab(&quot;Enrichment&quot;) +
   scale_y_discrete(labels = function(x) lapply(strwrap(x, width = 60, simplify = FALSE), paste, collapse=&quot;\n&quot;)) +
   labs(color = &quot;Adjusted P-value&quot;) +
@@ -1766,6 +1807,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/a0c762759c7f066dc175ebf7988a53401ad16cc8/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-12-1.png" target="_blank">a0c7627</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-09
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/bfairkun/rna-seq-dhx38/blob/c1d660db6d38073970096cd71db8fa190693c0d4/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-12-1.png" target="_blank">c1d660d</a>
 </td>
 <td>
@@ -1784,26 +1836,26 @@ Benjmain Fair
   dplyr::select(ID, Description, ONTOLOGY, p.adjust, setSize, enrichmentScore)</code></pre>
 <pre><code>           ID                                    Description ONTOLOGY
 1  GO:0000904 cell morphogenesis involved in differentiation       BP
-2  GO:0001501                    skeletal system development       BP
-3  GO:0002009                 morphogenesis of an epithelium       BP
-4  GO:0003002                                regionalization       BP
-5  GO:0004888      transmembrane signaling receptor activity       MF
-6  GO:0005887          integral component of plasma membrane       CC
-7  GO:0006935                                     chemotaxis       BP
-8  GO:0007268                 chemical synaptic transmission       BP
-9  GO:0007389                  pattern specification process       BP
-10 GO:0007409                                   axonogenesis       BP
-      p.adjust setSize enrichmentScore
-1  0.001375638     466       0.7726367
-2  0.001375638     257       0.7929044
-3  0.001375638     342       0.7776557
-4  0.001375638     181       0.8086927
-5  0.001375638     207       0.8086970
-6  0.001375638     445       0.7737560
-7  0.001375638     275       0.7840501
-8  0.001375638     347       0.7832492
-9  0.001375638     233       0.7959597
-10 0.001375638     288       0.8064676</code></pre>
+2  GO:0002009                 morphogenesis of an epithelium       BP
+3  GO:0005887          integral component of plasma membrane       CC
+4  GO:0007268                 chemical synaptic transmission       BP
+5  GO:0007389                  pattern specification process       BP
+6  GO:0007409                                   axonogenesis       BP
+7  GO:0007420                              brain development       BP
+8  GO:0007423                      sensory organ development       BP
+9  GO:0009986                                   cell surface       CC
+10 GO:0031226         intrinsic component of plasma membrane       CC
+       p.adjust setSize enrichmentScore
+1  0.0005502598     466       0.7726367
+2  0.0005502598     342       0.7776557
+3  0.0005502598     445       0.7737560
+4  0.0005502598     347       0.7832492
+5  0.0005502598     233       0.7959597
+6  0.0005502598     288       0.8064676
+7  0.0005502598     494       0.7412182
+8  0.0005502598     298       0.7866344
+9  0.0005502598     290       0.7825923
+10 0.0005502598     481       0.7704378</code></pre>
 <pre class="r"><code>gsea.results.df %&gt;%
   arrange(desc(enrichmentScore)) %&gt;% head(10) %&gt;%
   dplyr::select(ID, Description, ONTOLOGY, p.adjust, setSize)</code></pre>
@@ -1830,16 +1882,16 @@ Benjmain Fair
 9                                                          embryonic cranial skeleton morphogenesis
 10                                                                          membrane repolarization
    ONTOLOGY   p.adjust setSize
-1        BP 0.01682383      12
-2        MF 0.03480302      10
-3        CC 0.04295128      10
-4        BP 0.03197122      14
-5        BP 0.02119294      17
-6        BP 0.03494372      15
-7        BP 0.03636865      19
-8        BP 0.03636865      19
-9        BP 0.02627471      23
-10       BP 0.03514642      23</code></pre>
+1        BP 0.01587967      12
+2        MF 0.03714877      10
+3        CC 0.04422252      10
+4        BP 0.03776860      14
+5        BP 0.02269330      17
+6        BP 0.03920944      15
+7        BP 0.03619861      19
+8        BP 0.03619861      19
+9        BP 0.02127983      23
+10       BP 0.03137866      23</code></pre>
 <p>Lot’s of interesting stuff. Let’s write out the full table of results. Here is a plot of a few terms that catch’s the eye (<a href="GO:0007409" class="uri">GO:0007409</a>, axonogenesis). Though, another term that might point towards the interpretation of these differences being more related to the ipsc differentiation differences with n=1 (or maybe n=3; I still don’t fully understand the experiment design).</p>
 <p>This plot captures the essence of how GSEA works. A rug depicting instances of genes belonging to sets is shown on x-axis. Some gene sets are enriched for genes at the top of the ordered list, leading to more enrichment than you expect by chance as you move from the top (left) to bottom (right) of the ordered list.</p>
 <pre class="r"><code>gseaplot2(gsea.results, geneSetID = c(&quot;GO:0007409&quot;, &quot;GO:0007268&quot;, &quot;GO:0000904&quot;, &quot;GO:0086009&quot;), pvalue_table = F)</code></pre>
