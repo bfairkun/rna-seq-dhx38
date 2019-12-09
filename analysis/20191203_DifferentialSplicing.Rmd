@@ -90,6 +90,21 @@ leafcutter.merged %>%
     theme_bw()
 ```
 
+Let's check for intron clusters that overlap DHX38 gene, in case the gene itself is differentially spliced, possibly as a result of the mutations acting in cis.
+
+
+There are no clusters over DHX38. Note that leafcutter output only lists clusters that have more than 1 intron (not simple constitutive splicing) and that pass some default filters for minimum coverage over each the splice junction.
+
+```{r}
+#Filter based on leafcutter's gene annotations.
+sig %>% dplyr::filter(grepl("DHX38",genes))
+
+#Filter also based on genome coordinates of DHX38
+effect_sizes %>%
+  separate(intron, into=c("chrom", "start", "stop", "cluster"), sep=":") %>%
+  filter(chrom=="chr16" & start>= 72093613 & stop <= 72112912)
+```
+
 let's do a gsea to see what genes have differentially spliced clusters of introns. For this, we need an ordered gene list, with each gene appearing once. Since the biological question related to this is what are the genes or gene sets that are getting disrupted to cause the organismal phenotype, i think it is important to consider not just significance (P-value) but also effect size, perhaps as measured by delta-psi. Since significane and effect size can be quite different in a splicing analysis (see volcano plot above) because of low read counts on some junctions, let's first filter out all non-significant splicing changes (to filter out the noisy effect size estimates) Then let's make an ordered list based on the maximum delta-PSI for each gene.
 
 ```{r}

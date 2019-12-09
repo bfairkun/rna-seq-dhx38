@@ -27,6 +27,7 @@ library(edgeR)
 library(corrplot)
 library(gplots)
 library(biomaRt)
+library(ggrepel)
 library("clusterProfiler")
 library("org.Hs.eg.db")
 library(enrichplot)
@@ -166,8 +167,30 @@ results.more.descriptive <- results_edgeR$table %>%
 
 head(results.more.descriptive) %>% kable()
 
-results.more.descriptive %>%
+#Check if DHX38 is differentially expressed
+DHX38.results <- results.more.descriptive %>%
   filter(external_gene_name=="DHX38")
+
+kable(DHX38.results)
+
+#Plot smear with DHX label
+PlotSmear <- results.more.descriptive %>%
+  mutate(
+    Significance=case_when(
+      FDR<0.1 ~ "FDR<0.1",
+      FDR>0.1 ~ "Not significant",
+      external_gene_name=="DHX38" ~ "DHX38"),
+    Label=case_when(
+      external_gene_name=="DHX38" ~ paste0("DHX38\nP=", signif(DHX38.results$PValue)),
+      !external_gene_name=="DHX38" ~ ""),
+  ) %>% 
+  arrange(FDR)
+
+DHX38.results <- PlotSmear %>%
+  filter(external_gene_name=="DHX38")
+
+
+
 ```
 
 Ok good. DHX38 is not differentially expressed. So if the alleles have some affect on splicing through DHX38, is not likely through modulating expression of DHX38 levels, but rather altering function.
@@ -228,11 +251,11 @@ Now let's explore the GSEA results
 gsea.results.df <- as.data.frame(gsea.results)
 gsea.results.df %>% 
   group_by(ONTOLOGY) %>%
-  top_n(n = -5, wt = p.adjust) %>%
+  filter(rank(p.adjust, ties.method="first")<=8) %>%
   ggplot(aes(x=enrichmentScore, y=Description, color=p.adjust, size=setSize)) +
   geom_point() +
   facet_grid(ONTOLOGY~., scales = "free") +
-  scale_colour_gradient(low="red", high="black") +
+  scale_colour_gradient(low="red", high="black", trans="log10", limits=c(1E-3, 1)) +
   xlab("Enrichment") +
   scale_y_discrete(labels = function(x) lapply(strwrap(x, width = 60, simplify = FALSE), paste, collapse="\n")) +
   labs(color = "Adjusted P-value") +

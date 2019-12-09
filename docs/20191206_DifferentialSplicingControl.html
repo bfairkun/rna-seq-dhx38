@@ -12,7 +12,7 @@
 
 <meta name="author" content="Benjamin Fair" />
 
-<meta name="date" content="2019-12-06" />
+<meta name="date" content="2019-12-09" />
 
 <title>sf3b1 positive control analysis</title>
 
@@ -379,7 +379,7 @@ div.section {
 
 <h1 class="title toc-ignore">sf3b1 positive control analysis</h1>
 <h4 class="author">Benjamin Fair</h4>
-<h4 class="date">December 06, 2019</h4>
+<h4 class="date">December 09, 2019</h4>
 
 </div>
 
@@ -404,7 +404,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2019-12-06
+<strong>Last updated:</strong> 2019-12-09
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -428,7 +428,7 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 </div>
 <div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -495,10 +495,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree98a59fa2a9dc86e77a13a9665365e2f439cdceb2targetblank98a59faa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/98a59fa2a9dc86e77a13a9665365e2f439cdceb2" target="_blank">98a59fa</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treedae5a41a927b43bfabe80dcee3a43944d0f0c432targetblankdae5a41a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/dae5a41a927b43bfabe80dcee3a43944d0f0c432" target="_blank">dae5a41</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree98a59fa2a9dc86e77a13a9665365e2f439cdceb2targetblank98a59faa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treedae5a41a927b43bfabe80dcee3a43944d0f0c432targetblankdae5a41a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -508,12 +508,10 @@ Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
 
-Untracked files:
-    Untracked:  analysis/20191206_DifferentialSplicingControl.Rmd
-    Untracked:  data/sf3b1_data/
-
 Unstaged changes:
+    Modified:   analysis/20191203_DiffExpression.Rmd
     Modified:   analysis/20191203_DifferentialSplicing.Rmd
+    Modified:   analysis/20191206_DifferentialSplicingControl.Rmd
 
 </code></pre>
 <p>
@@ -526,9 +524,69 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the R Markdown and HTML files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view them.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/11ac1df172147a7d51ff51bd158affe7750118e4/analysis/20191206_DifferentialSplicingControl.Rmd" target="_blank">11ac1df</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-06
+</td>
+<td>
+added sf3b1 control analysis
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/bfairkun/rna-seq-dhx38/11ac1df172147a7d51ff51bd158affe7750118e4/docs/20191206_DifferentialSplicingControl.html" target="_blank">11ac1df</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-06
+</td>
+<td>
+added sf3b1 control analysis
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -673,6 +731,11 @@ head(effect_sizes) %&gt;% kable()</code></pre>
 </tr>
 </tbody>
 </table>
+<p>Note the sign of logef, compared the splicing ratios in WT and SF3B1 K700E.</p>
+<p>So that means that this differential splicing analysis was encoded such that positive effectsizes mean decrease in the mutant. That is a little counter-intuitive so let’s reverse that.</p>
+<pre class="r"><code>effect_sizes &lt;- effect_sizes %&gt;%
+  mutate(logef=-1* logef,
+         deltapsi=-1*deltapsi)</code></pre>
 <p>Check some basic things about the data.</p>
 <pre class="r"><code>#how many introns for each cluster
 effect_sizes %&gt;%
@@ -684,10 +747,84 @@ effect_sizes %&gt;%
   xlab(&quot;Num introns per cluster&quot;) +
   ylab(&quot;Freq&quot;) +
   theme_bw()</code></pre>
-<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
+Past versions of unnamed-chunk-4-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/11ac1df172147a7d51ff51bd158affe7750118e4/docs/figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-4-1.png" target="_blank">11ac1df</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#histogram of Pvalues
 hist(sig$p)</code></pre>
-<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-2">
+Past versions of unnamed-chunk-4-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/11ac1df172147a7d51ff51bd158affe7750118e4/docs/figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-4-2.png" target="_blank">11ac1df</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#how many significant (p.adjust &lt; 0.1)
 table(sig$p.adjust&lt;0.1) %&gt;% kable()</code></pre>
 <table>
@@ -723,7 +860,44 @@ leafcutter.merged %&gt;%
   ggplot(aes(x=deltapsi, y=-log10(p), color=sig)) +
     geom_point(alpha=0.05) +
     theme_bw()</code></pre>
-<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-3-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-3">
+Past versions of unnamed-chunk-4-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-4-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/11ac1df172147a7d51ff51bd158affe7750118e4/docs/figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-4-3.png" target="_blank">11ac1df</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Now check that differential splicing analysis works.</p>
 <p>Here I will load the list of all ~800 splice junctions Darman et al identified as significantly differntially spliced and check that this leafcutter pipeline also identifies them as significantly differentially spliced.</p>
 <p>Note that Darman et al did a bunch of separate analyses of SF3B1 mutants in various tissue or cell types and combined the list of differentially spliced junctions into a single large list (which I am loading here), even though I just used a subset of their samples to redo differential splicing analysis. Therefore, based on the fact that I am using only a small subset of their data in only one cell type (as opposed to the many analyses they combined), I may not expect to recover all of their significant introns.</p>
@@ -742,10 +916,84 @@ InDarman&lt;-leafcutter.merged %&gt;%
 
 #histogram of P-values for not containing introns siginificant in Darman et al
 hist(NotInDarman$p)</code></pre>
-<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/11ac1df172147a7d51ff51bd158affe7750118e4/docs/figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-5-1.png" target="_blank">11ac1df</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#histogram of P-values for clusters with introns sig in Darman
 hist(InDarman$p)</code></pre>
-<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-2">
+Past versions of unnamed-chunk-5-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/11ac1df172147a7d51ff51bd158affe7750118e4/docs/figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-5-2.png" target="_blank">11ac1df</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>## QQ-plot of cluster P-vals, grouped by whether cluster contains in intron identified as differentially spliced in Daraman et al.
 ggplot(NotInDarman, aes(color=&quot;NotInDarman&quot;, y=-log10(sort(p)), x=-log10(1:length(p)/length(p)))) +
   geom_point() +
@@ -756,7 +1004,7 @@ ggplot(NotInDarman, aes(color=&quot;NotInDarman&quot;, y=-log10(sort(p)), x=-log
   theme_bw() +
   theme(legend.position=&quot;bottom&quot;) +
   theme(legend.title=element_blank())</code></pre>
-<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-4-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-5-3.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Ok good. The introns Darman found to be significant, I also found to be significant with smaller P-values.</p>
 <p>Now classify splicing types as I did in the DHX38 analysis.</p>
 <pre class="r"><code>#Reclassify splicing types
@@ -849,10 +1097,10 @@ head(leafcutter.merged.AS.reclassified) %&gt;% kable()</code></pre>
 <tr class="odd">
 <td align="left">chr1:1263387:1267733:clu_10_-</td>
 <td align="left">Complex</td>
-<td align="right">0.5730873</td>
+<td align="right">-0.5730873</td>
 <td align="right">0.0078501</td>
 <td align="right">0.0165023</td>
-<td align="right">0.0086522</td>
+<td align="right">-0.0086522</td>
 <td align="left">chr1:clu_10_-</td>
 <td align="left">chr1:1263387:1267733</td>
 <td align="left">Success</td>
@@ -865,10 +1113,10 @@ head(leafcutter.merged.AS.reclassified) %&gt;% kable()</code></pre>
 <tr class="even">
 <td align="left">chr1:1263387:1267862:clu_10_-</td>
 <td align="left">Complex</td>
-<td align="right">-0.2769173</td>
+<td align="right">0.2769173</td>
 <td align="right">0.4876222</td>
 <td align="right">0.4381295</td>
-<td align="right">-0.0494928</td>
+<td align="right">0.0494928</td>
 <td align="left">chr1:clu_10_-</td>
 <td align="left">chr1:1263387:1267862</td>
 <td align="left">Success</td>
@@ -881,10 +1129,10 @@ head(leafcutter.merged.AS.reclassified) %&gt;% kable()</code></pre>
 <tr class="odd">
 <td align="left">chr1:1263387:1273666:clu_10_-</td>
 <td align="left">Complex</td>
-<td align="right">0.0681116</td>
+<td align="right">-0.0681116</td>
 <td align="right">0.0230059</td>
 <td align="right">0.0291878</td>
-<td align="right">0.0061820</td>
+<td align="right">-0.0061820</td>
 <td align="left">chr1:clu_10_-</td>
 <td align="left">chr1:1263387:1273666</td>
 <td align="left">Success</td>
@@ -897,10 +1145,10 @@ head(leafcutter.merged.AS.reclassified) %&gt;% kable()</code></pre>
 <tr class="even">
 <td align="left">chr1:1267993:1272853:clu_10_-</td>
 <td align="left">Complex</td>
-<td align="right">-0.2715277</td>
+<td align="right">0.2715277</td>
 <td align="right">0.0223636</td>
 <td align="right">0.0202023</td>
-<td align="right">-0.0021613</td>
+<td align="right">0.0021613</td>
 <td align="left">chr1:clu_10_-</td>
 <td align="left">chr1:1267993:1272853</td>
 <td align="left">Success</td>
@@ -913,10 +1161,10 @@ head(leafcutter.merged.AS.reclassified) %&gt;% kable()</code></pre>
 <tr class="odd">
 <td align="left">chr1:1267993:1273666:clu_10_-</td>
 <td align="left">Complex</td>
-<td align="right">-0.0927539</td>
+<td align="right">0.0927539</td>
 <td align="right">0.4591583</td>
 <td align="right">0.4959782</td>
-<td align="right">0.0368199</td>
+<td align="right">-0.0368199</td>
 <td align="left">chr1:clu_10_-</td>
 <td align="left">chr1:1267993:1273666</td>
 <td align="left">Success</td>
@@ -929,10 +1177,10 @@ head(leafcutter.merged.AS.reclassified) %&gt;% kable()</code></pre>
 <tr class="even">
 <td align="left">chr1:16626006:16626353:clu_100_-</td>
 <td align="left">Complex</td>
-<td align="right">-0.1590048</td>
+<td align="right">0.1590048</td>
 <td align="right">0.6370657</td>
 <td align="right">0.5707452</td>
-<td align="right">-0.0663206</td>
+<td align="right">0.0663206</td>
 <td align="left">chr1:clu_100_-</td>
 <td align="left">chr1:16626006:16626353</td>
 <td align="left">Success</td>
@@ -952,7 +1200,7 @@ head(leafcutter.merged.AS.reclassified) %&gt;% kable()</code></pre>
 
 #histogram of splicing fraction of minor isoforms (intron with smallest splicing fraction within cluster)
 hist(MinorIsoforms$WT)</code></pre>
-<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>MajorIsoforms &lt;- leafcutter.merged.AS.reclassified %&gt;%
   filter(p.adjust&lt;0.3) %&gt;%
   group_by(cluster) %&gt;%
@@ -961,7 +1209,7 @@ hist(MinorIsoforms$WT)</code></pre>
 
 #histogram of splicing fraction of major isoforms (intron with largest splicing fraction within cluster)
 hist(MajorIsoforms$WT)</code></pre>
-<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Now let’s check that we see the expected effect on alt 3’ss usage.</p>
 <pre class="r"><code>#table of splicing types of all clusters
 table(leafcutter.merged.AS.reclassified$SplicingType) %&gt;% kable()</code></pre>
@@ -1038,9 +1286,8 @@ leafcutter.merged.AS.reclassified %&gt;%
 </tbody>
 </table>
 <p>Ok as expected, there does seem to be an enrichment for alt3ss.</p>
-<p>Now let’s check the sign of the effect size. We expect mostly negative effect sizes (the way I coded this differential splicing analysis was such that splicing increases in the SF3B1 mutant samples have negative effect sizes)</p>
-<pre class="r"><code>#Note the sign of logef, compared the splicing ratios in WT and SF3B1 K700E
-head(leafcutter.merged) %&gt;% kable()</code></pre>
+<p>Now let’s check the sign of the effect size. We expect an increase in alt3ss usage for minor isoforms.</p>
+<pre class="r"><code>head(leafcutter.merged) %&gt;% kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
@@ -1062,10 +1309,10 @@ head(leafcutter.merged) %&gt;% kable()</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">chr1:1263387:1267733:clu_10_-</td>
-<td align="right">0.5730873</td>
+<td align="right">-0.5730873</td>
 <td align="right">0.0078501</td>
 <td align="right">0.0165023</td>
-<td align="right">0.0086522</td>
+<td align="right">-0.0086522</td>
 <td align="left">chr1:clu_10_-</td>
 <td align="left">chr1:1263387:1267733</td>
 <td align="left">Success</td>
@@ -1077,10 +1324,10 @@ head(leafcutter.merged) %&gt;% kable()</code></pre>
 </tr>
 <tr class="even">
 <td align="left">chr1:1263387:1267862:clu_10_-</td>
-<td align="right">-0.2769173</td>
+<td align="right">0.2769173</td>
 <td align="right">0.4876222</td>
 <td align="right">0.4381295</td>
-<td align="right">-0.0494928</td>
+<td align="right">0.0494928</td>
 <td align="left">chr1:clu_10_-</td>
 <td align="left">chr1:1263387:1267862</td>
 <td align="left">Success</td>
@@ -1092,10 +1339,10 @@ head(leafcutter.merged) %&gt;% kable()</code></pre>
 </tr>
 <tr class="odd">
 <td align="left">chr1:1263387:1273666:clu_10_-</td>
-<td align="right">0.0681116</td>
+<td align="right">-0.0681116</td>
 <td align="right">0.0230059</td>
 <td align="right">0.0291878</td>
-<td align="right">0.0061820</td>
+<td align="right">-0.0061820</td>
 <td align="left">chr1:clu_10_-</td>
 <td align="left">chr1:1263387:1273666</td>
 <td align="left">Success</td>
@@ -1107,10 +1354,10 @@ head(leafcutter.merged) %&gt;% kable()</code></pre>
 </tr>
 <tr class="even">
 <td align="left">chr1:1267993:1272853:clu_10_-</td>
-<td align="right">-0.2715277</td>
+<td align="right">0.2715277</td>
 <td align="right">0.0223636</td>
 <td align="right">0.0202023</td>
-<td align="right">-0.0021613</td>
+<td align="right">0.0021613</td>
 <td align="left">chr1:clu_10_-</td>
 <td align="left">chr1:1267993:1272853</td>
 <td align="left">Success</td>
@@ -1122,10 +1369,10 @@ head(leafcutter.merged) %&gt;% kable()</code></pre>
 </tr>
 <tr class="odd">
 <td align="left">chr1:1267993:1273666:clu_10_-</td>
-<td align="right">-0.0927539</td>
+<td align="right">0.0927539</td>
 <td align="right">0.4591583</td>
 <td align="right">0.4959782</td>
-<td align="right">0.0368199</td>
+<td align="right">-0.0368199</td>
 <td align="left">chr1:clu_10_-</td>
 <td align="left">chr1:1267993:1273666</td>
 <td align="left">Success</td>
@@ -1137,10 +1384,10 @@ head(leafcutter.merged) %&gt;% kable()</code></pre>
 </tr>
 <tr class="even">
 <td align="left">chr1:16626006:16626353:clu_100_-</td>
-<td align="right">-0.1590048</td>
+<td align="right">0.1590048</td>
 <td align="right">0.6370657</td>
 <td align="right">0.5707452</td>
-<td align="right">-0.0663206</td>
+<td align="right">0.0663206</td>
 <td align="left">chr1:clu_100_-</td>
 <td align="left">chr1:16626006:16626353</td>
 <td align="left">Success</td>
@@ -1160,7 +1407,7 @@ ggplot(aes(x=deltapsi, color=SplicingType)) +
     xlim(c(-1,1))+
     ylab(&quot;Cumulative frequency&quot;) +
     theme_bw()</code></pre>
-<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-7-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20191206_DifferentialSplicingControl.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>MinorIsoforms %&gt;%
   filter(SplicingType %in% c(&quot;Alt3ss&quot;)) %&gt;% pull(deltapsi) %&gt;%
   wilcox.test()</code></pre>
@@ -1168,9 +1415,9 @@ ggplot(aes(x=deltapsi, color=SplicingType)) +
     Wilcoxon signed rank test
 
 data:  .
-V = 11, p-value = 0.003357
+V = 109, p-value = 0.003357
 alternative hypothesis: true location is not equal to 0</code></pre>
-<p>For minor isoforms of alt3’ss, the effect size (deltapsi) is negative in ~80% of significant cases, meaning upregulated in the K700E mutant. This is more than expected by chance.</p>
+<p>For minor isoforms of alt3’ss, the effect size (deltapsi) is positive in ~80% of significant cases, meaning upregulated in the K700E mutant. This is more than expected by chance.</p>
 </div>
 <div id="conclusions" class="section level2">
 <h2>Conclusions</h2>
@@ -1213,10 +1460,11 @@ loaded via a namespace (and not attached):
 [29] promises_1.1.0   backports_1.1.5  scales_1.0.0     jsonlite_1.6    
 [33] fs_1.3.1         hms_0.5.2        digest_0.6.22    stringi_1.4.3   
 [37] grid_3.6.1       rprojroot_1.3-2  cli_1.1.0        tools_3.6.1     
-[41] magrittr_1.5     lazyeval_0.2.2   crayon_1.3.4     pkgconfig_2.0.3 
-[45] zeallot_0.1.0    ellipsis_0.3.0   xml2_1.2.2       lubridate_1.7.4 
-[49] assertthat_0.2.1 rmarkdown_1.17   httr_1.4.1       rstudioapi_0.10 
-[53] R6_2.4.1         nlme_3.1-142     git2r_0.26.1     compiler_3.6.1  </code></pre>
+[41] magrittr_1.5     lazyeval_0.2.2   crayon_1.3.4     whisker_0.4     
+[45] pkgconfig_2.0.3  zeallot_0.1.0    ellipsis_0.3.0   xml2_1.2.2      
+[49] lubridate_1.7.4  assertthat_0.2.1 rmarkdown_1.17   httr_1.4.1      
+[53] rstudioapi_0.10  R6_2.4.1         nlme_3.1-142     git2r_0.26.1    
+[57] compiler_3.6.1  </code></pre>
 </div>
 </div>
 

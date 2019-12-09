@@ -34,6 +34,18 @@ head(sig) %>% kable()
 effect_sizes <- read.table("../data/sf3b1_data/leafcutter.ds.effect_sizes.txt.gz", sep='\t', header=T)
 
 head(effect_sizes) %>% kable()
+
+
+```
+
+Note the sign of logef, compared the splicing ratios in WT and SF3B1 K700E.
+
+So that means that this differential splicing analysis was encoded such that positive effectsizes mean decrease in the mutant. That is a little counter-intuitive so let's reverse that.
+
+```{r}
+effect_sizes <- effect_sizes %>%
+  mutate(logef=-1* logef,
+         deltapsi=-1*deltapsi)
 ```
 
 Check some basic things about the data.
@@ -190,11 +202,11 @@ leafcutter.merged.AS.reclassified %>%
 
 Ok as expected, there does seem to be an enrichment for alt3ss.
 
-Now let's check the sign of the effect size. We expect mostly negative effect sizes (the way I coded this differential splicing analysis was such that splicing increases in the SF3B1 mutant samples have negative effect sizes)
+Now let's check the sign of the effect size. We expect an increase in alt3ss usage for minor isoforms.
 
 ```{r}
-#Note the sign of logef, compared the splicing ratios in WT and SF3B1 K700E
 head(leafcutter.merged) %>% kable()
+
 
 #Now make plots to get to know if minor isoform alt5'ss have generally gone down. Same for alt 3'ss.
 MinorIsoforms %>%
@@ -210,7 +222,7 @@ MinorIsoforms %>%
   wilcox.test()
 ```
 
-For minor isoforms of alt3'ss, the effect size (deltapsi) is negative in ~80% of significant cases, meaning upregulated in the K700E mutant. This is more than expected by chance.
+For minor isoforms of alt3'ss, the effect size (deltapsi) is positive in ~80% of significant cases, meaning upregulated in the K700E mutant. This is more than expected by chance.
 
 
 ## Conclusions
