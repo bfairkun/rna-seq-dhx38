@@ -127,7 +127,11 @@ Let's see if any of those features correlate with differentially expressed intro
 
 ```{r}
 #read intron features
-IntronFeatures <- read.table("../output/IntronFeatures.txt.gz", sep='\t', header=T)
+IntronFeatures <- read.table("../output/IntronFeatures.txt.gz", sep='\t', header=T) %>%
+  separate(Intron, c("chrom", "start", "stop", "strand"), sep = "_") %>%
+  mutate(newStop=as.numeric(stop)+1) %>%
+  mutate(junc_id=paste(paste0("chr", chrom), start, newStop, sep=":")) %>%
+  dplyr::select(-c("chrom", "start", "stop", "newStop"))
 
 head(IntronFeatures) %>% kable()
 
@@ -153,18 +157,12 @@ IntronFeatures %>%
 
 # merge the intron features with the leafcutter results and filter for the significantly differentially spliced introns that have the greatest effect size within cluster
 leafcutter.merged.w.features <- leafcutter.merged %>%
-  separate(junc_id, c("chrom", "start", "stop"), sep = ":") %>%
-  mutate(newChrom=sub("chr", "", chrom),
-         newStop=as.numeric(stop)-1,
-         strand=str_sub(intron, start=-1)) %>%
-  mutate(IntronID=str_c(newChrom, start, newStop, strand, sep="_")) %>%
-  dplyr::select(-c("chrom", "start", "stop", "newStop", "newChrom")) %>%
   mutate(abs.effectsize = abs(logef)) %>%
   group_by(cluster) %>% 
   top_n(n=1, abs.effectsize) %>%
   ungroup() %>%
   filter(p.adjust<0.2) %>%
-  left_join(IntronFeatures, by=c("IntronID"="Intron"))
+  left_join(IntronFeatures, by="junc_id")
 
 # Are specific types of unannotated splicing more prevalent?
 leafcutter.merged.w.features %>%
@@ -174,8 +172,8 @@ colnames(leafcutter.merged.w.features)
 
 # Set up features and effect sizes into a cleaner data frame
 IntronFeaturesAndEffectSizes <- leafcutter.merged.w.features %>%
-  dplyr::select(IntronID, logef, DonorScore, AcceptorScore, ss_dist, bp_scr, ppt_len, ppt_scr, svm_scr) %>%
-  column_to_rownames("IntronID")
+  dplyr::select(junc_id, logef, DonorScore, AcceptorScore, ss_dist, bp_scr, ppt_len, ppt_scr, svm_scr) %>%
+  column_to_rownames("junc_id")
 
 # See if there is any correlations
 CorrelationsWithFeatures <- corr.test(x=IntronFeaturesAndEffectSizes[,1],
@@ -304,9 +302,35 @@ ggplot(PlotExonSkippingSpliceRatios, aes(x=CassetteExonIncluded.DownstreamIntron
 #And there should generally be anti correlation with the exon skipped isoform and either of the exon included introns
 ggplot(PlotExonSkippingSpliceRatios, aes(x=CassetteExonIncluded.DownstreamIntron, y=CassetteExonSkipped)) +
     geom_point()
+
+#And finally, cassette skipped exons should have weaker splice sites.
+leafcutter.merged.AS.reclassified %>%
+  left_join(IntronFeatures, by="junc_id") %>%
+  filter(SplicingType %in% c("CassetteExonIncluded.DownstreamIntron", "CassetteExonIncluded.UpstreamIntron")) %>%
+  dplyr::select(SplicingType, DonorScore, AcceptorScore) %>%
+  gather(key="Motif", value="MotifScore", -SplicingType) %>%
+  mutate(Motif=case_when(
+    Motif=="DonorScore" ~ "5'ss",
+    Motif== "AcceptorScore" ~ "3'ss")) %>%
+  ggplot(aes(x=MotifScore, color=Motif, linetype=SplicingType)) +
+    stat_ecdf(geom = "step") +
+    ylab("Cumulative frequency") +
+    theme_bw()
+
+leafcutter.merged.AS.reclassified %>%
+  left_join(IntronFeatures, by="junc_id") %>%
+  filter(SplicingType %in% c("CassetteExonIncluded.DownstreamIntron", "CassetteExonIncluded.UpstreamIntron")) %>%
+  dplyr::select(SplicingType, svm_scr) %>%
+  ggplot(aes(x=svm_scr, linetype=SplicingType)) +
+    stat_ecdf(geom = "step") +
+    ylab("Cumulative frequency") +
+    theme_bw()
+
 ```
 
-Okay from that it seems my classification of alternative splicing types makes sense. Now let's check if the minor isoform (as assessed in healthy samples) for each splicing type is has a general polarity to effect size. Specifically, if alt5'ss have negative effect sizes.
+Okay yes, for cassette exons, upstream introns have weaker splice acceptors than down stream splice acceptors, downstream introns have weaker splice donors than upstream splice donors. That pattern isn't apparent for branchpoints though, so that signal may be too weak, or predictions on branchpoints may be lousy.
+
+But all in all it seems that my classification of alternative splicing types makes sense. Now let's check if the minor isoform (as assessed in healthy samples) for each splicing type is has a general polarity to effect size. Specifically, if alt5'ss have negative effect sizes.
 
 ```{r}
 MinorIsoforms <- leafcutter.merged.AS.reclassified %>%
@@ -369,9 +393,12 @@ Finally, since all of this type of analysis didn't return anything very interest
 BedFile <- leafcutter.merged.AS.reclassified %>%
   dplyr::select(intron, SplicingType, logef, deltapsi, p) %>%
   separate(intron, into=c("chrom", "start", "stop", "cluster"), remove=F) %>%
-  mutate(extra=paste(logef, deltapsi, SplicingType), score=-log10(p), strand=".") %>%
-  
-  dplyr::select(chrom, start, stop, intron, score, strand, extra )
+  mutate(extra=paste(logef, deltapsi, SplicingType),
+         score=-log10(p),
+         strand=".",
+         name=paste0(chrom,":",start,"-",stop)
+         )%>%
+  dplyr::select(chrom, start, stop, name, score, strand, extra )
 
 head(BedFile) %>% kable()
 
