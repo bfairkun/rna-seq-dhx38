@@ -144,9 +144,12 @@ Let's see if any of those features correlate with differentially expressed intro
 #read intron features
 IntronFeatures <- read.table("../output/IntronFeatures.txt.gz", sep='\t', header=T) %>%
   separate(Intron, c("chrom", "start", "stop", "strand"), sep = "_") %>%
-  mutate(newStop=as.numeric(stop)+1) %>%
-  mutate(junc_id=paste(paste0("chr", chrom), start, newStop, sep=":")) %>%
-  dplyr::select(-c("chrom", "start", "stop", "newStop"))
+  mutate(newStop=as.numeric(stop)+1,
+         newStart=as.numeric(start)) %>%
+  mutate(
+    junc_id=paste(paste0("chr", chrom), newStart, newStop, sep=":"),
+    IntronLength=newStop-newStart) %>%
+  dplyr::select(-c("chrom", "start", "stop", "newStop", "newStart"))
 
 head(IntronFeatures) %>% kable()
 
@@ -187,7 +190,7 @@ colnames(leafcutter.merged.w.features)
 
 # Set up features and effect sizes into a cleaner data frame
 IntronFeaturesAndEffectSizes <- leafcutter.merged.w.features %>%
-  dplyr::select(junc_id, logef, DonorScore, AcceptorScore, ss_dist, bp_scr, ppt_len, ppt_scr, svm_scr) %>%
+  dplyr::select(junc_id, logef, DonorScore, AcceptorScore, ss_dist, bp_scr, ppt_len, ppt_scr, svm_scr, IntronLength) %>%
   column_to_rownames("junc_id")
 
 # See if there is any correlations
@@ -197,7 +200,7 @@ CorrelationsWithFeatures <- corr.test(x=IntronFeaturesAndEffectSizes[,1],
                          adjust="none")
 
 # table of spearmans r, pvalue, and n
-data.frame(r= t(CorrelationsWithFeatures$r), p=t(CorrelationsWithFeatures$p), n=t(CorrelationsWithFeatures$n)) %>% kable()
+data.frame(Spearman.r= t(CorrelationsWithFeatures$r), p=t(CorrelationsWithFeatures$p), n=t(CorrelationsWithFeatures$n)) %>% kable()
 ```
 
 None of the features tested seem to correlate with the effect size of largest-effect introns in significant clusters.
