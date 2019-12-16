@@ -10,7 +10,11 @@ editor_options:
 
 Welcome to my research website.
 
+3 replicates (same cell line at different passages) of iPSC derived neural progenitor cells from patient with DHX38 biallelic mutations, compared with 3 replicates of an unrelated healthy control.
+
 - [Differential gene expression](20191203_DiffExpression.html)
+- [Plot differential expression of splicing genes](20191216_DifferentialExpression_Splicing.html)
 - [Differential splicing](20191203_DifferentialSplicing.html)
 - [Differential splicing pos control analysis](20191206_DifferentialSplicingControl.html)
+- [Check overlap with polyA length](20191216_polyA_Intersect.html)
 

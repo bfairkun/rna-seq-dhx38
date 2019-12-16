@@ -97,7 +97,7 @@ cpm <- cpm(CountTable.matrix.filtered, log=TRUE, prior.count=0.5)
 
 # look at correlations from filtered cpm matrix
 cor(cpm) %>%
-heatmap.2(., trace="none")
+heatmap.2(., trace="none", cexRow=1, cexCol=1)
 
 # Also look at similarity with MDS plot
 plotMDS(cpm)

@@ -335,6 +335,14 @@ leafcutter.merged.AS.reclassified %>%
     ylab("Cumulative frequency") +
     theme_bw()
 
+A<-leafcutter.merged.AS.reclassified %>%
+  left_join(IntronFeatures, by="junc_id") %>%
+  filter(SplicingType %in% c("CassetteExonIncluded.DownstreamIntron", "CassetteExonIncluded.UpstreamIntron")) %>%
+  dplyr::select(SplicingType, DonorScore, AcceptorScore)
+wilcox.test(DonorScore~SplicingType, data=A, alternative="less")
+wilcox.test(AcceptorScore~SplicingType, data=A)
+
+
 leafcutter.merged.AS.reclassified %>%
   left_join(IntronFeatures, by="junc_id") %>%
   filter(SplicingType %in% c("CassetteExonIncluded.DownstreamIntron", "CassetteExonIncluded.UpstreamIntron")) %>%

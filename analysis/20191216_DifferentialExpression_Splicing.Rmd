@@ -1,0 +1,149 @@
+---
+title: "DiffExpression of Splicing Proteins"
+author: "Benjamin Fair"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+## Introduction
+
+I [previously]() did a differential expression analysis comparing the affected vs healthy control RNA-seq libraries. There was no GeneOntology enrichment for splicing proteins. Nonetheless, let's view all splicing related proteins for their differential expression estimates.
+
+## Analysis
+
+First, load necessary libraries
+```{r}
+library(tidyverse)
+library(biomaRt)
+library(knitr)
+```
+
+And load the differential expression results.
+
+```{r}
+DiffExp <- read.table("../output/GeneExpression.DE.tab", stringsAsFactors = F, header=T, sep='\t')
+
+head(DiffExp) %>% kable()
+
+```
+
+Now get all splicing related gene names from BioMart. I previously used [AmiGO website](http://amigo.geneontology.org/amigo) to search 'splicing' for related GeneOntology codes and saved them to a file.
+
+```{r}
+SplicingGO.terms <- read.table("../data/GO_splicing_ids.fromAmiGO_online_search.tab", sep='\t', col.names=c("GO.ID", "Description"))
+
+kable(SplicingGO.terms)
+```
+
+Now create a Biomart query, using these GO terms as a filter. Note that I set `eval=F` because sometimes ensembl BioMart servers are so busy that this block of code throws errors depending on how busy the server is. So I just ran this code once, wrote the results to a file in output, and read in the output in the next code chunk.
+
+```{r, eval=F}
+#Use biomart to get common gene names and ensembl IDs
+human_mart <- useMart("ensembl", dataset="hsapiens_gene_ensembl")
+
+MyBioMartQuery <- getBM(attributes = c("ensembl_gene_id","external_gene_name", "description"), mart=human_mart, filters=c("ensembl_gene_id", "go"), values=list(ensembl_ids=DiffExp$ensembl_gene_id, go=SplicingGO.terms$GO.ID))
+
+
+write.table(MyBioMartQuery, file="../output/BioMartQuery.Go.Splicing.tab", sep='\t')
+```
+
+Read in those BioMart query results...
+```{r}
+MyBioMartQuery <- read.table("../output/BioMartQuery.Go.Splicing.tab", sep='\t', header=T)
+head(kable(MyBioMartQuery))
+
+```
+
+
+Now plot the differential expression results, specifically of splicing proteins...
+
+```{r}
+SplicingProteinResults <- DiffExp %>%
+  filter(ensembl_gene_id %in% MyBioMartQuery$ensembl_gene_id)
+NonSplicingProteinResults <- DiffExp %>%
+  filter(!ensembl_gene_id %in% MyBioMartQuery$ensembl_gene_id)
+
+#Histograms of P-values, grouped by splicing gene classification
+hist(SplicingProteinResults$PValue)
+hist(NonSplicingProteinResults$PValue)
+
+##qq plot of P-values, grouped by splicing gene classificiation. Note that qq-plot might be deceiving way to compare distributions with hugely different number of points in each group. Here there are ~100X more non-splicing genes, so the eyes are drawn to the hundred or so P-values that are smaller than any splicing-gene Pvalues, even though that might be expected by chance.
+ggplot(NonSplicingProteinResults, aes(color="Splicing genes", y=-log10(sort(PValue)), x=-log10(1:length(PValue)/length(PValue)))) +
+  geom_point() +
+  geom_point(data=SplicingProteinResults, aes(color="Not splicing genes")) +
+  xlab("-log10(Theoretical-Pvalues)") +
+  ylab("-log10(Observed-Pvalues)") +
+  geom_abline() +
+  theme_bw() +
+  theme(legend.position="bottom") +
+  theme(legend.title=element_blank())
+
+##different way to make grouped qq-plot
+# ToPlot <- DiffExp %>%
+#   mutate(SplicingGeneClassification=ensembl_gene_id %in% MyBioMartQuery$ensembl_gene_id) %>%
+#   add_count(SplicingGeneClassification, name="GroupCount") %>%
+#   group_by(SplicingGeneClassification) %>%
+#   mutate(rank = rank(PValue, ties.method = "random")) %>%
+#   ungroup() %>%
+#   mutate(expect=rank/GroupCount)
+# 
+# ggplot(ToPlot, aes(color=SplicingGeneClassification, y=-log10(PValue), x=-log10(expect))) +
+#   geom_point() +
+#   xlab("-log10(Theoretical-Pvalues)") +
+#   ylab("-log10(Observed-Pvalues)") +
+#   geom_abline() +
+#   ylim(c(0,10)) +
+#   theme_bw() +
+#   theme(legend.position="bottom") +
+#   theme(legend.title=element_blank())
+
+
+# are these distributions of Pvalues significantly different?
+wilcox.test(NonSplicingProteinResults$PValue, SplicingProteinResults$PValue)
+
+```
+
+No, the distribution of Pvalues for splicing genes is not significantly different than for non-splicing genes. So there is no reason to think splicing genes in general are differentially expressed. the simplest explanation is that DHX38 genotype directly leads to altered expression of some key genes (but not necessarily splicing related genes in general).
+
+Nonetheless, let's plot the expression changes for all splicing genes. (Not that we have convincing evidence that splicing is altered in a way that is dependent on this DHX38 genotype). 
+
+```{r}
+dim(SplicingProteinResults)
+
+#Plot all 159 splicing genes tested
+SplicingProteinResults %>%
+ggplot(aes(x=reorder(external_gene_name,logFC), y=logFC, fill=FDR<0.1)) +
+  geom_col() +
+  coord_flip() +
+  scale_fill_manual(values=c("black", "red")) +
+  theme_classic() +
+  xlab("Splicing genes\nGO:0048024, GO:0000398, GO:0005681") +
+  theme(
+        axis.text.y=element_blank(),
+        axis.ticks.y=element_blank())
+
+#Plot just the significant ones
+SplicingProteinResults %>%
+  filter(FDR<0.1) %>%
+ggplot(aes(x=reorder(external_gene_name,logFC), y=logFC, fill=PValue)) +
+  geom_col() +
+  scale_fill_viridis_c(trans="log10", direction=-1, option="D") +
+  coord_flip() +
+  theme_classic()+
+  xlab("") +
+  theme( axis.line = element_line(colour = "red", 
+                      size = 1, linetype = "solid")) +
+  theme(axis.text.y = element_text(size=4))
+
+```
+
+## Conclusions
+
+Splicing related genes as a group are not any more or less differentially expressed than non-splicing related genes. Nevertheless, there are still some significantly differentially expressed splicing genes, like RBM3. Due to experimental design (not isogenic comparisons), it is still unclear whether this change is related to DHX38 genotype.
+

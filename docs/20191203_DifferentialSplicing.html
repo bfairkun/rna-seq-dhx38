@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Benjamin Fair" />
 
-<meta name="date" content="2019-12-09" />
+<meta name="date" content="2019-12-16" />
 
 <title>Untitled</title>
 
@@ -237,6 +236,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -379,7 +379,7 @@ div.section {
 
 <h1 class="title toc-ignore">Untitled</h1>
 <h4 class="author">Benjamin Fair</h4>
-<h4 class="date">December 09, 2019</h4>
+<h4 class="date">December 16, 2019</h4>
 
 </div>
 
@@ -404,7 +404,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2019-12-09
+<strong>Last updated:</strong> 2019-12-16
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -495,10 +495,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treedbbdff32af42a7bdbc1cd9c6d91adbb7bb55845ftargetblankdbbdff3a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/dbbdff32af42a7bdbc1cd9c6d91adbb7bb55845f" target="_blank">dbbdff3</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treed602320dfafe088c010d645b5a782854b0cc40e4targetblankd602320a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/d602320dfafe088c010d645b5a782854b0cc40e4" target="_blank">d602320</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treedbbdff32af42a7bdbc1cd9c6d91adbb7bb55845ftargetblankdbbdff3a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treed602320dfafe088c010d645b5a782854b0cc40e4targetblankd602320a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -507,9 +507,14 @@ Great! You are using Git for version control. Tracking code development and conn
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
+
+Untracked files:
+    Untracked:  analysis/20191216_DifferentialExpression_Splicing.Rmd
+    Untracked:  data/GO_splicing_ids.fromAmiGO_online_search.tab
+    Untracked:  dsdist.
 
 Unstaged changes:
+    Modified:   analysis/20191203_DiffExpression.Rmd
     Modified:   analysis/20191203_DifferentialSplicing.Rmd
 
 </code></pre>
@@ -549,6 +554,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/d602320dfafe088c010d645b5a782854b0cc40e4/analysis/20191203_DifferentialSplicing.Rmd" target="_blank">d602320</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-10
+</td>
+<td>
+update site
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/bfairkun/rna-seq-dhx38/d602320dfafe088c010d645b5a782854b0cc40e4/docs/20191203_DifferentialSplicing.html" target="_blank">d602320</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-10
+</td>
+<td>
+update site
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -2028,6 +2067,24 @@ Benjmain Fair
 </table>
 </div>
 </div>
+<pre class="r"><code>A&lt;-leafcutter.merged.AS.reclassified %&gt;%
+  left_join(IntronFeatures, by=&quot;junc_id&quot;) %&gt;%
+  filter(SplicingType %in% c(&quot;CassetteExonIncluded.DownstreamIntron&quot;, &quot;CassetteExonIncluded.UpstreamIntron&quot;)) %&gt;%
+  dplyr::select(SplicingType, DonorScore, AcceptorScore)
+wilcox.test(DonorScore~SplicingType, data=A, alternative=&quot;less&quot;)</code></pre>
+<pre><code>
+    Wilcoxon rank sum test with continuity correction
+
+data:  DonorScore by SplicingType
+W = 880752, p-value = 2.556e-13
+alternative hypothesis: true location shift is less than 0</code></pre>
+<pre class="r"><code>wilcox.test(AcceptorScore~SplicingType, data=A)</code></pre>
+<pre><code>
+    Wilcoxon rank sum test with continuity correction
+
+data:  AcceptorScore by SplicingType
+W = 1237044, p-value &lt; 2.2e-16
+alternative hypothesis: true location shift is not equal to 0</code></pre>
 <pre class="r"><code>leafcutter.merged.AS.reclassified %&gt;%
   left_join(IntronFeatures, by=&quot;junc_id&quot;) %&gt;%
   filter(SplicingType %in% c(&quot;CassetteExonIncluded.DownstreamIntron&quot;, &quot;CassetteExonIncluded.UpstreamIntron&quot;)) %&gt;%
@@ -2437,44 +2494,45 @@ other attached packages:
 [10] clusterProfiler_3.12.0 knitr_1.26             forcats_0.4.0         
 [13] stringr_1.4.0          dplyr_0.8.3            purrr_0.3.3           
 [16] readr_1.3.1            tidyr_1.0.0            tibble_2.1.3          
-[19] ggplot2_3.2.1          tidyverse_1.2.1       
+[19] ggplot2_3.2.1          tidyverse_1.3.0       
 
 loaded via a namespace (and not attached):
   [1] fgsea_1.10.1        colorspace_1.4-1    ellipsis_0.3.0     
   [4] ggridges_0.5.1      rprojroot_1.3-2     qvalue_2.16.0      
-  [7] fs_1.3.1            rstudioapi_0.10     farver_1.1.0       
+  [7] fs_1.3.1            rstudioapi_0.10     farver_2.0.1       
  [10] urltools_1.7.3      graphlayouts_0.5.0  ggrepel_0.8.1      
- [13] bit64_0.9-7         lubridate_1.7.4     xml2_1.2.2         
- [16] splines_3.6.1       mnormt_1.5-5        GOSemSim_2.10.0    
- [19] polyclip_1.10-0     zeallot_0.1.0       jsonlite_1.6       
- [22] workflowr_1.5.0     broom_0.5.2         GO.db_3.8.2        
- [25] ggforce_0.3.1       BiocManager_1.30.9  compiler_3.6.1     
- [28] httr_1.4.1          rvcheck_0.1.6       backports_1.1.5    
- [31] assertthat_0.2.1    Matrix_1.2-17       lazyeval_0.2.2     
- [34] cli_1.1.0           later_1.0.0         tweenr_1.0.1       
- [37] htmltools_0.4.0     prettyunits_1.0.2   tools_3.6.1        
- [40] igraph_1.2.4.1      gtable_0.3.0        glue_1.3.1         
- [43] reshape2_1.4.3      DO.db_2.9           fastmatch_1.1-0    
- [46] Rcpp_1.0.2          cellranger_1.1.0    vctrs_0.2.0        
- [49] nlme_3.1-142        ggraph_2.0.0        xfun_0.11          
- [52] rvest_0.3.5         lifecycle_0.1.0     DOSE_3.10.2        
- [55] europepmc_0.3       MASS_7.3-51.4       scales_1.0.0       
- [58] tidygraph_1.1.2     hms_0.5.2           promises_1.1.0     
- [61] RColorBrewer_1.1-2  yaml_2.2.0          memoise_1.1.0      
- [64] gridExtra_2.3       UpSetR_1.4.0        triebeard_0.3.0    
- [67] stringi_1.4.3       RSQLite_2.1.2       highr_0.8          
- [70] BiocParallel_1.18.1 rlang_0.4.1         pkgconfig_2.0.3    
- [73] evaluate_0.14       lattice_0.20-38     labeling_0.3       
- [76] cowplot_1.0.0       bit_1.1-14          tidyselect_0.2.5   
- [79] plyr_1.8.4          magrittr_1.5        R6_2.4.1           
- [82] generics_0.0.2      DBI_1.0.0           foreign_0.8-72     
- [85] pillar_1.4.2        haven_2.2.0         whisker_0.4        
- [88] withr_2.1.2         modelr_0.1.5        crayon_1.3.4       
- [91] rmarkdown_1.17      viridis_0.5.1       progress_1.2.2     
- [94] grid_3.6.1          readxl_1.3.1        data.table_1.12.6  
- [97] blob_1.2.0          git2r_0.26.1        digest_0.6.22      
-[100] httpuv_1.5.2        gridGraphics_0.4-1  munsell_0.5.0      
-[103] viridisLite_0.3.0   ggplotify_0.0.4    </code></pre>
+ [13] bit64_0.9-7         fansi_0.4.0         lubridate_1.7.4    
+ [16] xml2_1.2.2          splines_3.6.1       mnormt_1.5-5       
+ [19] GOSemSim_2.10.0     polyclip_1.10-0     zeallot_0.1.0      
+ [22] jsonlite_1.6        workflowr_1.5.0     broom_0.5.2        
+ [25] GO.db_3.8.2         dbplyr_1.4.2        ggforce_0.3.1      
+ [28] BiocManager_1.30.10 compiler_3.6.1      httr_1.4.1         
+ [31] rvcheck_0.1.7       backports_1.1.5     assertthat_0.2.1   
+ [34] Matrix_1.2-18       lazyeval_0.2.2      cli_2.0.0          
+ [37] later_1.0.0         tweenr_1.0.1        htmltools_0.4.0    
+ [40] prettyunits_1.0.2   tools_3.6.1         igraph_1.2.4.2     
+ [43] gtable_0.3.0        glue_1.3.1          reshape2_1.4.3     
+ [46] DO.db_2.9           fastmatch_1.1-0     Rcpp_1.0.2         
+ [49] cellranger_1.1.0    vctrs_0.2.0         nlme_3.1-143       
+ [52] ggraph_2.0.0        xfun_0.11           rvest_0.3.5        
+ [55] lifecycle_0.1.0     DOSE_3.10.2         europepmc_0.3      
+ [58] MASS_7.3-51.4       scales_1.1.0        tidygraph_1.1.2    
+ [61] hms_0.5.2           promises_1.1.0      RColorBrewer_1.1-2 
+ [64] yaml_2.2.0          memoise_1.1.0       gridExtra_2.3      
+ [67] UpSetR_1.4.0        triebeard_0.3.0     stringi_1.4.3      
+ [70] RSQLite_2.1.4       highr_0.8           BiocParallel_1.18.1
+ [73] rlang_0.4.1         pkgconfig_2.0.3     evaluate_0.14      
+ [76] lattice_0.20-38     labeling_0.3        cowplot_1.0.0      
+ [79] bit_1.1-14          tidyselect_0.2.5    plyr_1.8.5         
+ [82] magrittr_1.5        R6_2.4.1            generics_0.0.2     
+ [85] DBI_1.0.0           foreign_0.8-72      pillar_1.4.2       
+ [88] haven_2.2.0         whisker_0.4         withr_2.1.2        
+ [91] modelr_0.1.5        crayon_1.3.4        rmarkdown_1.18     
+ [94] viridis_0.5.1       progress_1.2.2      grid_3.6.1         
+ [97] readxl_1.3.1        data.table_1.12.8   blob_1.2.0         
+[100] git2r_0.26.1        reprex_0.3.0        digest_0.6.23      
+[103] httpuv_1.5.2        gridGraphics_0.4-1  munsell_0.5.0      
+[106] ggplotify_0.0.4     viridisLite_0.3.0  </code></pre>
 </div>
 </div>
 

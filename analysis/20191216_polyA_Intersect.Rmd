@@ -1,0 +1,122 @@
+---
+title: "Overlap with diff polyA length"
+author: "Benjamin Fair"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+## Introduction
+
+As I understand it (based on reading email correspondences and filenames), the collaborators also took PacBio-based measurements of polyA length between healthy and affected and performed a differential polyA length expression analysis. 
+## Analysis
+
+First, load necessary libraries
+```{r}
+library(tidyverse)
+library(knitr)
+```
+
+Read in data from collaborator (some sort of differential analysis based on PacBio data)
+
+```{r}
+#Read PacBioResults
+PacBio.results <- read.csv("../data/Diff_tail_length_WT_vs_DHX.csv", )
+head(PacBio.results) %>% kable()
+
+#Read standard RNAseq results
+DiffExp <- read.table("../output/GeneExpression.DE.tab", stringsAsFactors = F, header=T, sep='\t')
+
+head(DiffExp) %>% kable()
+
+Merged <- inner_join(PacBio.results, DiffExp, by=c("gene"="external_gene_name"))
+
+```
+
+Let's visualize the data a bit...
+
+First, a correlation of polyA length between conditions
+
+
+```{r}
+Merged %>%
+ggplot(aes(x=med_pa_len_A, y=med_pa_len_B, color=iso_pa_sig)) +
+  geom_point(alpha=0.3) +
+  theme_bw()
+```
+
+From browsing the PacBio table, I believe iso_pa diff is just the absolute value of the difference between med_pa_len_[A/B]. let's check that
+
+```{r}
+Merged %>%
+ggplot(aes(x=med_pa_len_A-med_pa_len_B, y=iso_pa_diff,color=iso_pa_sig)) +
+  geom_point(alpha=0.3) +
+  theme_bw()
+```
+
+Ok. I think the cnt columns refer to read counts (expression). Let's try to recreate the MA plot I think I saw in the email correspondence
+
+```{r}
+ggplot(PacBio.results, aes(x=log2((cntA+cntB)/2), y=med_pa_len_A-med_pa_len_B, color=iso_pa_sig)) +
+  geom_point() +
+  theme_bw()
+```
+
+Ok yeah, that looks a lot like the plot I saw in the email correspondence, so I think I am understanding the PacBio results correctly.
+
+To make sure, let's check that the cntA and cntB (expression) correlates with expression as measured by RNA-seq (Technically these aren't perfectly comparable since the RNA-seq expression is measured in CountsPerMillion, rather than RPKM, so there is no length normalization). Nonetheless, I expect to see some correlation.
+
+```{r}
+ggplot(Merged, aes(x=log2((cntA+cntB)/2), y=logCPM)) +
+  geom_point() +
+  theme_bw()
+
+cor.test(log2((Merged$cntA+Merged$cntB)/2), Merged$logCPM, method='spearman')
+
+```
+
+
+Now, is there any correlation between expression polyA length and expression? (The natural hypothesis is that the genes with longer tails will be stabilized, and therefore upregulated)
+
+```{r}
+
+Merged %>%
+ggplot(aes(x=med_pa_len_A-med_pa_len_B, y=logFC,color=iso_pa_sig)) +
+  geom_point(alpha=0.3) +
+  theme_bw() +
+  xlab("Difference in polyA length") +
+  ylab("logFC expression")
+
+cor.test(Merged$med_pa_len_A-Merged$med_pa_len_B, Merged$logFC, method='spearman')
+```
+
+No obvious difference and no significant correlation. Let's check if there is any significant overlap between the sets of significant gene by fisher test of the 2x2 contigency table of significant vs not significant gene count for each method.
+
+```{r}
+Merged$ExpressionSig <- Merged$FDR<0.1
+
+#how many significant by each method?
+table(Merged$ExpressionSig)
+table(Merged$iso_pa_sig)
+
+
+Merged %>%
+  dplyr::select(ExpressionSig, iso_pa_sig) %>%
+  group_by(ExpressionSig, iso_pa_sig) %>% summarise(n = n()) %>%
+  spread(key = ExpressionSig, value = n) %>%
+  column_to_rownames("iso_pa_sig") %>%
+  fisher.test()
+
+```
+
+Ok the overlap is not significant. As far as we can measure, the significance of these assays seem to be uncorrelated.
+
+
+## Conclusions
+
+

@@ -1,18 +1,17 @@
 <!DOCTYPE html>
 
-<html xmlns="http://www.w3.org/1999/xhtml">
+<html>
 
 <head>
 
 <meta charset="utf-8" />
-<meta http-equiv="Content-Type" content="text/html; charset=utf-8" />
 <meta name="generator" content="pandoc" />
 <meta http-equiv="X-UA-Compatible" content="IE=EDGE" />
 
 
 <meta name="author" content="Benjamin Fair" />
 
-<meta name="date" content="2019-12-09" />
+<meta name="date" content="2019-12-16" />
 
 <title>Untitled</title>
 
@@ -237,6 +236,7 @@ $(document).ready(function () {
   border: none;
   display: inline-block;
   border-radius: 4px;
+  background-color: transparent;
 }
 
 .tabset-dropdown > .nav-tabs.nav-tabs-open > li {
@@ -379,7 +379,7 @@ div.section {
 
 <h1 class="title toc-ignore">Untitled</h1>
 <h4 class="author">Benjamin Fair</h4>
-<h4 class="date">December 09, 2019</h4>
+<h4 class="date">December 16, 2019</h4>
 
 </div>
 
@@ -404,7 +404,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2019-12-09
+<strong>Last updated:</strong> 2019-12-16
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -495,10 +495,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree2edbe6f5fc585ef00298285fd5ea968a2f6312d3targetblank2edbe6fa"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/2edbe6f5fc585ef00298285fd5ea968a2f6312d3" target="_blank">2edbe6f</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treed602320dfafe088c010d645b5a782854b0cc40e4targetblankd602320a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/d602320dfafe088c010d645b5a782854b0cc40e4" target="_blank">d602320</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree2edbe6f5fc585ef00298285fd5ea968a2f6312d3targetblank2edbe6fa" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treed602320dfafe088c010d645b5a782854b0cc40e4targetblankd602320a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -507,11 +507,15 @@ Great! You are using Git for version control. Tracking code development and conn
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
-    Ignored:    analysis/figure/
+
+Untracked files:
+    Untracked:  analysis/20191216_DifferentialExpression_Splicing.Rmd
+    Untracked:  data/GO_splicing_ids.fromAmiGO_online_search.tab
+    Untracked:  dsdist.
 
 Unstaged changes:
     Modified:   analysis/20191203_DiffExpression.Rmd
-    Modified:   analysis/20191206_DifferentialSplicingControl.Rmd
+    Modified:   analysis/20191203_DifferentialSplicing.Rmd
 
 </code></pre>
 <p>
@@ -550,6 +554,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/dbbdff32af42a7bdbc1cd9c6d91adbb7bb55845f/analysis/20191203_DiffExpression.Rmd" target="_blank">dbbdff3</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-09
+</td>
+<td>
+update site
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/bfairkun/rna-seq-dhx38/dbbdff32af42a7bdbc1cd9c6d91adbb7bb55845f/docs/20191203_DiffExpression.html" target="_blank">dbbdff3</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-09
+</td>
+<td>
+update site
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -1119,7 +1157,7 @@ cpm &lt;- cpm(CountTable.matrix.filtered, log=TRUE, prior.count=0.5)
 
 # look at correlations from filtered cpm matrix
 cor(cpm) %&gt;%
-heatmap.2(., trace=&quot;none&quot;)</code></pre>
+heatmap.2(., trace=&quot;none&quot;, cexRow=1, cexCol=1)</code></pre>
 <p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>
 <button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-2">
@@ -1623,6 +1661,43 @@ ggplot(PlotSmear, aes(x=logCPM, y=logFC, color=Significance, label=Label)) +
     theme_bw() +
     theme(legend.title = element_blank())</code></pre>
 <p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
+Past versions of unnamed-chunk-8-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-8-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/dbbdff32af42a7bdbc1cd9c6d91adbb7bb55845f/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-8-1.png" target="_blank">dbbdff3</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-09
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Ok good. DHX38 is not differentially expressed. So if the alleles have some affect on splicing through DHX38, is not likely through modulating expression of DHX38 levels, but rather altering function.</p>
 <p>Let’s make some plots to get to know significance testing results a little bit more… Keep in mind we don’t know much about the types of replicates these are (technical, versus biological split before differentiation, split after differentiation, etc), and that all these are from a single healthy and a single affected patient.</p>
 <p>Volcano plot:</p>
@@ -1807,6 +1882,17 @@ Date
 <tbody>
 <tr>
 <td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/dbbdff32af42a7bdbc1cd9c6d91adbb7bb55845f/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-12-1.png" target="_blank">dbbdff3</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2019-12-09
+</td>
+</tr>
+<tr>
+<td>
 <a href="https://github.com/bfairkun/rna-seq-dhx38/blob/a0c762759c7f066dc175ebf7988a53401ad16cc8/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-12-1.png" target="_blank">a0c7627</a>
 </td>
 <td>
@@ -1975,46 +2061,47 @@ other attached packages:
 [13] edgeR_3.26.8           limma_3.40.6           knitr_1.26            
 [16] forcats_0.4.0          stringr_1.4.0          dplyr_0.8.3           
 [19] purrr_0.3.3            readr_1.3.1            tidyr_1.0.0           
-[22] tibble_2.1.3           ggplot2_3.2.1          tidyverse_1.2.1       
+[22] tibble_2.1.3           ggplot2_3.2.1          tidyverse_1.3.0       
 
 loaded via a namespace (and not attached):
-  [1] fgsea_1.10.1        colorspace_1.4-1    ellipsis_0.3.0     
-  [4] ggridges_0.5.1      rprojroot_1.3-2     qvalue_2.16.0      
-  [7] fs_1.3.1            rstudioapi_0.10     farver_1.1.0       
- [10] urltools_1.7.3      graphlayouts_0.5.0  bit64_0.9-7        
- [13] lubridate_1.7.4     xml2_1.2.2          splines_3.6.1      
- [16] GOSemSim_2.10.0     polyclip_1.10-0     zeallot_0.1.0      
- [19] jsonlite_1.6        workflowr_1.5.0     broom_0.5.2        
- [22] GO.db_3.8.2         ggforce_0.3.1       BiocManager_1.30.9 
- [25] compiler_3.6.1      httr_1.4.1          rvcheck_0.1.6      
- [28] backports_1.1.5     assertthat_0.2.1    Matrix_1.2-17      
- [31] lazyeval_0.2.2      cli_1.1.0           later_1.0.0        
- [34] tweenr_1.0.1        htmltools_0.4.0     prettyunits_1.0.2  
- [37] tools_3.6.1         igraph_1.2.4.1      gtable_0.3.0       
- [40] glue_1.3.1          reshape2_1.4.3      DO.db_2.9          
- [43] fastmatch_1.1-0     Rcpp_1.0.2          cellranger_1.1.0   
- [46] vctrs_0.2.0         gdata_2.18.0        nlme_3.1-142       
- [49] ggraph_2.0.0        xfun_0.11           rvest_0.3.5        
- [52] lifecycle_0.1.0     gtools_3.8.1        XML_3.98-1.20      
- [55] DOSE_3.10.2         europepmc_0.3       MASS_7.3-51.4      
- [58] scales_1.0.0        tidygraph_1.1.2     hms_0.5.2          
- [61] promises_1.1.0      RColorBrewer_1.1-2  curl_4.2           
- [64] yaml_2.2.0          memoise_1.1.0       gridExtra_2.3      
- [67] UpSetR_1.4.0        triebeard_0.3.0     stringi_1.4.3      
- [70] RSQLite_2.1.2       highr_0.8           caTools_1.17.1.2   
- [73] BiocParallel_1.18.1 rlang_0.4.1         pkgconfig_2.0.3    
- [76] bitops_1.0-6        evaluate_0.14       lattice_0.20-38    
- [79] labeling_0.3        cowplot_1.0.0       bit_1.1-14         
- [82] tidyselect_0.2.5    plyr_1.8.4          magrittr_1.5       
- [85] R6_2.4.1            generics_0.0.2      DBI_1.0.0          
- [88] pillar_1.4.2        haven_2.2.0         whisker_0.4        
- [91] withr_2.1.2         RCurl_1.95-4.12     modelr_0.1.5       
- [94] crayon_1.3.4        KernSmooth_2.23-16  rmarkdown_1.17     
- [97] viridis_0.5.1       progress_1.2.2      locfit_1.5-9.1     
-[100] grid_3.6.1          readxl_1.3.1        data.table_1.12.6  
-[103] blob_1.2.0          git2r_0.26.1        digest_0.6.22      
-[106] httpuv_1.5.2        gridGraphics_0.4-1  munsell_0.5.0      
-[109] ggplotify_0.0.4     viridisLite_0.3.0  </code></pre>
+  [1] readxl_1.3.1        backports_1.1.5     fastmatch_1.1-0    
+  [4] workflowr_1.5.0     plyr_1.8.5          igraph_1.2.4.2     
+  [7] lazyeval_0.2.2      splines_3.6.1       BiocParallel_1.18.1
+ [10] urltools_1.7.3      digest_0.6.23       htmltools_0.4.0    
+ [13] GOSemSim_2.10.0     viridis_0.5.1       GO.db_3.8.2        
+ [16] gdata_2.18.0        fansi_0.4.0         magrittr_1.5       
+ [19] memoise_1.1.0       graphlayouts_0.5.0  modelr_0.1.5       
+ [22] prettyunits_1.0.2   colorspace_1.4-1    blob_1.2.0         
+ [25] rvest_0.3.5         haven_2.2.0         xfun_0.11          
+ [28] crayon_1.3.4        RCurl_1.95-4.12     jsonlite_1.6       
+ [31] zeallot_0.1.0       glue_1.3.1          polyclip_1.10-0    
+ [34] gtable_0.3.0        UpSetR_1.4.0        scales_1.1.0       
+ [37] DOSE_3.10.2         DBI_1.0.0           Rcpp_1.0.2         
+ [40] viridisLite_0.3.0   progress_1.2.2      gridGraphics_0.4-1 
+ [43] bit_1.1-14          europepmc_0.3       httr_1.4.1         
+ [46] fgsea_1.10.1        RColorBrewer_1.1-2  ellipsis_0.3.0     
+ [49] pkgconfig_2.0.3     XML_3.98-1.20       farver_2.0.1       
+ [52] dbplyr_1.4.2        locfit_1.5-9.1      ggplotify_0.0.4    
+ [55] tidyselect_0.2.5    labeling_0.3        rlang_0.4.1        
+ [58] reshape2_1.4.3      later_1.0.0         munsell_0.5.0      
+ [61] cellranger_1.1.0    tools_3.6.1         cli_2.0.0          
+ [64] generics_0.0.2      RSQLite_2.1.4       broom_0.5.2        
+ [67] ggridges_0.5.1      evaluate_0.14       yaml_2.2.0         
+ [70] bit64_0.9-7         fs_1.3.1            tidygraph_1.1.2    
+ [73] caTools_1.17.1.3    ggraph_2.0.0        nlme_3.1-143       
+ [76] whisker_0.4         DO.db_2.9           xml2_1.2.2         
+ [79] compiler_3.6.1      rstudioapi_0.10     curl_4.3           
+ [82] reprex_0.3.0        tweenr_1.0.1        stringi_1.4.3      
+ [85] highr_0.8           lattice_0.20-38     Matrix_1.2-18      
+ [88] vctrs_0.2.0         pillar_1.4.2        lifecycle_0.1.0    
+ [91] BiocManager_1.30.10 triebeard_0.3.0     data.table_1.12.8  
+ [94] cowplot_1.0.0       bitops_1.0-6        httpuv_1.5.2       
+ [97] qvalue_2.16.0       R6_2.4.1            promises_1.1.0     
+[100] KernSmooth_2.23-16  gridExtra_2.3       MASS_7.3-51.4      
+[103] gtools_3.8.1        assertthat_0.2.1    rprojroot_1.3-2    
+[106] withr_2.1.2         hms_0.5.2           grid_3.6.1         
+[109] rmarkdown_1.18      rvcheck_0.1.7       git2r_0.26.1       
+[112] ggforce_0.3.1       lubridate_1.7.4    </code></pre>
 </div>
 </div>
 
