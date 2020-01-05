@@ -83,3 +83,36 @@ rule move_leafcutter_results:
         cat {input.effects} | gzip - > {output.effects}
         cat {input.sig} | gzip - > {output.sig}
         """
+
+rule leafcutter_ds_from_list:
+    input:
+        numers = "leafcutter/leafcutter_perind_numers.counts.gz",
+        groupfile = lambda wildcards: Leafcutter_ds_analyses_params.at[wildcards.analysis_name, "GroupsFile"],
+        exonsbedgz = "Misc/AnnotatedIntronBeds/Annotated_all_exons.txt.gz"
+    output:
+        "leafcutter/differential_splicing/Analyses/{analysis_name}_effect_sizes.txt",
+        "leafcutter/differential_splicing/Analyses/{analysis_name}_cluster_significance.txt"
+    threads: 4
+    params:
+        leafcutter_path=config["Path_to_leafcutter_repo"],
+        outputprefix = lambda wildcards: "-o leafcutter/differential_splicing/Analyses/{analysis_name}".format(analysis_name=wildcards.analysis_name),
+        extra_params = lambda wildcards: Leafcutter_ds_analyses_params.at[wildcards.analysis_name, "ExtraLeafcutterParams"]
+    log:
+        "logs/leafcutter_ds_analyses/{analysis_name}.log"
+    shell:
+        """
+        /software/R-3.4.3-el7-x86_64/bin/Rscript {params.leafcutter_path}scripts/leafcutter_ds.R -p {threads} -e {input.exonsbedgz} {params.outputprefix} {params.extra_params} {input.numers} {input.groupfile} &> {log}
+        """
+
+rule move_leafcutter_ds_from_list_results:
+    input:
+        effects = "leafcutter/differential_splicing/Analyses/{analysis_name}_effect_sizes.txt",
+        sig = "leafcutter/differential_splicing/Analyses/{analysis_name}_cluster_significance.txt"
+    output:
+        effects = "../output/leafcutter_ds_analyses/{analysis_name}_effect_sizes.txt.gz",
+        sig = "../output/leafcutter_ds_analyses/{analysis_name}_cluster_significance.txt.gz"
+    shell:
+        """
+        cat {input.effects} | gzip - > {output.effects}
+        cat {input.sig} | gzip - > {output.sig}
+        """

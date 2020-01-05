@@ -23,6 +23,10 @@ Path_to_leafcutter_repo: "~/software/leafcutter/"
 leafcutter_groupfile: "../data/leafcutter.groups.txt"
 leafcutter_ds_optional_params: "-i 3"
 
+#For additional leafcutter_ds analysis, define the parameters of the analysis
+#in this file
+leafcutter_ds_analysis_params: "leafcutter_ds_analyses_config.txt"
+
 # Install featureCounts
 # https://sourceforge.net/projects/subread/files/subread-1.6.4/
 # and add the featureCounts executable path here

@@ -18,3 +18,7 @@ SampleList_PE = set(FastQList[FastQList.R2.notnull()]['Sample'])
 # print(samples)
 # print( expand("Hello {sample}", sample=samples.index) )
 # print( samples.at["A", "R1"] )
+
+Leafcutter_ds_analyses_params = pd.read_csv(config["leafcutter_ds_analysis_params"], sep='\t', index_col=0)
+Leafcutter_ds_analyses_params.fillna('', inplace=True)
+Leafcutter_ds_analyses_list = Leafcutter_ds_analyses_params.index

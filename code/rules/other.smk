@@ -144,9 +144,26 @@ rule MergeIntronFeatureScores:
         IntronList = "Misc/FullIntronList.bed"
     output:
         "../output/IntronFeatures.txt.gz"
+    log:
+        "logs/MergeIntronFeatureScores.log"
     shell:
         """
-        Rscript scripts/MergeIntronFeatures.R
+        /software/R-3.4.3-el7-x86_64/bin/Rscript scripts/MergeIntronFeatures.R &> {log}
         gzip ../output/IntronFeatures.txt 
+        """
+
+rule SubsetDHX_locus_bams:
+    input:
+        bam = "Alignments/SecondPass/{sample}/Aligned.sortedByCoord.out.bam",
+        bai = "Alignments/SecondPass/{sample}/Aligned.sortedByCoord.out.bam.bai",
+    output:
+        bam = "Alignments/DHXLocus/{sample}.bam",
+        bai = "Alignments/DHXLocus/{sample}.bam.bai"
+    params:
+        region = "16:72,093,613-72,112,912"
+    shell:
+        """
+        samtools view -bh -F256 {input.bam} {params.region} > {output.bam}
+        samtools index {output.bam}
         """
 

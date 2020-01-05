@@ -20,7 +20,9 @@ rule all:
         "Misc/MotifScores/PWMs/AnnotatedDonors.fa",
         "Misc/FullIntronList.Acceptors.fasta",
         "Misc/MotifScores/Donors.txt",
-        "../output/IntronFeatures.txt.gz"
+        "../output/IntronFeatures.txt.gz",
+        expand( "Alignments/DHXLocus/{sample}.bam", sample=SampleList),
+        expand( "../output/leafcutter_ds_analyses/{analysis_name}_effect_sizes.txt.gz", analysis_name=Leafcutter_ds_analyses_list)
 
 include: "rules/DownloadReference.smk"
 include: "rules/DownloadAndMergeFastq.smk"
