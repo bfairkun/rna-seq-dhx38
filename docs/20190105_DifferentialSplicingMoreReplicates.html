@@ -11,7 +11,7 @@
 
 <meta name="author" content="Benjamin Fair" />
 
-<meta name="date" content="2020-01-06" />
+<meta name="date" content="2020-01-14" />
 
 <title>Untitled</title>
 
@@ -379,7 +379,7 @@ div.section {
 
 <h1 class="title toc-ignore">Untitled</h1>
 <h4 class="author">Benjamin Fair</h4>
-<h4 class="date">January 06, 2020</h4>
+<h4 class="date">January 14, 2020</h4>
 
 </div>
 
@@ -404,7 +404,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-01-06
+<strong>Last updated:</strong> 2020-01-14
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 6 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -428,7 +428,7 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 </div>
 <div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -495,10 +495,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treec1593d2843f3194bbf8390fec2daf4e46797087dtargetblankc1593d2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/c1593d2843f3194bbf8390fec2daf4e46797087d" target="_blank">c1593d2</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree2ce85b8d6032575c1844103c3da6463192639abetargetblank2ce85b8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/2ce85b8d6032575c1844103c3da6463192639abe" target="_blank">2ce85b8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treec1593d2843f3194bbf8390fec2daf4e46797087dtargetblankc1593d2a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree2ce85b8d6032575c1844103c3da6463192639abetargetblank2ce85b8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -507,10 +507,16 @@ Great! You are using Git for version control. Tracking code development and conn
 Ignored files:
     Ignored:    .Rhistory
     Ignored:    .Rproj.user/
+    Ignored:    analysis/figure/
 
 Untracked files:
-    Untracked:  analysis/20190105_DifferentialSplicingMoreReplicates.Rmd
-    Untracked:  output/DiffSplicingRegions.WithMoreReplicates.bed
+    Untracked:  analysis/20200110_DiffExpression_MoreReplicates.Rmd
+    Untracked:  output/GeneExpression.DE.WithMoreReplicates.tab
+    Untracked:  output/GeneExpression.gsea.WithMoreReplicates.tab
+
+Unstaged changes:
+    Modified:   analysis/20190105_DifferentialSplicingMoreReplicates.Rmd
+    Modified:   analysis/20191203_DiffExpression.Rmd
 
 </code></pre>
 <p>
@@ -523,9 +529,69 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
+
 <p>
-There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
+These are the previous versions of the R Markdown and HTML files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view them.
 </p>
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+File
+</th>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+<th>
+Message
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/4e8e59a820dd4e9f6d9300a3e5560def09567b0a/analysis/20190105_DifferentialSplicingMoreReplicates.Rmd" target="_blank">4e8e59a</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2020-01-06
+</td>
+<td>
+add splicing analysis with more reps
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/bfairkun/rna-seq-dhx38/4e8e59a820dd4e9f6d9300a3e5560def09567b0a/docs/20190105_DifferentialSplicingMoreReplicates.html" target="_blank">4e8e59a</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2020-01-06
+</td>
+<td>
+add splicing analysis with more reps
+</td>
+</tr>
+</tbody>
+</table>
+</div>
 <hr>
 </div>
 </div>
@@ -715,11 +781,122 @@ left_join(sig_3v3, sig_1v1, by=&quot;cluster&quot;, suffix=c(&quot;.3v3&quot;, &
   geom_point(alpha=0.2) +
   theme_bw()</code></pre>
 <p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-2-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-2-1">
+Past versions of unnamed-chunk-2-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-2-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/4e8e59a820dd4e9f6d9300a3e5560def09567b0a/docs/figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-2-1.png" target="_blank">4e8e59a</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2020-01-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Ok. Yes, it seems you get well correlated P-values. I feel justified in combining replicates as I have and running leafcutter’s differential splicing analysis on those combined replicates. This is a much simpler approach than dealing with these different levels of replication with a mixed model for example. Let’s check how many significant clusters you get this way…</p>
 <pre class="r"><code>hist(sig_3v3$p)</code></pre>
 <p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-1">
+Past versions of unnamed-chunk-3-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/4e8e59a820dd4e9f6d9300a3e5560def09567b0a/docs/figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-3-1.png" target="_blank">4e8e59a</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2020-01-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>hist(sig_1v1$p)</code></pre>
 <p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-3-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-3-2">
+Past versions of unnamed-chunk-3-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-3-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/4e8e59a820dd4e9f6d9300a3e5560def09567b0a/docs/figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-3-2.png" target="_blank">4e8e59a</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2020-01-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>table(sig_1v1$p.adjust&lt;0.1)</code></pre>
 <pre><code>
 FALSE  TRUE 
@@ -738,7 +915,70 @@ FALSE  TRUE
 <pre><code>
 FALSE  TRUE 
 13813    92 </code></pre>
-<p>Ok. only 24 significant differentially spliced clusters at FDR&lt;0.1. These are likely more robustly associated with the DHX sample of interest carrying biallelic mutations. However, with this small of a number of significant junctions to deal with, there likely isn’t any reasonable downstream analysis we can do with regards to looking for intron features that explain these. Let’s make a volcano plot to visualize, labelling the genes with the significantly changed splicing events.</p>
+<p>Ok. only 24 significant differentially spliced clusters at FDR&lt;0.1. These are likely more robustly associated with the DHX sample of interest carrying biallelic mutations. However, let’s permute the contrast samples as a way to assess how much of the inflated P-values might be due to natural genetic variation between unrelated samples and other technical effects that are unrelated to the DHX38 sample specifically. If there is a similar amount of P-value inflation, I will conclude that most of the differentially spliced clusters are still not specific to an additional DHX38 effect, but rather, represent the natural amount of genetic and biological/technical effects present in any of these lines.</p>
+<pre class="r"><code>#Read in the significant results from the permutated data
+Permutation1ClusterSig &lt;- read.table(&quot;../output/leafcutter_ds_analyses/AdditionalRepsPerm1_cluster_significance.txt.gz&quot;, sep=&#39;\t&#39;, header=T)
+
+Permutation2ClusterSig &lt;- read.table(&quot;../output/leafcutter_ds_analyses/AdditionalRepsPerm2_cluster_significance.txt.gz&quot;, sep=&#39;\t&#39;, header=T)
+
+Permutation3ClusterSig &lt;- read.table(&quot;../output/leafcutter_ds_analyses/AdditionalRepsPerm3_cluster_significance.txt.gz&quot;, sep=&#39;\t&#39;, header=T)
+
+data.frame(RealResults=sig$p,
+           Permutation1Results=Permutation1ClusterSig$p,
+           Permutation2Results=Permutation2ClusterSig$p,
+           Permutation3Results=Permutation3ClusterSig$p) %&gt;% gather(value=&quot;Actual.P&quot;) %&gt;%
+  group_by(key) %&gt;%
+  mutate(Expected.P=percent_rank(Actual.P)) %&gt;%
+  ungroup() %&gt;%
+  ggplot(aes(color=key, x=-log10(Expected.P), y=-log10(Actual.P))) +
+  geom_point() +
+  geom_abline() +
+  scale_color_manual(labels = c(Permutation1Results=&quot;Permuted; [BIH4] v [DHX, XM001, JG]&quot;,
+                                Permutation2Results=&quot;Permuted; [XM001] v [DHX, BIH4, JG]&quot;,
+                                Permutation3Results=&quot;Permuted; [JG] v [DHX, XM001, BIH4]&quot;,
+                                RealResults=&quot;Actual; [DHX] v [BIH4, XM001, JG]&quot;),
+                     values=c(&quot;red&quot;, &quot;blue&quot;, &quot;purple&quot;, &quot;black&quot;)) +
+  theme_bw()</code></pre>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
+Past versions of unnamed-chunk-5-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-5-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/4e8e59a820dd4e9f6d9300a3e5560def09567b0a/docs/figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-5-1.png" target="_blank">4e8e59a</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2020-01-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
+<p>Ok, similar to the same plot made for gene expression analysis, there is not drastically more P-value inflation than in some of the permutations, and in fact there is more small P-value inflation in one of the permutations. I conclude that the effect of the DHX38 mutation is quite small, relative to the effect of comparing any random sample of different unrelated lines. Most of the significantly different splice events are probably not due to DHX38. Nonetheless, assuming that there really is a DHX38-specific splicing defect, the splice events we do find are the best prioritized list of DHX38-dependednt splice events that we can do, with the data at hand.</p>
+<p>Also, with only 24 significantly differentially spliced clusters, there isn’t much reasonable downstream analysis we can do with regards to looking for intron features that explain these. Let’s make a volcano plot to visualize, labelling the genes with the significantly changed splicing events.</p>
 <pre class="r"><code>effect_sizes &lt;- read.table(&quot;../output/leafcutter_ds_analyses/AdditionalReps_effect_sizes.txt.gz&quot;, sep=&#39;\t&#39;, header=T)
 
 
@@ -781,10 +1021,10 @@ effect_sizes %&gt;%
   xlab(&quot;Num introns per cluster&quot;) +
   ylab(&quot;Freq&quot;) +
   theme_bw()</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#histogram of Pvalues
 hist(sig$p)</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#how many significant (p.adjust &lt; 0.1)
 table(sig$p.adjust&lt;0.1) %&gt;% kable()</code></pre>
 <table>
@@ -830,7 +1070,7 @@ leafcutter.merged %&gt;%
     geom_text_repel(size=3) +
     theme_bw() +
     theme(legend.position = &quot;none&quot;)</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-5-3.png" width="672" style="display: block; margin: auto;" /> Let’s check for intron clusters that overlap DHX38 gene, in case the gene itself is differentially spliced, possibly as a result of the mutations acting in cis.</p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-6-3.png" width="672" style="display: block; margin: auto;" /> Let’s check for intron clusters that overlap DHX38 gene, in case the gene itself is differentially spliced, possibly as a result of the mutations acting in cis.</p>
 <p>There are no clusters over DHX38. Note that leafcutter output only lists clusters that have more than 1 intron (not simple constitutive splicing) and that pass some default filters for minimum coverage over each the splice junction.</p>
 <pre class="r"><code>#Filter based on leafcutter&#39;s gene annotations.
 sig %&gt;% dplyr::filter(grepl(&quot;DHX38&quot;,genes))</code></pre>
@@ -1071,60 +1311,60 @@ data.frame(Spearman.r= t(CorrelationsWithFeatures$r), p=t(CorrelationsWithFeatur
 <table>
 <thead>
 <tr class="header">
-<th></th>
-<th align="right">Spearman.r</th>
-<th align="right">p</th>
-<th align="right">n</th>
+<th align="right">S</th>
+<th align="left">pearman.r</th>
+<th align="center">p</th>
+<th align="left">n</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td>DonorScore</td>
-<td align="right">0.0214669</td>
-<td align="right">0.8372843</td>
-<td align="right">94</td>
+<td align="right">DonorScore</td>
+<td align="left">0.0214669</td>
+<td align="center">0.8372843</td>
+<td align="left">94</td>
 </tr>
 <tr class="even">
-<td>AcceptorScore</td>
-<td align="right">0.0247519</td>
-<td align="right">0.8128087</td>
-<td align="right">94</td>
+<td align="right">AcceptorScore</td>
+<td align="left">0.0247519</td>
+<td align="center">0.8128087</td>
+<td align="left">94</td>
 </tr>
 <tr class="odd">
-<td>ss_dist</td>
-<td align="right">-0.0822056</td>
-<td align="right">0.4490769</td>
-<td align="right">87</td>
+<td align="right">ss_dist</td>
+<td align="left">-0.0822056</td>
+<td align="center">0.4490769</td>
+<td align="left">87</td>
 </tr>
 <tr class="even">
-<td>bp_scr</td>
-<td align="right">0.0297989</td>
-<td align="right">0.7840949</td>
-<td align="right">87</td>
+<td align="right">bp_scr</td>
+<td align="left">0.0297989</td>
+<td align="center">0.7840949</td>
+<td align="left">87</td>
 </tr>
 <tr class="odd">
-<td>ppt_len</td>
-<td align="right">-0.0668364</td>
-<td align="right">0.5385021</td>
-<td align="right">87</td>
+<td align="right">ppt_len</td>
+<td align="left">-0.0668364</td>
+<td align="center">0.5385021</td>
+<td align="left">87</td>
 </tr>
 <tr class="even">
-<td>ppt_scr</td>
-<td align="right">-0.1043431</td>
-<td align="right">0.3361503</td>
-<td align="right">87</td>
+<td align="right">ppt_scr</td>
+<td align="left">-0.1043431</td>
+<td align="center">0.3361503</td>
+<td align="left">87</td>
 </tr>
 <tr class="odd">
-<td>svm_scr</td>
-<td align="right">-0.0401693</td>
-<td align="right">0.7118263</td>
-<td align="right">87</td>
+<td align="right">svm_scr</td>
+<td align="left">-0.0401693</td>
+<td align="center">0.7118263</td>
+<td align="left">87</td>
 </tr>
 <tr class="even">
-<td>IntronLength</td>
-<td align="right">0.1171120</td>
-<td align="right">0.2609604</td>
-<td align="right">94</td>
+<td align="right">IntronLength</td>
+<td align="left">0.1171120</td>
+<td align="center">0.2609604</td>
+<td align="left">94</td>
 </tr>
 </tbody>
 </table>
@@ -1133,7 +1373,7 @@ data.frame(Spearman.r= t(CorrelationsWithFeatures$r), p=t(CorrelationsWithFeatur
 <p>When doing this analysis, some people think in terms of deltapsi, some people might think in terms of a different metric of effect size. Let’s look at both.</p>
 <pre class="r"><code># leafcutter&#39;s logef effect size, versus deltapsi
 qplot(leafcutter.merged.w.features$logef, leafcutter.merged.w.features$deltapsi) + theme_bw()</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#significant positive deltapsi introns
 leafcutter.merged.w.features %&gt;%
   filter(deltapsi &gt; 0) %&gt;%
@@ -1157,7 +1397,7 @@ leafcutter.merged.w.features %&gt;%
     stat_ecdf(geom = &quot;step&quot;) +
     ylab(&quot;Cumulative frequency&quot;) +
     theme_bw()</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-9-2.png" width="672" style="display: block; margin: auto;" /></p>
 <p>There simply aren’t many significant introns to do this kind of analyses. Nonetheless, the polarization in effect sizse for annotated introns and unanottated cryptic 5’ss seems to be the most likely candidates to be significant. Let’s see if these effects are significant or could just be chance.</p>
 <pre class="r"><code>## are alt annotated splice sites differentially regulated?
 wilcox.test(
@@ -1395,11 +1635,85 @@ PlotExonSkippingSpliceRatios &lt;- leafcutter.merged.AS.reclassified %&gt;%
 
 ggplot(PlotExonSkippingSpliceRatios, aes(x=CassetteExonIncluded.DownstreamIntron, y=CassetteExonIncluded.UpstreamIntron)) +
     geom_point()</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-1">
+Past versions of unnamed-chunk-11-1.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-1" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/4e8e59a820dd4e9f6d9300a3e5560def09567b0a/docs/figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-1.png" target="_blank">4e8e59a</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2020-01-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#And there should generally be anti correlation with the exon skipped isoform and either of the exon included introns
 ggplot(PlotExonSkippingSpliceRatios, aes(x=CassetteExonIncluded.DownstreamIntron, y=CassetteExonSkipped)) +
     geom_point()</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-10-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-2">
+Past versions of unnamed-chunk-11-2.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-2" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/4e8e59a820dd4e9f6d9300a3e5560def09567b0a/docs/figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-2.png" target="_blank">4e8e59a</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2020-01-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>#And finally, cassette skipped exons should have weaker splice sites.
 leafcutter.merged.AS.reclassified %&gt;%
   left_join(IntronFeatures, by=&quot;junc_id&quot;) %&gt;%
@@ -1413,7 +1727,44 @@ leafcutter.merged.AS.reclassified %&gt;%
     stat_ecdf(geom = &quot;step&quot;) +
     ylab(&quot;Cumulative frequency&quot;) +
     theme_bw()</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-10-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-3">
+Past versions of unnamed-chunk-11-3.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-3" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/4e8e59a820dd4e9f6d9300a3e5560def09567b0a/docs/figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-3.png" target="_blank">4e8e59a</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2020-01-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <pre class="r"><code>A&lt;-leafcutter.merged.AS.reclassified %&gt;%
   left_join(IntronFeatures, by=&quot;junc_id&quot;) %&gt;%
   filter(SplicingType %in% c(&quot;CassetteExonIncluded.DownstreamIntron&quot;, &quot;CassetteExonIncluded.UpstreamIntron&quot;)) %&gt;%
@@ -1440,7 +1791,44 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
     stat_ecdf(geom = &quot;step&quot;) +
     ylab(&quot;Cumulative frequency&quot;) +
     theme_bw()</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-10-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p>
+<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-11-4">
+Past versions of unnamed-chunk-11-4.png
+</button>
+</p>
+<div id="fig-unnamed-chunk-11-4" class="collapse">
+<div class="table-responsive">
+<table class="table table-condensed table-hover">
+<thead>
+<tr>
+<th>
+Version
+</th>
+<th>
+Author
+</th>
+<th>
+Date
+</th>
+</tr>
+</thead>
+<tbody>
+<tr>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/4e8e59a820dd4e9f6d9300a3e5560def09567b0a/docs/figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-4.png" target="_blank">4e8e59a</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2020-01-06
+</td>
+</tr>
+</tbody>
+</table>
+</div>
+</div>
 <p>Okay yes, for cassette exons, upstream introns have weaker splice acceptors than down stream splice acceptors, downstream introns have weaker splice donors than upstream splice donors. That pattern isn’t apparent for branchpoints though, so that signal may be too weak, or predictions on branchpoints may be lousy.</p>
 <p>But all in all it seems that my classification of alternative splicing types makes sense. Now let’s check if the minor isoform (as assessed in healthy samples) for each splicing type is has a general polarity to effect size. Specifically, if alt5’ss have negative effect sizes.</p>
 <pre class="r"><code>MinorIsoforms &lt;- leafcutter.merged.AS.reclassified %&gt;%
@@ -1451,7 +1839,7 @@ alternative hypothesis: true location shift is not equal to 0</code></pre>
 
 #histogram of splicing fraction of minor isoforms (intron with smallest splicing fraction within cluster)
 hist(MinorIsoforms$H)</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>MajorIsoforms &lt;- leafcutter.merged.AS.reclassified %&gt;%
   filter(p.adjust&lt;0.3) %&gt;%
   group_by(cluster) %&gt;%
@@ -1460,7 +1848,7 @@ hist(MinorIsoforms$H)</code></pre>
 
 #histogram of splicing fraction of major isoforms (intron with largest splicing fraction within cluster)
 hist(MajorIsoforms$H)</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-12-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#Now make plots to get to know if minor isoform alt5&#39;ss have generally gone down. Same for alt 3&#39;ss.
 MinorIsoforms %&gt;%
   filter(SplicingType %in% c(&quot;Alt5ss&quot;, &quot;Alt3ss&quot;)) %&gt;%
@@ -1469,7 +1857,7 @@ ggplot(aes(x=deltapsi, color=SplicingType)) +
     xlim(c(-1,1))+
     ylab(&quot;Cumulative frequency&quot;) +
     theme_bw()</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-12-3.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#Mirrored plot for major isoforms.
 MajorIsoforms %&gt;%
     filter(SplicingType %in% c(&quot;Alt5ss&quot;, &quot;Alt3ss&quot;)) %&gt;%
@@ -1478,7 +1866,7 @@ ggplot(aes(x=deltapsi, color=SplicingType)) +
     xlim(c(-1,1))+
     ylab(&quot;Cumulative frequency&quot;) +
     theme_bw()</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-4.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-12-4.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#Is this significant?
 wilcox.test(
   MinorIsoforms %&gt;%
@@ -1507,7 +1895,7 @@ leafcutter.merged.AS.reclassified %&gt;%
     xlim(c(-1,1))+
     ylab(&quot;Cumulative frequency&quot;) +
     theme_bw()</code></pre>
-<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-11-5.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20190105_DifferentialSplicingMoreReplicates.Rmd/unnamed-chunk-12-5.png" width="672" style="display: block; margin: auto;" /></p>
 <p>So there is no apparent difference in alt5’ss or alt3’ss usage when I considered all easily classifiable introns, regardless of annotation. In other words, the minor isoforms for 5’ss were equally up and down regulated. This is mirrored in when looking at major isoforms.</p>
 <p>Finally, since all of this type of analysis didn’t return anything very interesting with confidence, I should browse the raw aligned read data in IGV to explore patterns that I might not have picked up on this differential splicing analysis. To aid in IGV exploration, let’s write out a bed file of the most significant clusters so we can quickly jump to the regions of interest that are differentially spliced</p>
 <pre class="r"><code>#bed file, with chromosome, start, stop, name, score, strand, extra info
@@ -1658,12 +2046,13 @@ loaded via a namespace (and not attached):
  [79] tidyselect_0.2.5    plyr_1.8.5          magrittr_1.5       
  [82] R6_2.4.1            generics_0.0.2      DBI_1.0.0          
  [85] foreign_0.8-72      pillar_1.4.2        haven_2.2.0        
- [88] withr_2.1.2         modelr_0.1.5        crayon_1.3.4       
- [91] rmarkdown_1.18      viridis_0.5.1       progress_1.2.2     
- [94] grid_3.6.1          readxl_1.3.1        data.table_1.12.8  
- [97] blob_1.2.0          git2r_0.26.1        reprex_0.3.0       
-[100] digest_0.6.23       httpuv_1.5.2        gridGraphics_0.4-1 
-[103] munsell_0.5.0       viridisLite_0.3.0   ggplotify_0.0.4    </code></pre>
+ [88] whisker_0.4         withr_2.1.2         modelr_0.1.5       
+ [91] crayon_1.3.4        rmarkdown_1.18      viridis_0.5.1      
+ [94] progress_1.2.2      grid_3.6.1          readxl_1.3.1       
+ [97] data.table_1.12.8   blob_1.2.0          git2r_0.26.1       
+[100] reprex_0.3.0        digest_0.6.23       httpuv_1.5.2       
+[103] gridGraphics_0.4-1  munsell_0.5.0       ggplotify_0.0.4    
+[106] viridisLite_0.3.0  </code></pre>
 </div>
 </div>
 

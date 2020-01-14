@@ -428,7 +428,7 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 </div>
 <div id="strongRMarkdownfilestronguncommittedchanges" class="panel-collapse collapse">
 <div class="panel-body">
-<p>The R Markdown file has unstaged changes. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
+<p>The R Markdown is untracked by Git. To know which version of the R Markdown file created these results, you’ll want to first commit it to the Git repo. If you’re still working on the analysis, you can ignore this warning. When you’re finished, you can run <code>wflow_publish</code> to commit the R Markdown file and build the HTML.</p>
 </div>
 </div>
 </div>
@@ -516,6 +516,8 @@ Untracked files:
 Unstaged changes:
     Modified:   analysis/20190105_DifferentialSplicingMoreReplicates.Rmd
     Modified:   analysis/20191203_DiffExpression.Rmd
+    Modified:   output/GeneExpression.DE.tab
+    Modified:   output/GeneExpression.gsea.tab
 
 </code></pre>
 <p>
@@ -528,182 +530,20 @@ Note that any generated files, e.g. HTML, png, CSS, etc., are not included in t
 <hr>
 </div>
 <div id="versions" class="tab-pane fade">
-
 <p>
-These are the previous versions of the R Markdown and HTML files. If you’ve configured a remote Git repository (see <code>?wflow_git_remote</code>), click on the hyperlinks in the table below to view them.
+There are no past versions. Publish this analysis with <code>wflow_publish()</code> to start tracking its development.
 </p>
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-File
-</th>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-<th>
-Message
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/a8678b7146f38cd5cbe0a4dfa46a602ef6e23d9a/analysis/20191203_DiffExpression.Rmd" target="_blank">a8678b7</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-16
-</td>
-<td>
-update site
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/bfairkun/rna-seq-dhx38/a8678b7146f38cd5cbe0a4dfa46a602ef6e23d9a/docs/20191203_DiffExpression.html" target="_blank">a8678b7</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-16
-</td>
-<td>
-update site
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/dbbdff32af42a7bdbc1cd9c6d91adbb7bb55845f/analysis/20191203_DiffExpression.Rmd" target="_blank">dbbdff3</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-09
-</td>
-<td>
-update site
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/bfairkun/rna-seq-dhx38/dbbdff32af42a7bdbc1cd9c6d91adbb7bb55845f/docs/20191203_DiffExpression.html" target="_blank">dbbdff3</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-09
-</td>
-<td>
-update site
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/a0c762759c7f066dc175ebf7988a53401ad16cc8/analysis/20191203_DiffExpression.Rmd" target="_blank">a0c7627</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-09
-</td>
-<td>
-update site
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/bfairkun/rna-seq-dhx38/a0c762759c7f066dc175ebf7988a53401ad16cc8/docs/20191203_DiffExpression.html" target="_blank">a0c7627</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-09
-</td>
-<td>
-update site
-</td>
-</tr>
-<tr>
-<td>
-Rmd
-</td>
-<td>
-<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/c1d660db6d38073970096cd71db8fa190693c0d4/analysis/20191203_DiffExpression.Rmd" target="_blank">c1d660d</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-04
-</td>
-<td>
-initialize site
-</td>
-</tr>
-<tr>
-<td>
-html
-</td>
-<td>
-<a href="https://rawcdn.githack.com/bfairkun/rna-seq-dhx38/c1d660db6d38073970096cd71db8fa190693c0d4/docs/20191203_DiffExpression.html" target="_blank">c1d660d</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-04
-</td>
-<td>
-initialize site
-</td>
-</tr>
-</tbody>
-</table>
-</div>
 <hr>
 </div>
 </div>
 </div>
 <div id="introduction" class="section level2">
 <h2>Introduction</h2>
-<p>Exploratory differential expression analysis comparing RNA-seq from iPSC derived neurons from healthy control vs patient with biallelic mutations in DHX38 that may affect splicing and gene expression. In particular, worth checking whether DHX38 is differentially expressed.</p>
+<p>I previously did a differential splicing analysis with 3 replicates of affected and 3 replicates of unrelated healthy. Now we have more healthy datasets of other unrelated individuals for more robust analysis to identify effects that might be unqiue to the DHX38 mutations.</p>
 </div>
 <div id="analysis" class="section level2">
 <h2>Analysis</h2>
-<p>Raw RNA-seq data has been aligned and collapsed into gene count table (rows of genes, columns of samples, each cell is exonic read counts) using code in <code>code</code> section of this repo, creating a count matrix in <code>output</code>. Here I will process that data with edgeR approach that I have used previously.</p>
+<p>Raw RNA-seq data has been aligned and collapsed into gene count table (rows of genes, columns of samples, each cell is exonic read counts) using code in <code>code</code> section of this repo, creating a count matrix in <code>output</code>. Here I will process that data with edgeR approach that I have used previously. The combined samples are simply biological replicates combined. Since there are multiple levels of replication, I think a reasonable way to do this analysis is to just combine the bioligical replicates and do a 1 affected vs 3 healthy analysis.</p>
 <p>First, load necessary libraries</p>
 <pre class="r"><code>library(tidyverse)
 library(knitr)
@@ -929,8 +769,6 @@ kable(CountTable.matrix[1:10,])</code></pre>
 </tr>
 </tbody>
 </table>
-<p>Subset the three original biological replicates for healthy (XM001 line) and affected (DHX38 line)</p>
-<pre class="r"><code>CountTable.matrix &lt;- CountTable.matrix[, grep(&quot;Healthy_\\d|Affected_\\d&quot;, colnames(CountTable.matrix))]</code></pre>
 <p>Plot total exonic gene counts per sample</p>
 <pre class="r"><code>CountTable.matrix %&gt;% colSums() %&gt;% as.data.frame() %&gt;%
   rownames_to_column(&quot;Sample&quot;) %&gt;%
@@ -939,44 +777,8 @@ kable(CountTable.matrix[1:10,])</code></pre>
   ylab(&quot;Exonic read count (Millions)&quot;) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-4-1">
-Past versions of unnamed-chunk-4-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-4-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/c1d660db6d38073970096cd71db8fa190693c0d4/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-4-1.png" target="_blank">c1d660d</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-3-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>As expected, the combined samples are the sum of the replicates.</p>
 <p>Check correlations between samples</p>
 <pre class="r"><code># CountTable to CountsPerMillion
 cpm &lt;- cpm(CountTable.matrix, log=TRUE, prior.count=0.5)
@@ -985,280 +787,525 @@ kable(cpm[1:10,])</code></pre>
 <thead>
 <tr class="header">
 <th></th>
-<th align="left">Healthy_1</th>
-<th>Healthy_3 A</th>
-<th>ffected_2 A</th>
-<th align="left">ffected_1</th>
-<th>Healthy_2 A</th>
-<th align="left">ffected_3</th>
+<th align="right">Healthy.JG_3</th>
+<th align="right">Healthy.BIH4_1</th>
+<th align="right">Healthy_1</th>
+<th align="right">Healthy_3</th>
+<th align="right">Combined.BIH4</th>
+<th align="right">Affected_2</th>
+<th align="right">Affected_1</th>
+<th align="right">Combined.XM001</th>
+<th align="right">Healthy_2</th>
+<th align="right">Healthy.JG_2</th>
+<th align="right">Healthy.BIH4_2</th>
+<th align="right">Combined.JG</th>
+<th align="right">Combined.DHX</th>
+<th align="right">Healthy.JG_1</th>
+<th align="right">Affected_3</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>ENSG00000223972</td>
-<td align="left">-5.6592577</td>
-<td>-3.9504652</td>
-<td>-4.3162048</td>
-<td align="left">-3.5276237</td>
-<td>-2.6115366</td>
-<td align="left">-5.6592577</td>
+<td align="right">-2.8591246</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-4.0596960</td>
+<td align="right">-4.6647839</td>
+<td align="right">-4.4585544</td>
+<td align="right">-3.6083115</td>
+<td align="right">-3.6296760</td>
+<td align="right">-2.6537340</td>
+<td align="right">-3.0569103</td>
+<td align="right">-4.1261628</td>
+<td align="right">-2.6661101</td>
+<td align="right">-4.3768956</td>
+<td align="right">-2.2712367</td>
+<td align="right">-6.0520744</td>
 </tr>
 <tr class="even">
 <td>ENSG00000227232</td>
-<td align="left">0.7752012</td>
-<td>0.7872815</td>
-<td>0.7062672</td>
-<td align="left">0.5446464</td>
-<td>0.3407064</td>
-<td align="left">0.3045612</td>
+<td align="right">0.8924541</td>
+<td align="right">1.0623718</td>
+<td align="right">0.7712198</td>
+<td align="right">0.7833333</td>
+<td align="right">1.0259928</td>
+<td align="right">0.7020906</td>
+<td align="right">0.5399739</td>
+<td align="right">0.6410562</td>
+<td align="right">0.3353232</td>
+<td align="right">1.3433098</td>
+<td align="right">0.9987444</td>
+<td align="right">1.1295392</td>
+<td align="right">0.5337226</td>
+<td align="right">1.0894737</td>
+<td align="right">0.2990411</td>
 </tr>
 <tr class="odd">
 <td>ENSG00000278267</td>
-<td align="left">-0.3053958</td>
-<td>-0.2724577</td>
-<td>-1.3781151</td>
-<td align="left">-1.1367073</td>
-<td>-1.1478440</td>
-<td align="left">-1.2759314</td>
+<td align="right">-0.0042239</td>
+<td align="right">-0.5019166</td>
+<td align="right">-0.3138292</td>
+<td align="right">-0.2807002</td>
+<td align="right">-0.6806292</td>
+<td align="right">-1.3959114</td>
+<td align="right">-1.1517472</td>
+<td align="right">-0.5380690</td>
+<td align="right">-1.1630010</td>
+<td align="right">-0.7536815</td>
+<td align="right">-0.8272240</td>
+<td align="right">-0.2613098</td>
+<td align="right">-1.2800265</td>
+<td align="right">-0.1086483</td>
+<td align="right">-1.2925038</td>
 </tr>
 <tr class="even">
 <td>ENSG00000243485</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td>-3.6328997</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-5.6592577</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-3.9708238</td>
+<td align="right">-3.7198834</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-3.8864472</td>
+<td align="right">-3.3297094</td>
+<td align="right">-4.3021258</td>
+<td align="right">-4.7520134</td>
+<td align="right">-3.9864137</td>
+<td align="right">-6.0520744</td>
 </tr>
 <tr class="odd">
 <td>ENSG00000284332</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-5.6592577</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
 </tr>
 <tr class="even">
 <td>ENSG00000237613</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-5.6592577</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
 </tr>
 <tr class="odd">
 <td>ENSG00000268020</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-5.6592577</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
 </tr>
 <tr class="even">
 <td>ENSG00000240361</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-5.6592577</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
 </tr>
 <tr class="odd">
 <td>ENSG00000186092</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-5.6592577</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
 </tr>
 <tr class="even">
 <td>ENSG00000238009</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-5.6592577</td>
-<td>-5.6592577</td>
-<td align="left">-3.4536643</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-6.0520744</td>
+<td align="right">-4.7520134</td>
+<td align="right">-6.0520744</td>
+<td align="right">-3.5302110</td>
 </tr>
 </tbody>
 </table>
 <pre class="r"><code>#plot cpm
 median_log2_cpm &lt;- apply(cpm, 1, median)
 hist(median_log2_cpm)</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-5-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-1">
-Past versions of unnamed-chunk-5-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/c1d660db6d38073970096cd71db8fa190693c0d4/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-5-1.png" target="_blank">c1d660d</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-4-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># check correlations between samples
 CorMat &lt;- cor(cpm)
 kable(CorMat)</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="right">H</th>
-<th>ealthy_1 H</th>
-<th>ealthy_3 A</th>
-<th>ffected_2 A</th>
-<th>ffected_1 H</th>
-<th>ealthy_2 A</th>
-<th align="left">ffected_3</th>
+<th></th>
+<th align="right">Healthy.JG_3</th>
+<th align="right">Healthy.BIH4_1</th>
+<th align="right">Healthy_1</th>
+<th align="right">Healthy_3</th>
+<th align="right">Combined.BIH4</th>
+<th align="right">Affected_2</th>
+<th align="right">Affected_1</th>
+<th align="right">Combined.XM001</th>
+<th align="right">Healthy_2</th>
+<th align="right">Healthy.JG_2</th>
+<th align="right">Healthy.BIH4_2</th>
+<th align="right">Combined.JG</th>
+<th align="right">Combined.DHX</th>
+<th align="right">Healthy.JG_1</th>
+<th align="right">Affected_3</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">Healthy_1</td>
-<td>1.0000000</td>
-<td>0.9566326</td>
-<td>0.9481810</td>
-<td>0.9476774</td>
-<td>0.9602321</td>
-<td align="left">0.9533046</td>
+<td>Healthy.JG_3</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9547294</td>
+<td align="right">0.9551455</td>
+<td align="right">0.9412465</td>
+<td align="right">0.9617618</td>
+<td align="right">0.9463351</td>
+<td align="right">0.9450591</td>
+<td align="right">0.9624578</td>
+<td align="right">0.9448417</td>
+<td align="right">0.9557623</td>
+<td align="right">0.9527712</td>
+<td align="right">0.9814294</td>
+<td align="right">0.9586613</td>
+<td align="right">0.9610586</td>
+<td align="right">0.9534496</td>
 </tr>
 <tr class="even">
-<td align="right">Healthy_3</td>
-<td>0.9566326</td>
-<td>1.0000000</td>
-<td>0.9590767</td>
-<td>0.9585526</td>
-<td>0.9735489</td>
-<td align="left">0.9456417</td>
+<td>Healthy.BIH4_1</td>
+<td align="right">0.9547294</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9539969</td>
+<td align="right">0.9422676</td>
+<td align="right">0.9872051</td>
+<td align="right">0.9493463</td>
+<td align="right">0.9476235</td>
+<td align="right">0.9623758</td>
+<td align="right">0.9456483</td>
+<td align="right">0.9510469</td>
+<td align="right">0.9588224</td>
+<td align="right">0.9636047</td>
+<td align="right">0.9614223</td>
+<td align="right">0.9548696</td>
+<td align="right">0.9560137</td>
 </tr>
 <tr class="odd">
-<td align="right">Affected_2</td>
-<td>0.9481810</td>
-<td>0.9590767</td>
-<td>1.0000000</td>
-<td>0.9798889</td>
-<td>0.9588634</td>
-<td align="left">0.9708343</td>
+<td>Healthy_1</td>
+<td align="right">0.9551455</td>
+<td align="right">0.9539969</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9524657</td>
+<td align="right">0.9596554</td>
+<td align="right">0.9443687</td>
+<td align="right">0.9438560</td>
+<td align="right">0.9870490</td>
+<td align="right">0.9562035</td>
+<td align="right">0.9470934</td>
+<td align="right">0.9506989</td>
+<td align="right">0.9611764</td>
+<td align="right">0.9555638</td>
+<td align="right">0.9545264</td>
+<td align="right">0.9495342</td>
 </tr>
 <tr class="even">
-<td align="right">Affected_1</td>
-<td>0.9476774</td>
-<td>0.9585526</td>
-<td>0.9798889</td>
-<td>1.0000000</td>
-<td>0.9580552</td>
-<td align="left">0.9698493</td>
+<td>Healthy_3</td>
+<td align="right">0.9412465</td>
+<td align="right">0.9422676</td>
+<td align="right">0.9524657</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9512527</td>
+<td align="right">0.9554088</td>
+<td align="right">0.9549189</td>
+<td align="right">0.9807831</td>
+<td align="right">0.9700262</td>
+<td align="right">0.9375445</td>
+<td align="right">0.9499229</td>
+<td align="right">0.9465928</td>
+<td align="right">0.9560525</td>
+<td align="right">0.9414062</td>
+<td align="right">0.9413015</td>
 </tr>
 <tr class="odd">
-<td align="right">Healthy_2</td>
-<td>0.9602321</td>
-<td>0.9735489</td>
-<td>0.9588634</td>
-<td>0.9580552</td>
-<td>1.0000000</td>
-<td align="left">0.9484914</td>
+<td>Combined.BIH4</td>
+<td align="right">0.9617618</td>
+<td align="right">0.9872051</td>
+<td align="right">0.9596554</td>
+<td align="right">0.9512527</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9634273</td>
+<td align="right">0.9620600</td>
+<td align="right">0.9702293</td>
+<td align="right">0.9541399</td>
+<td align="right">0.9626313</td>
+<td align="right">0.9884341</td>
+<td align="right">0.9744784</td>
+<td align="right">0.9748043</td>
+<td align="right">0.9652938</td>
+<td align="right">0.9672163</td>
 </tr>
 <tr class="even">
-<td align="right">Affected_3</td>
-<td>0.9533046</td>
-<td>0.9456417</td>
-<td>0.9708343</td>
-<td>0.9698493</td>
-<td>0.9484914</td>
-<td align="left">1.0000000</td>
+<td>Affected_2</td>
+<td align="right">0.9463351</td>
+<td align="right">0.9493463</td>
+<td align="right">0.9443687</td>
+<td align="right">0.9554088</td>
+<td align="right">0.9634273</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9768898</td>
+<td align="right">0.9620928</td>
+<td align="right">0.9552610</td>
+<td align="right">0.9531728</td>
+<td align="right">0.9629860</td>
+<td align="right">0.9602197</td>
+<td align="right">0.9883522</td>
+<td align="right">0.9537794</td>
+<td align="right">0.9675438</td>
+</tr>
+<tr class="odd">
+<td>Affected_1</td>
+<td align="right">0.9450591</td>
+<td align="right">0.9476235</td>
+<td align="right">0.9438560</td>
+<td align="right">0.9549189</td>
+<td align="right">0.9620600</td>
+<td align="right">0.9768898</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9613420</td>
+<td align="right">0.9544294</td>
+<td align="right">0.9519131</td>
+<td align="right">0.9620527</td>
+<td align="right">0.9589687</td>
+<td align="right">0.9871373</td>
+<td align="right">0.9528822</td>
+<td align="right">0.9664420</td>
+</tr>
+<tr class="even">
+<td>Combined.XM001</td>
+<td align="right">0.9624578</td>
+<td align="right">0.9623758</td>
+<td align="right">0.9870490</td>
+<td align="right">0.9807831</td>
+<td align="right">0.9702293</td>
+<td align="right">0.9620928</td>
+<td align="right">0.9613420</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9835078</td>
+<td align="right">0.9565234</td>
+<td align="right">0.9637110</td>
+<td align="right">0.9694140</td>
+<td align="right">0.9697808</td>
+<td align="right">0.9624151</td>
+<td align="right">0.9597859</td>
+</tr>
+<tr class="odd">
+<td>Healthy_2</td>
+<td align="right">0.9448417</td>
+<td align="right">0.9456483</td>
+<td align="right">0.9562035</td>
+<td align="right">0.9700262</td>
+<td align="right">0.9541399</td>
+<td align="right">0.9552610</td>
+<td align="right">0.9544294</td>
+<td align="right">0.9835078</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9408971</td>
+<td align="right">0.9513490</td>
+<td align="right">0.9504304</td>
+<td align="right">0.9575416</td>
+<td align="right">0.9450088</td>
+<td align="right">0.9443274</td>
+</tr>
+<tr class="even">
+<td>Healthy.JG_2</td>
+<td align="right">0.9557623</td>
+<td align="right">0.9510469</td>
+<td align="right">0.9470934</td>
+<td align="right">0.9375445</td>
+<td align="right">0.9626313</td>
+<td align="right">0.9531728</td>
+<td align="right">0.9519131</td>
+<td align="right">0.9565234</td>
+<td align="right">0.9408971</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9568884</td>
+<td align="right">0.9838795</td>
+<td align="right">0.9650818</td>
+<td align="right">0.9630776</td>
+<td align="right">0.9590722</td>
+</tr>
+<tr class="odd">
+<td>Healthy.BIH4_2</td>
+<td align="right">0.9527712</td>
+<td align="right">0.9588224</td>
+<td align="right">0.9506989</td>
+<td align="right">0.9499229</td>
+<td align="right">0.9884341</td>
+<td align="right">0.9629860</td>
+<td align="right">0.9620527</td>
+<td align="right">0.9637110</td>
+<td align="right">0.9513490</td>
+<td align="right">0.9568884</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9658420</td>
+<td align="right">0.9707951</td>
+<td align="right">0.9582526</td>
+<td align="right">0.9607596</td>
+</tr>
+<tr class="even">
+<td>Combined.JG</td>
+<td align="right">0.9814294</td>
+<td align="right">0.9636047</td>
+<td align="right">0.9611764</td>
+<td align="right">0.9465928</td>
+<td align="right">0.9744784</td>
+<td align="right">0.9602197</td>
+<td align="right">0.9589687</td>
+<td align="right">0.9694140</td>
+<td align="right">0.9504304</td>
+<td align="right">0.9838795</td>
+<td align="right">0.9658420</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9740497</td>
+<td align="right">0.9872414</td>
+<td align="right">0.9680140</td>
+</tr>
+<tr class="odd">
+<td>Combined.DHX</td>
+<td align="right">0.9586613</td>
+<td align="right">0.9614223</td>
+<td align="right">0.9555638</td>
+<td align="right">0.9560525</td>
+<td align="right">0.9748043</td>
+<td align="right">0.9883522</td>
+<td align="right">0.9871373</td>
+<td align="right">0.9697808</td>
+<td align="right">0.9575416</td>
+<td align="right">0.9650818</td>
+<td align="right">0.9707951</td>
+<td align="right">0.9740497</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9657162</td>
+<td align="right">0.9902138</td>
+</tr>
+<tr class="even">
+<td>Healthy.JG_1</td>
+<td align="right">0.9610586</td>
+<td align="right">0.9548696</td>
+<td align="right">0.9545264</td>
+<td align="right">0.9414062</td>
+<td align="right">0.9652938</td>
+<td align="right">0.9537794</td>
+<td align="right">0.9528822</td>
+<td align="right">0.9624151</td>
+<td align="right">0.9450088</td>
+<td align="right">0.9630776</td>
+<td align="right">0.9582526</td>
+<td align="right">0.9872414</td>
+<td align="right">0.9657162</td>
+<td align="right">1.0000000</td>
+<td align="right">0.9589588</td>
+</tr>
+<tr class="odd">
+<td>Affected_3</td>
+<td align="right">0.9534496</td>
+<td align="right">0.9560137</td>
+<td align="right">0.9495342</td>
+<td align="right">0.9413015</td>
+<td align="right">0.9672163</td>
+<td align="right">0.9675438</td>
+<td align="right">0.9664420</td>
+<td align="right">0.9597859</td>
+<td align="right">0.9443274</td>
+<td align="right">0.9590722</td>
+<td align="right">0.9607596</td>
+<td align="right">0.9680140</td>
+<td align="right">0.9902138</td>
+<td align="right">0.9589588</td>
+<td align="right">1.0000000</td>
 </tr>
 </tbody>
 </table>
 <pre class="r"><code># Plot
 heatmap.2(CorMat, trace=&quot;none&quot;)</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-5-2.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-5-2">
-Past versions of unnamed-chunk-5-2.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-5-2" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/a8678b7146f38cd5cbe0a4dfa46a602ef6e23d9a/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-5-2.png" target="_blank">a8678b7</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-16
-</td>
-</tr>
-<tr>
-<td>
-<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/c1d660db6d38073970096cd71db8fa190693c0d4/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-5-2.png" target="_blank">c1d660d</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
-<p>Healthy_1 is sort of an outlier sample, and it is probably because it has the least reads. In my experience, this number of reads is still quite high, and the correlations are quite high, so I am not yet concerned. I think it will look like less of an outlier once we filter out the extremely lowly expressed genes that basically are just represented by the 0.5 pseudocount I added.</p>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-4-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Ok, as expected. Biological replicates from same line cluster together. From here on forth I will deal with just the combined samples.</p>
+<pre class="r"><code>#Subset the combined samples
+CountTable.matrix &lt;- CountTable.matrix[, grep(&quot;Combined*&quot;, colnames(CountTable.matrix))]
+
+dim(CountTable.matrix)</code></pre>
+<pre><code>[1] 58676     4</code></pre>
+<p>And do the same filtering as before, filtering out genes below a threshold for cpm expression…</p>
 <pre class="r"><code># Pick a cutoff for lowly expressed genes to exclude
 hist(median_log2_cpm)
 expr_cutoff &lt;- 2
 abline(v = expr_cutoff, col = &quot;red&quot;, lwd = 3)</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-6-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>#How many genes pass this threshold
 sum(median_log2_cpm &gt; expr_cutoff)</code></pre>
-<pre><code>[1] 11731</code></pre>
+<pre><code>[1] 11978</code></pre>
 <pre class="r"><code>CountTable.matrix.filtered &lt;- CountTable.matrix[median_log2_cpm &gt; expr_cutoff, ]
 
 # Recalculate cpm from filtered count table
@@ -1267,20 +1314,19 @@ cpm &lt;- cpm(CountTable.matrix.filtered, log=TRUE, prior.count=0.5)
 # look at correlations from filtered cpm matrix
 cor(cpm) %&gt;%
 heatmap.2(., trace=&quot;none&quot;, cexRow=1, cexCol=1)</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-6-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># Also look at similarity with MDS plot
 plotMDS(cpm)</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-6-3.png" width="672" style="display: block; margin: auto;" /></p>
-<pre class="r"><code>plotMDS(cpm, dim=c(3,4))</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-6-4.png" width="672" style="display: block; margin: auto;" /></p>
-<p>samples primarily segregate by condition (healthy vs affected) as expected</p>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-6-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Interestingly, samples do not primarily segregate by condition (healthy vs affected). In other words, biological noise (effects not due to the healthy vs affected contrast of interest) are greater than the healthy vs affected. I wil still do the differential expression analysis as planned, since it will yield a list of DE genes that are more likely truly due to the DHX38 mutations, but nonetheless it is likely that a large fraction of the DE genes we find will be due to effects not due to the DHX38 genotype but rather other line-specific effects, since these other line-specific effects have a generally stronger effect. In other words, the hypothesized effect of DHX38 mutations are quite small.</p>
 <p>Now start prepping data for differential expression analysis</p>
-<pre class="r"><code>group &lt;- substr(colnames(CountTable.matrix.filtered), 1, 1)
+<pre class="r"><code>colnames(CountTable.matrix.filtered)</code></pre>
+<pre><code>[1] &quot;Combined.BIH4&quot;  &quot;Combined.XM001&quot; &quot;Combined.JG&quot;    &quot;Combined.DHX&quot;  </code></pre>
+<pre class="r"><code># A for affected, H for healthy
+group &lt;- c(&quot;H&quot;, &quot;H&quot;, &quot;H&quot;, &quot;A&quot;)
 
-# A for affected, H for healthy
-group</code></pre>
-<pre><code>[1] &quot;H&quot; &quot;H&quot; &quot;A&quot; &quot;A&quot; &quot;H&quot; &quot;A&quot;</code></pre>
-<pre class="r"><code># y is a DGELIst object contains count table and other metadata
+
+# y is a DGELIst object contains count table and other metadata
 y &lt;- DGEList(counts = CountTable.matrix.filtered, group = group)
 
 # calculate normalization factors using default TMM method which more accurately scales samples with different library sizes, for example while considering that highly expressed genes between conditions can have undesired effects if just using simple CountsPerMillion normalization.
@@ -1290,48 +1336,36 @@ y$samples %&gt;% kable()</code></pre>
 <table>
 <thead>
 <tr class="header">
-<th align="right">gr</th>
-<th>oup l</th>
-<th>ib.size n</th>
-<th align="left">orm.factors</th>
+<th></th>
+<th align="left">group</th>
+<th align="right">lib.size</th>
+<th align="right">norm.factors</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
-<td align="right">Healthy_1</td>
-<td>H</td>
-<td>17476649</td>
-<td align="left">1.0187011</td>
+<td>Combined.BIH4</td>
+<td align="left">H</td>
+<td align="right">40494235</td>
+<td align="right">1.0134834</td>
 </tr>
 <tr class="even">
-<td align="right">Healthy_3</td>
-<td>H</td>
-<td>22100659</td>
-<td align="left">0.9627104</td>
+<td>Combined.XM001</td>
+<td align="left">H</td>
+<td align="right">60272758</td>
+<td align="right">0.9668125</td>
 </tr>
 <tr class="odd">
-<td align="right">Affected_2</td>
-<td>A</td>
-<td>32479868</td>
-<td align="left">1.0053802</td>
+<td>Combined.JG</td>
+<td align="left">H</td>
+<td align="right">55267740</td>
+<td align="right">1.0171157</td>
 </tr>
 <tr class="even">
-<td align="right">Affected_1</td>
-<td>A</td>
-<td>29502745</td>
-<td align="left">1.0288182</td>
-</tr>
-<tr class="odd">
-<td align="right">Healthy_2</td>
-<td>H</td>
-<td>20674206</td>
-<td align="left">0.9725252</td>
-</tr>
-<tr class="even">
-<td align="right">Affected_3</td>
-<td>A</td>
-<td>27510589</td>
-<td align="left">1.0136493</td>
+<td>Combined.DHX</td>
+<td align="left">A</td>
+<td align="right">89524716</td>
+<td align="right">1.0033922</td>
 </tr>
 </tbody>
 </table>
@@ -1340,47 +1374,10 @@ y$samples %&gt;% kable()</code></pre>
 y &lt;- estimateDisp(y)</code></pre>
 <pre><code>Design matrix not provided. Switch to the classic mode.</code></pre>
 <pre class="r"><code>sqrt(y$common.dispersion) # biological coefficient of variation</code></pre>
-<pre><code>[1] 0.1426432</code></pre>
+<pre><code>[1] 0.2478897</code></pre>
 <pre class="r"><code>#Plot dispersions
 plotBCV(y)</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-8-1">
-Past versions of unnamed-chunk-8-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-8-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/dbbdff32af42a7bdbc1cd9c6d91adbb7bb55845f/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-8-1.png" target="_blank">dbbdff3</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-09
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-8-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># by default, the tagwise dispersion is used for DE testing.
 # Perform testing
 et &lt;- exactTest(y, pair=c(&quot;H&quot;,&quot;A&quot;))
@@ -1391,68 +1388,99 @@ head(results_edgeR$table) %&gt;% kable()</code></pre>
 <thead>
 <tr class="header">
 <th></th>
-<th align="center">logFC</th>
-<th align="center">logCPM</th>
-<th align="center">PValue</th>
-<th align="center">FDR</th>
+<th align="right">logFC</th>
+<th align="right">logCPM</th>
+<th align="right">PValue</th>
+<th align="right">FDR</th>
 </tr>
 </thead>
 <tbody>
 <tr class="odd">
 <td>ENSG00000279457</td>
-<td align="center">0.0286578</td>
-<td align="center">2.311793</td>
-<td align="center">0.9138237</td>
-<td align="center">0.9499394</td>
+<td align="right">0.0008339</td>
+<td align="right">2.323825</td>
+<td align="right">1.0000000</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td>ENSG00000248527</td>
-<td align="center">-1.4383809</td>
-<td align="center">3.329079</td>
-<td align="center">0.0005804</td>
-<td align="center">0.0027838</td>
+<td align="right">-0.6449759</td>
+<td align="right">2.974398</td>
+<td align="right">0.5288493</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td>ENSG00000228794</td>
-<td align="center">0.0825600</td>
-<td align="center">3.224725</td>
-<td align="center">0.6806027</td>
-<td align="center">0.7897280</td>
+<td align="right">-0.1405206</td>
+<td align="right">3.373410</td>
+<td align="right">0.8252138</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td>ENSG00000230699</td>
-<td align="center">0.5619901</td>
-<td align="center">2.492218</td>
-<td align="center">0.0208050</td>
-<td align="center">0.0580142</td>
+<td align="right">0.3685152</td>
+<td align="right">2.468252</td>
+<td align="right">0.5953829</td>
+<td align="right">1</td>
 </tr>
 <tr class="odd">
 <td>ENSG00000188976</td>
-<td align="center">-0.1734505</td>
-<td align="center">6.992373</td>
-<td align="center">0.2378148</td>
-<td align="center">0.3807569</td>
+<td align="right">-0.0582193</td>
+<td align="right">6.968201</td>
+<td align="right">0.8141212</td>
+<td align="right">1</td>
 </tr>
 <tr class="even">
 <td>ENSG00000187961</td>
-<td align="center">-0.0083391</td>
-<td align="center">4.093719</td>
-<td align="center">0.9656396</td>
-<td align="center">0.9814519</td>
+<td align="right">-0.2584633</td>
+<td align="right">4.302562</td>
+<td align="right">0.5637095</td>
+<td align="right">1</td>
 </tr>
 </tbody>
 </table>
 <pre class="r"><code>#histogram of nominal P-vals
 hist(results_edgeR$table$PValue)</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-8-2.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code># how many genes below FDR threshold
 sum(results_edgeR$table$FDR &lt; .1)</code></pre>
-<pre><code>[1] 4845</code></pre>
+<pre><code>[1] 187</code></pre>
 <pre class="r"><code>#MA plot showing FDR&lt;0.1
 plotSmear(et, de.tags = rownames(results_edgeR)[results_edgeR$table$FDR &lt; .01])
 abline(h = c(-2, 2), col = &quot;blue&quot;)</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-8-3.png" width="672" style="display: block; margin: auto;" /></p>
-<p>Ok we did differential testing. Now let’s explore the results</p>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-8-3.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Ok we did differential testing. But are the significant P-values still just due to technical factors that would be present in any 1v3 contrast of genetically independent cell lines? Let’s try the permutations of the sample labels to see if there is inflation of small P-values in the real contrast compared to the permutated contrasts (For example, the 1v3 comparison of [BIH4] vs [DHX39, XM001, JG])?</p>
+<pre class="r"><code>DiffExpTest &lt;- function(groups){
+  Results &lt;- DGEList(counts = CountTable.matrix.filtered, group = groups) %&gt;%
+  estimateDisp() %&gt;%
+  exactTest(pair=c(&quot;H&quot;, &quot;A&quot;))
+  return(Results$table$PValue)
+}
+
+RealResults &lt;- DiffExpTest(groups=c(&quot;H&quot;, &quot;H&quot;, &quot;H&quot;, &quot;A&quot;))</code></pre>
+<pre><code>Design matrix not provided. Switch to the classic mode.</code></pre>
+<pre class="r"><code>Permutation1Results &lt;- DiffExpTest(groups=c(&quot;A&quot;, &quot;H&quot;, &quot;H&quot;, &quot;H&quot;))</code></pre>
+<pre><code>Design matrix not provided. Switch to the classic mode.</code></pre>
+<pre class="r"><code>Permutation2Results &lt;- DiffExpTest(groups=c(&quot;H&quot;, &quot;A&quot;, &quot;H&quot;, &quot;H&quot;))</code></pre>
+<pre><code>Design matrix not provided. Switch to the classic mode.</code></pre>
+<pre class="r"><code>Permutation3Results &lt;- DiffExpTest(groups=c(&quot;H&quot;, &quot;H&quot;, &quot;A&quot;, &quot;H&quot;))</code></pre>
+<pre><code>Design matrix not provided. Switch to the classic mode.</code></pre>
+<pre class="r"><code>data.frame(RealResults, Permutation1Results, Permutation2Results, Permutation3Results) %&gt;% gather(value=&quot;Actual.P&quot;) %&gt;%
+  group_by(key) %&gt;%
+  mutate(Expected.P=percent_rank(Actual.P)) %&gt;%
+  ungroup() %&gt;%
+  ggplot(aes(color=key, x=-log10(Expected.P), y=-log10(Actual.P))) +
+  geom_point() +
+  geom_abline() +
+  scale_color_manual(labels = c(Permutation1Results=&quot;Permuted; [BIH4] v [DHX, XM001, JG]&quot;,
+                                Permutation2Results=&quot;Permuted; [XM001] v [DHX, BIH4, JG]&quot;,
+                                Permutation3Results=&quot;Permuted; [JG] v [DHX, XM001, BIH4]&quot;,
+                                RealResults=&quot;Actual; [DHX] v [BIH4, XM001, JG]&quot;),
+                     values=c(&quot;red&quot;, &quot;blue&quot;, &quot;purple&quot;, &quot;black&quot;)) +
+  theme_bw()</code></pre>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p>Ok, as I suggested before, the possible biological effect of DHX38 mutations is relatively small, compared to inter-line variation between non-DHX38 mutant samples. For example, the [XM001] v [DHX, BIH4, JG] comparison has more inflated P-values. So most of the significant changes we see are still likely due to non-DHX38 related things.</p>
+<p>In any case, let’s still explore the results from the original contrast.</p>
 <p>First add common gene names to the results table</p>
 <pre class="r"><code>#Use biomart to get common gene names and ensembl IDs
 human_mart &lt;- useMart(&quot;ensembl&quot;, dataset=&quot;hsapiens_gene_ensembl&quot;)
@@ -1479,55 +1507,55 @@ head(results.more.descriptive) %&gt;% kable()</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">ENSG00000279457</td>
-<td align="right">0.0286578</td>
-<td align="right">2.311793</td>
-<td align="right">0.9138237</td>
-<td align="right">0.9499394</td>
+<td align="right">0.0008339</td>
+<td align="right">2.323825</td>
+<td align="right">1.0000000</td>
+<td align="right">1</td>
 <td align="left">WASH9P</td>
 <td align="left">WAS protein family homolog 9, pseudogene [Source:HGNC Symbol;Acc:HGNC:53981]</td>
 </tr>
 <tr class="even">
 <td align="left">ENSG00000248527</td>
-<td align="right">-1.4383809</td>
-<td align="right">3.329079</td>
-<td align="right">0.0005804</td>
-<td align="right">0.0027838</td>
+<td align="right">-0.6449759</td>
+<td align="right">2.974398</td>
+<td align="right">0.5288493</td>
+<td align="right">1</td>
 <td align="left">MTATP6P1</td>
 <td align="left">MT-ATP6 pseudogene 1 [Source:HGNC Symbol;Acc:HGNC:44575]</td>
 </tr>
 <tr class="odd">
 <td align="left">ENSG00000228794</td>
-<td align="right">0.0825600</td>
-<td align="right">3.224725</td>
-<td align="right">0.6806027</td>
-<td align="right">0.7897280</td>
+<td align="right">-0.1405206</td>
+<td align="right">3.373410</td>
+<td align="right">0.8252138</td>
+<td align="right">1</td>
 <td align="left">LINC01128</td>
 <td align="left">long intergenic non-protein coding RNA 1128 [Source:HGNC Symbol;Acc:HGNC:49377]</td>
 </tr>
 <tr class="even">
 <td align="left">ENSG00000230699</td>
-<td align="right">0.5619901</td>
-<td align="right">2.492218</td>
-<td align="right">0.0208050</td>
-<td align="right">0.0580142</td>
+<td align="right">0.3685152</td>
+<td align="right">2.468252</td>
+<td align="right">0.5953829</td>
+<td align="right">1</td>
 <td align="left">AL645608.2</td>
 <td align="left">novel transcript</td>
 </tr>
 <tr class="odd">
 <td align="left">ENSG00000188976</td>
-<td align="right">-0.1734505</td>
-<td align="right">6.992373</td>
-<td align="right">0.2378148</td>
-<td align="right">0.3807569</td>
+<td align="right">-0.0582193</td>
+<td align="right">6.968201</td>
+<td align="right">0.8141212</td>
+<td align="right">1</td>
 <td align="left">NOC2L</td>
 <td align="left">NOC2 like nucleolar associated transcriptional repressor [Source:HGNC Symbol;Acc:HGNC:24517]</td>
 </tr>
 <tr class="even">
 <td align="left">ENSG00000187961</td>
-<td align="right">-0.0083391</td>
-<td align="right">4.093719</td>
-<td align="right">0.9656396</td>
-<td align="right">0.9814519</td>
+<td align="right">-0.2584633</td>
+<td align="right">4.302562</td>
+<td align="right">0.5637095</td>
+<td align="right">1</td>
 <td align="left">KLHL17</td>
 <td align="left">kelch like family member 17 [Source:HGNC Symbol;Acc:HGNC:24023]</td>
 </tr>
@@ -1553,10 +1581,10 @@ kable(DHX38.results)</code></pre>
 <tbody>
 <tr class="odd">
 <td align="left">ENSG00000140829</td>
-<td align="right">-0.1835105</td>
-<td align="right">7.017915</td>
-<td align="right">0.2105357</td>
-<td align="right">0.3491369</td>
+<td align="right">0.0673342</td>
+<td align="right">6.889669</td>
+<td align="right">0.7861621</td>
+<td align="right">1</td>
 <td align="left">DHX38</td>
 <td align="left">DEAH-box helicase 38 [Source:HGNC Symbol;Acc:HGNC:17211]</td>
 </tr>
@@ -1573,7 +1601,7 @@ PlotSmear &lt;- results.more.descriptive %&gt;%
       external_gene_name==&quot;DHX38&quot; ~ paste0(&quot;DHX38\nP=&quot;, signif(DHX38.results$PValue, 3)),
       !external_gene_name==&quot;DHX38&quot; ~ &quot;&quot;),
   ) %&gt;% 
-  arrange(FDR)
+  arrange(desc(FDR))
 
 DHX38.results &lt;- PlotSmear %&gt;%
   filter(external_gene_name==&quot;DHX38&quot;)
@@ -1582,46 +1610,10 @@ ggplot(PlotSmear, aes(x=logCPM, y=logFC, color=Significance, label=Label)) +
     geom_point() +
     geom_point(data=DHX38.results, color=&quot;black&quot;, show.legend = F) +
     geom_text_repel(data=DHX38.results, color=&quot;black&quot;, show.legend = F) +
+    geom_hline(yintercept = 0, linetype=&quot;dashed&quot;) +
     theme_bw() +
     theme(legend.title = element_blank())</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-9-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-9-1">
-Past versions of unnamed-chunk-9-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-9-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/c1d660db6d38073970096cd71db8fa190693c0d4/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-9-1.png" target="_blank">c1d660d</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Ok good. DHX38 is not differentially expressed. So if the alleles have some affect on splicing through DHX38, is not likely through modulating expression of DHX38 levels, but rather altering function.</p>
 <p>Let’s make some plots to get to know significance testing results a little bit more… Keep in mind we don’t know much about the types of replicates these are (technical, versus biological split before differentiation, split after differentiation, etc), and that all these are from a single healthy and a single affected patient.</p>
 <p>Volcano plot:</p>
@@ -1630,44 +1622,7 @@ Benjmain Fair
   ggplot(aes(x=logFC, y=-log10(PValue), color=Significance)) +
   geom_point(alpha=0.2) +
   theme_bw()</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-10-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-10-1">
-Past versions of unnamed-chunk-10-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-10-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/c1d660db6d38073970096cd71db8fa190693c0d4/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-10-1.png" target="_blank">c1d660d</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Plot of original results of a significant gene. Useful to check polarization of the logFC values (I think I set up the <code>exactTest</code> function to be such that positive logFC means more highly expressed in affected, but let’s double check that)</p>
 <pre class="r"><code>Top5DE_Genes &lt;- results.more.descriptive %&gt;%
   arrange(FDR) %&gt;% head(5) %&gt;%
@@ -1687,29 +1642,29 @@ results.more.descriptive %&gt;%
 </thead>
 <tbody>
 <tr class="odd">
-<td align="left">ENSG00000018625</td>
-<td align="left">ATP1A2</td>
-<td align="right">8.652466</td>
+<td align="left">ENSG00000123562</td>
+<td align="left">MORF4L2</td>
+<td align="right">1.289187</td>
 </tr>
 <tr class="even">
-<td align="left">ENSG00000044524</td>
-<td align="left">EPHA3</td>
-<td align="right">-6.177846</td>
+<td align="left">ENSG00000148841</td>
+<td align="left">ITPRIP</td>
+<td align="right">2.426031</td>
 </tr>
 <tr class="odd">
-<td align="left">ENSG00000096696</td>
-<td align="left">DSP</td>
-<td align="right">11.570811</td>
+<td align="left">ENSG00000237550</td>
+<td align="left">AC243919.1</td>
+<td align="right">-4.985699</td>
 </tr>
 <tr class="even">
-<td align="left">ENSG00000196569</td>
-<td align="left">LAMA2</td>
-<td align="right">7.873156</td>
+<td align="left">ENSG00000215030</td>
+<td align="left">RPL13P12</td>
+<td align="right">3.646536</td>
 </tr>
 <tr class="odd">
-<td align="left">ENSG00000198300</td>
-<td align="left">PEG3</td>
-<td align="right">13.352126</td>
+<td align="left">ENSG00000132872</td>
+<td align="left">SYT4</td>
+<td align="right">1.850729</td>
 </tr>
 </tbody>
 </table>
@@ -1722,7 +1677,7 @@ results.more.descriptive %&gt;%
   facet_wrap(~ensembl_gene_id) +
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-11-1.png" width="672" style="display: block; margin: auto;" /></p>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-12-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Ok correct, positive FC means higher expressed in affected samples. Now let’s do gene set enrichment analysis (GSEA) to see which types of gene categories are enriched for differentially expressed genes. For this we need an ordered list of genes. We could use absolute value of log-fold change, or maybe -log10(Pvalue). Judging from the volcano plot I’d guess the results would be virtually identical either way</p>
 <pre class="r"><code>#had to add very small number to Pvalue because very significant genes have Pvalues that are 0
 gsea.results &lt;- results.more.descriptive %&gt;%
@@ -1744,115 +1699,67 @@ gsea.results.df %&gt;%
   scale_y_discrete(labels = function(x) lapply(strwrap(x, width = 60, simplify = FALSE), paste, collapse=&quot;\n&quot;)) +
   labs(color = &quot;Adjusted P-value&quot;) +
   theme_bw()</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-13-1.png" width="672" style="display: block; margin: auto;" /></p>
-<p>
-<button type="button" class="btn btn-default btn-xs btn-workflowr btn-workflowr-fig" data-toggle="collapse" data-target="#fig-unnamed-chunk-13-1">
-Past versions of unnamed-chunk-13-1.png
-</button>
-</p>
-<div id="fig-unnamed-chunk-13-1" class="collapse">
-<div class="table-responsive">
-<table class="table table-condensed table-hover">
-<thead>
-<tr>
-<th>
-Version
-</th>
-<th>
-Author
-</th>
-<th>
-Date
-</th>
-</tr>
-</thead>
-<tbody>
-<tr>
-<td>
-<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/c1d660db6d38073970096cd71db8fa190693c0d4/docs/figure/20191203_DiffExpression.Rmd/unnamed-chunk-13-1.png" target="_blank">c1d660d</a>
-</td>
-<td>
-Benjmain Fair
-</td>
-<td>
-2019-12-04
-</td>
-</tr>
-</tbody>
-</table>
-</div>
-</div>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
 <pre class="r"><code>gsea.results.df %&gt;%
   arrange(p.adjust) %&gt;% head(10) %&gt;%
   dplyr::select(ID, Description, ONTOLOGY, p.adjust, setSize, enrichmentScore)</code></pre>
 <pre><code>           ID                                    Description ONTOLOGY
 1  GO:0000904 cell morphogenesis involved in differentiation       BP
-2  GO:0002009                 morphogenesis of an epithelium       BP
+2  GO:0003002                                regionalization       BP
 3  GO:0005887          integral component of plasma membrane       CC
 4  GO:0006935                                     chemotaxis       BP
-5  GO:0007268                 chemical synaptic transmission       BP
+5  GO:0007389                  pattern specification process       BP
 6  GO:0007409                                   axonogenesis       BP
 7  GO:0007411                                  axon guidance       BP
-8  GO:0007420                              brain development       BP
-9  GO:0007423                      sensory organ development       BP
+8  GO:0009952       anterior/posterior pattern specification       BP
+9  GO:0010720        positive regulation of cell development       BP
 10 GO:0021953  central nervous system neuron differentiation       BP
-      p.adjust setSize enrichmentScore
-1  0.000506239     466       0.7711145
-2  0.000506239     342       0.7776910
-3  0.000506239     445       0.7739937
-4  0.000506239     275       0.7844739
-5  0.000506239     347       0.7838175
-6  0.000506239     288       0.8067617
-7  0.000506239     146       0.8375858
-8  0.000506239     494       0.7413534
-9  0.000506239     298       0.7859719
-10 0.000506239     117       0.8482862</code></pre>
+       p.adjust setSize enrichmentScore
+1  0.0003977492     473       0.5906860
+2  0.0003977492     190       0.6797062
+3  0.0003977492     462       0.5818294
+4  0.0003977492     281       0.6042926
+5  0.0003977492     243       0.6538520
+6  0.0003977492     294       0.6323043
+7  0.0003977492     149       0.6738251
+8  0.0003977492     104       0.7179275
+9  0.0003977492     355       0.5840187
+10 0.0003977492     117       0.7023207</code></pre>
 <pre class="r"><code>gsea.results.df %&gt;%
   arrange(desc(enrichmentScore)) %&gt;% head(10) %&gt;%
   dplyr::select(ID, Description, ONTOLOGY, p.adjust, setSize)</code></pre>
-<pre><code>           ID
-1  GO:0044065
-2  GO:0031420
-3  GO:0098533
-4  GO:0010881
-5  GO:0010882
-6  GO:0043576
-7  GO:0014808
-8  GO:1903514
-9  GO:0048701
-10 GO:0086009
-                                                                                        Description
-1                                                          regulation of respiratory system process
-2                                                                          alkali metal ion binding
-3                                                  ATPase dependent transmembrane transport complex
-4  regulation of cardiac muscle contraction by regulation of the release of sequestered calcium ion
-5                                 regulation of cardiac muscle contraction by calcium ion signaling
-6                                                        regulation of respiratory gaseous exchange
-7                         release of sequestered calcium ion into cytosol by sarcoplasmic reticulum
-8                          release of sequestered calcium ion into cytosol by endoplasmic reticulum
-9                                                          embryonic cranial skeleton morphogenesis
-10                                                                          membrane repolarization
-   ONTOLOGY   p.adjust setSize
-1        BP 0.01594444      12
-2        MF 0.03722781      10
-3        CC 0.04429591      10
-4        BP 0.03879577      14
-5        BP 0.02417820      17
-6        BP 0.04046228      15
-7        BP 0.03706927      19
-8        BP 0.03706927      19
-9        BP 0.02316158      23
-10       BP 0.03134935      23</code></pre>
+<pre><code>           ID                                            Description ONTOLOGY
+1  GO:0048665                              neuron fate specification       BP
+2  GO:0060579        ventral spinal cord interneuron fate commitment       BP
+3  GO:0060581 cell fate commitment involved in pattern specification       BP
+4  GO:0021514        ventral spinal cord interneuron differentiation       BP
+5  GO:0071625                                  vocalization behavior       BP
+6  GO:0032332     positive regulation of chondrocyte differentiation       BP
+7  GO:0060512                           prostate gland morphogenesis       BP
+8  GO:0060740                prostate gland epithelium morphogenesis       BP
+9  GO:0048663                                 neuron fate commitment       BP
+10 GO:0021513                  spinal cord dorsal/ventral patterning       BP
+      p.adjust setSize
+1  0.012532160      14
+2  0.036769704      10
+3  0.036769704      10
+4  0.032182086      11
+5  0.040837996      13
+6  0.044858667      13
+7  0.032515162      15
+8  0.032515162      15
+9  0.001242509      29
+10 0.040837996      15</code></pre>
 <p>Lot’s of interesting stuff. Let’s write out the full table of results. Here is a plot of a few terms that catch’s the eye (<a href="GO:0007409" class="uri">GO:0007409</a>, axonogenesis). Though, another term that might point towards the interpretation of these differences being more related to the ipsc differentiation differences with n=1 (or maybe n=3; I still don’t fully understand the experiment design).</p>
 <p>This plot captures the essence of how GSEA works. A rug depicting instances of genes belonging to sets is shown on x-axis. Some gene sets are enriched for genes at the top of the ordered list, leading to more enrichment than you expect by chance as you move from the top (left) to bottom (right) of the ordered list.</p>
-<pre class="r"><code>gseaplot2(gsea.results, geneSetID = c(&quot;GO:0007409&quot;, &quot;GO:0007268&quot;, &quot;GO:0000904&quot;, &quot;GO:0086009&quot;), pvalue_table = F)</code></pre>
-<p><img src="figure/20191203_DiffExpression.Rmd/unnamed-chunk-14-1.png" width="672" style="display: block; margin: auto;" /></p>
+<pre class="r"><code>gseaplot2(gsea.results, geneSetID = c(&quot;GO:0000904&quot;, &quot;GO:0007409&quot;, &quot;GO:0060579&quot;), pvalue_table = F)</code></pre>
+<p><img src="figure/20200110_DiffExpression_MoreReplicates.Rmd/unnamed-chunk-15-1.png" width="672" style="display: block; margin: auto;" /></p>
 <p>Another thing to keep in mind with this and any GSEA is that there is a lot of overlap in some gene set terms, as is clear above in the rug plot along the x-axis. Some sets are huge (hundreds of terms).</p>
 <pre class="r"><code>#Write out gsea results
-write.table(gsea.results.df, file=&quot;../output/GeneExpression.gsea.tab&quot;, quote=F, sep=&#39;\t&#39;, row.names = F)
+write.table(gsea.results.df, file=&quot;../output/GeneExpression.gsea.WithMoreReplicates.tab&quot;, quote=F, sep=&#39;\t&#39;, row.names = F)
 
 #write differential expression results
-write.table(results.more.descriptive, file=&quot;../output/GeneExpression.DE.tab&quot;, quote=F, sep=&#39;\t&#39;, row.names = F)</code></pre>
+write.table(results.more.descriptive, file=&quot;../output/GeneExpression.DE.WithMoreReplicates.tab&quot;, quote=F, sep=&#39;\t&#39;, row.names = F)</code></pre>
 </div>
 <div id="conclusions" class="section level2">
 <h2>Conclusions</h2>
@@ -1892,44 +1799,44 @@ other attached packages:
 [22] tibble_2.1.3           ggplot2_3.2.1          tidyverse_1.3.0       
 
 loaded via a namespace (and not attached):
-  [1] readxl_1.3.1        backports_1.1.5     fastmatch_1.1-0    
-  [4] workflowr_1.5.0     plyr_1.8.5          igraph_1.2.4.2     
-  [7] lazyeval_0.2.2      splines_3.6.1       BiocParallel_1.18.1
- [10] urltools_1.7.3      digest_0.6.23       htmltools_0.4.0    
- [13] GOSemSim_2.10.0     viridis_0.5.1       GO.db_3.8.2        
- [16] gdata_2.18.0        fansi_0.4.0         magrittr_1.5       
- [19] memoise_1.1.0       graphlayouts_0.5.0  modelr_0.1.5       
- [22] prettyunits_1.0.2   colorspace_1.4-1    blob_1.2.0         
- [25] rvest_0.3.5         haven_2.2.0         xfun_0.11          
- [28] crayon_1.3.4        RCurl_1.95-4.12     jsonlite_1.6       
- [31] zeallot_0.1.0       glue_1.3.1          polyclip_1.10-0    
- [34] gtable_0.3.0        UpSetR_1.4.0        scales_1.1.0       
- [37] DOSE_3.10.2         DBI_1.0.0           Rcpp_1.0.2         
- [40] viridisLite_0.3.0   progress_1.2.2      gridGraphics_0.4-1 
- [43] bit_1.1-14          europepmc_0.3       httr_1.4.1         
- [46] fgsea_1.10.1        RColorBrewer_1.1-2  ellipsis_0.3.0     
- [49] pkgconfig_2.0.3     XML_3.98-1.20       farver_2.0.1       
- [52] dbplyr_1.4.2        locfit_1.5-9.1      ggplotify_0.0.4    
- [55] tidyselect_0.2.5    labeling_0.3        rlang_0.4.1        
- [58] reshape2_1.4.3      later_1.0.0         munsell_0.5.0      
- [61] cellranger_1.1.0    tools_3.6.1         cli_2.0.0          
- [64] generics_0.0.2      RSQLite_2.1.4       broom_0.5.2        
- [67] ggridges_0.5.1      evaluate_0.14       yaml_2.2.0         
- [70] bit64_0.9-7         fs_1.3.1            tidygraph_1.1.2    
- [73] caTools_1.17.1.3    ggraph_2.0.0        nlme_3.1-143       
- [76] whisker_0.4         DO.db_2.9           xml2_1.2.2         
- [79] compiler_3.6.1      rstudioapi_0.10     curl_4.3           
- [82] reprex_0.3.0        tweenr_1.0.1        stringi_1.4.3      
- [85] highr_0.8           lattice_0.20-38     Matrix_1.2-18      
- [88] vctrs_0.2.0         pillar_1.4.2        lifecycle_0.1.0    
- [91] BiocManager_1.30.10 triebeard_0.3.0     data.table_1.12.8  
- [94] cowplot_1.0.0       bitops_1.0-6        httpuv_1.5.2       
- [97] qvalue_2.16.0       R6_2.4.1            promises_1.1.0     
-[100] KernSmooth_2.23-16  gridExtra_2.3       MASS_7.3-51.4      
-[103] gtools_3.8.1        assertthat_0.2.1    rprojroot_1.3-2    
-[106] withr_2.1.2         hms_0.5.2           grid_3.6.1         
-[109] rmarkdown_1.18      rvcheck_0.1.7       git2r_0.26.1       
-[112] ggforce_0.3.1       lubridate_1.7.4    </code></pre>
+  [1] fgsea_1.10.1        colorspace_1.4-1    ellipsis_0.3.0     
+  [4] ggridges_0.5.1      rprojroot_1.3-2     qvalue_2.16.0      
+  [7] fs_1.3.1            rstudioapi_0.10     farver_2.0.1       
+ [10] urltools_1.7.3      graphlayouts_0.5.0  bit64_0.9-7        
+ [13] fansi_0.4.0         lubridate_1.7.4     xml2_1.2.2         
+ [16] splines_3.6.1       GOSemSim_2.10.0     polyclip_1.10-0    
+ [19] zeallot_0.1.0       jsonlite_1.6        workflowr_1.5.0    
+ [22] broom_0.5.2         GO.db_3.8.2         dbplyr_1.4.2       
+ [25] ggforce_0.3.1       BiocManager_1.30.10 compiler_3.6.1     
+ [28] httr_1.4.1          rvcheck_0.1.7       backports_1.1.5    
+ [31] assertthat_0.2.1    Matrix_1.2-18       lazyeval_0.2.2     
+ [34] cli_2.0.0           later_1.0.0         tweenr_1.0.1       
+ [37] htmltools_0.4.0     prettyunits_1.0.2   tools_3.6.1        
+ [40] igraph_1.2.4.2      gtable_0.3.0        glue_1.3.1         
+ [43] reshape2_1.4.3      DO.db_2.9           fastmatch_1.1-0    
+ [46] Rcpp_1.0.2          cellranger_1.1.0    vctrs_0.2.0        
+ [49] gdata_2.18.0        nlme_3.1-143        ggraph_2.0.0       
+ [52] xfun_0.11           rvest_0.3.5         lifecycle_0.1.0    
+ [55] gtools_3.8.1        XML_3.98-1.20       DOSE_3.10.2        
+ [58] europepmc_0.3       MASS_7.3-51.4       scales_1.1.0       
+ [61] tidygraph_1.1.2     hms_0.5.2           promises_1.1.0     
+ [64] RColorBrewer_1.1-2  curl_4.3            yaml_2.2.0         
+ [67] memoise_1.1.0       gridExtra_2.3       UpSetR_1.4.0       
+ [70] triebeard_0.3.0     stringi_1.4.3       RSQLite_2.1.4      
+ [73] highr_0.8           caTools_1.17.1.3    BiocParallel_1.18.1
+ [76] rlang_0.4.1         pkgconfig_2.0.3     bitops_1.0-6       
+ [79] evaluate_0.14       lattice_0.20-38     labeling_0.3       
+ [82] cowplot_1.0.0       bit_1.1-14          tidyselect_0.2.5   
+ [85] plyr_1.8.5          magrittr_1.5        R6_2.4.1           
+ [88] generics_0.0.2      DBI_1.0.0           pillar_1.4.2       
+ [91] haven_2.2.0         withr_2.1.2         RCurl_1.95-4.12    
+ [94] modelr_0.1.5        crayon_1.3.4        KernSmooth_2.23-16 
+ [97] rmarkdown_1.18      viridis_0.5.1       progress_1.2.2     
+[100] locfit_1.5-9.1      grid_3.6.1          readxl_1.3.1       
+[103] data.table_1.12.8   blob_1.2.0          git2r_0.26.1       
+[106] reprex_0.3.0        digest_0.6.23       httpuv_1.5.2       
+[109] gridGraphics_0.4-1  munsell_0.5.0       ggplotify_0.0.4    
+[112] viridisLite_0.3.0  </code></pre>
 </div>
 </div>
 

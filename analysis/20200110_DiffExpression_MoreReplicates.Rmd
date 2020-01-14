@@ -13,11 +13,11 @@ knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
 
 ## Introduction
 
-Exploratory differential expression analysis comparing RNA-seq from iPSC derived neurons from healthy control vs patient with biallelic mutations in DHX38 that may affect splicing and gene expression. In particular, worth checking whether DHX38 is differentially expressed.
+I previously did a differential splicing analysis with 3 replicates of affected and 3 replicates of unrelated healthy. Now we have more healthy datasets of other unrelated individuals for more robust analysis to identify effects that might be unqiue to the DHX38 mutations.
 
 ## Analysis
 
-Raw RNA-seq data has been aligned and collapsed into gene count table (rows of genes, columns of samples, each cell is exonic read counts) using code in `code` section of this repo, creating a count matrix in `output`. Here I will process that data with edgeR approach that I have used previously.
+Raw RNA-seq data has been aligned and collapsed into gene count table (rows of genes, columns of samples, each cell is exonic read counts) using code in `code` section of this repo, creating a count matrix in `output`. Here I will process that data with edgeR approach that I have used previously. The combined samples are simply biological replicates combined. Since there are multiple levels of replication, I think a reasonable way to do this analysis is to just combine the bioligical replicates and do a 1 affected vs 3 healthy analysis.
 
 First, load necessary libraries
 ```{r}
@@ -45,17 +45,7 @@ CountTable.matrix <- CountTable %>%
 
 #Preview table
 kable(CountTable.matrix[1:10,])
-
-
 ```
-
-Subset the three original biological replicates for healthy (XM001 line) and affected (DHX38 line)
-
-```{r}
-CountTable.matrix <- CountTable.matrix[, grep("Healthy_\\d|Affected_\\d", colnames(CountTable.matrix))]
-  
-```
-
 
 Plot total exonic gene counts per sample
 
@@ -68,6 +58,8 @@ CountTable.matrix %>% colSums() %>% as.data.frame() %>%
   theme_bw() +
   theme(axis.text.x = element_text(angle = 45, hjust = 1))
 ```
+
+As expected, the combined samples are the sum of the replicates.
 
 Check correlations between samples
 
@@ -88,7 +80,17 @@ kable(CorMat)
 heatmap.2(CorMat, trace="none")
 ```
 
-Healthy_1 is sort of an outlier sample, and it is probably because it has the least reads. In my experience, this number of reads is still quite high, and the correlations are quite high, so I am not yet concerned. I think it will look like less of an outlier once we filter out the extremely lowly expressed genes that basically are just represented by the 0.5 pseudocount I added.
+Ok, as expected. Biological replicates from same line cluster together. From here on forth I will deal with just the combined samples.
+
+```{r}
+#Subset the combined samples
+CountTable.matrix <- CountTable.matrix[, grep("Combined*", colnames(CountTable.matrix))]
+
+dim(CountTable.matrix)
+
+```
+
+And do the same filtering as before, filtering out genes below a threshold for cpm expression...
 
 ```{r}
 # Pick a cutoff for lowly expressed genes to exclude
@@ -111,18 +113,19 @@ heatmap.2(., trace="none", cexRow=1, cexCol=1)
 
 # Also look at similarity with MDS plot
 plotMDS(cpm)
-plotMDS(cpm, dim=c(3,4))
 ```
 
-samples primarily segregate by condition (healthy vs affected) as expected
+Interestingly, samples do not primarily segregate by condition (healthy vs affected). In other words, biological noise (effects not due to the healthy vs affected contrast of interest) are greater than the healthy vs affected. I wil still do the differential expression analysis as planned, since it will yield a list of DE genes that are more likely truly due to the DHX38 mutations, but nonetheless it is likely that a large fraction of the DE genes we find will be due to effects not due to the DHX38 genotype but rather other line-specific effects, since these other line-specific effects have a generally stronger effect. In other words, the hypothesized effect of DHX38 mutations are quite small.
 
 Now start prepping data for differential expression analysis
 
 ```{r}
-group <- substr(colnames(CountTable.matrix.filtered), 1, 1)
+
+colnames(CountTable.matrix.filtered)
 
 # A for affected, H for healthy
-group
+group <- c("H", "H", "H", "A")
+
 
 # y is a DGELIst object contains count table and other metadata
 y <- DGEList(counts = CountTable.matrix.filtered, group = group)
@@ -161,7 +164,41 @@ plotSmear(et, de.tags = rownames(results_edgeR)[results_edgeR$table$FDR < .01])
 abline(h = c(-2, 2), col = "blue")
 ```
 
-Ok we did differential testing. Now let's explore the results
+Ok we did differential testing. But are the significant P-values still just due to technical factors that would be present in any 1v3 contrast of genetically independent cell lines? Let's try the permutations of the sample labels to see if there is inflation of small P-values in the real contrast compared to the permutated contrasts (For example, the 1v3 comparison of [BIH4] vs [DHX39, XM001, JG])?
+
+```{r}
+
+DiffExpTest <- function(groups){
+  Results <- DGEList(counts = CountTable.matrix.filtered, group = groups) %>%
+  estimateDisp() %>%
+  exactTest(pair=c("H", "A"))
+  return(Results$table$PValue)
+}
+
+RealResults <- DiffExpTest(groups=c("H", "H", "H", "A"))
+Permutation1Results <- DiffExpTest(groups=c("A", "H", "H", "H"))
+Permutation2Results <- DiffExpTest(groups=c("H", "A", "H", "H"))
+Permutation3Results <- DiffExpTest(groups=c("H", "H", "A", "H"))
+
+data.frame(RealResults, Permutation1Results, Permutation2Results, Permutation3Results) %>% gather(value="Actual.P") %>%
+  group_by(key) %>%
+  mutate(Expected.P=percent_rank(Actual.P)) %>%
+  ungroup() %>%
+  ggplot(aes(color=key, x=-log10(Expected.P), y=-log10(Actual.P))) +
+  geom_point() +
+  geom_abline() +
+  scale_color_manual(labels = c(Permutation1Results="Permuted; [BIH4] v [DHX, XM001, JG]",
+                                Permutation2Results="Permuted; [XM001] v [DHX, BIH4, JG]",
+                                Permutation3Results="Permuted; [JG] v [DHX, XM001, BIH4]",
+                                RealResults="Actual; [DHX] v [BIH4, XM001, JG]"),
+                     values=c("red", "blue", "purple", "black")) +
+  theme_bw()
+
+```
+
+Ok, as I suggested before, the possible biological effect of DHX38 mutations is relatively small, compared to inter-line variation between non-DHX38 mutant samples. For example, the [XM001] v [DHX, BIH4, JG] comparison has more inflated P-values. So most of the significant changes we see are still likely due to non-DHX38 related things.
+
+In any case, let's still explore the results from the original contrast.
 
 First add common gene names to the results table
 
@@ -194,7 +231,7 @@ PlotSmear <- results.more.descriptive %>%
       external_gene_name=="DHX38" ~ paste0("DHX38\nP=", signif(DHX38.results$PValue, 3)),
       !external_gene_name=="DHX38" ~ ""),
   ) %>% 
-  arrange(FDR)
+  arrange(desc(FDR))
 
 DHX38.results <- PlotSmear %>%
   filter(external_gene_name=="DHX38")
@@ -203,8 +240,10 @@ ggplot(PlotSmear, aes(x=logCPM, y=logFC, color=Significance, label=Label)) +
     geom_point() +
     geom_point(data=DHX38.results, color="black", show.legend = F) +
     geom_text_repel(data=DHX38.results, color="black", show.legend = F) +
+    geom_hline(yintercept = 0, linetype="dashed") +
     theme_bw() +
     theme(legend.title = element_blank())
+  
 ```
 
 Ok good. DHX38 is not differentially expressed. So if the alleles have some affect on splicing through DHX38, is not likely through modulating expression of DHX38 levels, but rather altering function.
@@ -293,17 +332,17 @@ This plot captures the essence of how GSEA works. A rug depicting instances of g
 
 
 ```{r}
-gseaplot2(gsea.results, geneSetID = c("GO:0007409", "GO:0007268", "GO:0000904", "GO:0086009"), pvalue_table = F)
+gseaplot2(gsea.results, geneSetID = c("GO:0000904", "GO:0007409", "GO:0060579"), pvalue_table = F)
 ```
 
 Another thing to keep in mind with this and any GSEA is that there is a lot of overlap in some gene set terms, as is clear above in the rug plot along the x-axis. Some sets are huge (hundreds of terms).
 
 ```{r}
 #Write out gsea results
-write.table(gsea.results.df, file="../output/GeneExpression.gsea.tab", quote=F, sep='\t', row.names = F)
+write.table(gsea.results.df, file="../output/GeneExpression.gsea.WithMoreReplicates.tab", quote=F, sep='\t', row.names = F)
 
 #write differential expression results
-write.table(results.more.descriptive, file="../output/GeneExpression.DE.tab", quote=F, sep='\t', row.names = F)
+write.table(results.more.descriptive, file="../output/GeneExpression.DE.WithMoreReplicates.tab", quote=F, sep='\t', row.names = F)
 ```
 
 

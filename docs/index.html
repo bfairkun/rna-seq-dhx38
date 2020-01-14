@@ -324,7 +324,7 @@ div.section {
 <div class="tab-content">
 <div id="summary" class="tab-pane fade in active">
 <p>
-<strong>Last updated:</strong> 2020-01-06
+<strong>Last updated:</strong> 2020-01-14
 </p>
 <p>
 <strong>Checks:</strong> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> 1 <span class="glyphicon glyphicon-exclamation-sign text-danger" aria-hidden="true"></span> 1
@@ -355,10 +355,10 @@ This reproducible <a href="http://rmarkdown.rstudio.com">R Markdown</a> analysis
 <div class="panel panel-default">
 <div class="panel-heading">
 <p class="panel-title">
-<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treec1593d2843f3194bbf8390fec2daf4e46797087dtargetblankc1593d2a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/c1593d2843f3194bbf8390fec2daf4e46797087d" target="_blank">c1593d2</a> </a>
+<a data-toggle="collapse" data-parent="#workflowr-checks" href="#strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree2ce85b8d6032575c1844103c3da6463192639abetargetblank2ce85b8a"> <span class="glyphicon glyphicon-ok text-success" aria-hidden="true"></span> <strong>Repository version:</strong> <a href="https://github.com/bfairkun/rna-seq-dhx38/tree/2ce85b8d6032575c1844103c3da6463192639abe" target="_blank">2ce85b8</a> </a>
 </p>
 </div>
-<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38treec1593d2843f3194bbf8390fec2daf4e46797087dtargetblankc1593d2a" class="panel-collapse collapse">
+<div id="strongRepositoryversionstrongahrefhttpsgithubcombfairkunrnaseqdhx38tree2ce85b8d6032575c1844103c3da6463192639abetargetblank2ce85b8a" class="panel-collapse collapse">
 <div class="panel-body">
 <p>
 Great! You are using Git for version control. Tracking code development and connecting the code version to the results is critical for reproducibility. The version displayed above was the version of the Git repository at the time these results were generated. <br><br> Note that you need to be careful to ensure that all relevant files for the analysis have been committed to Git prior to generating the results (you can use <code>wflow_publish</code> or <code>wflow_git_commit</code>). workflowr only checks the R Markdown file, but you know if there are other scripts or data files that it depends on. Below is the status of the Git repository when the results were generated:
@@ -369,11 +369,16 @@ Ignored files:
     Ignored:    .Rproj.user/
 
 Untracked files:
-    Untracked:  analysis/20190105_DifferentialSplicingMoreReplicates.Rmd
-    Untracked:  output/DiffSplicingRegions.WithMoreReplicates.bed
+    Untracked:  analysis/20200110_DiffExpression_MoreReplicates.Rmd
+    Untracked:  output/GeneExpression.DE.WithMoreReplicates.tab
+    Untracked:  output/GeneExpression.gsea.WithMoreReplicates.tab
 
 Unstaged changes:
+    Modified:   analysis/20190105_DifferentialSplicingMoreReplicates.Rmd
+    Modified:   analysis/20191203_DiffExpression.Rmd
     Modified:   analysis/index.Rmd
+    Modified:   output/GeneExpression.DE.tab
+    Modified:   output/GeneExpression.gsea.tab
 
 </code></pre>
 <p>
@@ -412,6 +417,40 @@ Message
 </tr>
 </thead>
 <tbody>
+<tr>
+<td>
+Rmd
+</td>
+<td>
+<a href="https://github.com/bfairkun/rna-seq-dhx38/blob/4e8e59a820dd4e9f6d9300a3e5560def09567b0a/analysis/index.Rmd" target="_blank">4e8e59a</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2020-01-06
+</td>
+<td>
+add splicing analysis with more reps
+</td>
+</tr>
+<tr>
+<td>
+html
+</td>
+<td>
+<a href="https://rawcdn.githack.com/bfairkun/rna-seq-dhx38/4e8e59a820dd4e9f6d9300a3e5560def09567b0a/docs/index.html" target="_blank">4e8e59a</a>
+</td>
+<td>
+Benjmain Fair
+</td>
+<td>
+2020-01-06
+</td>
+<td>
+add splicing analysis with more reps
+</td>
+</tr>
 <tr>
 <td>
 Rmd
@@ -586,9 +625,10 @@ initial commit
 </div>
 <div id="analysis-with-more-replicates" class="section level2">
 <h2>Analysis with more replicates</h2>
-<p>Here I did some of the same analyses, simply copy/pasting a lot of code used to in the analyses above. However, now we have a slightly different experimental design. We still have the 3 DHX38 iPSC-derived NPC replicates (same differentiation, replicated at different passages), and the 3 healthy control replicates (cell line XM001). But now we additionally have 2 replicates of cell line BIH4 and 2 replicates of cell line JG (both of these are also healthy controls, but with different genetic background and different differentiation, where the replicates still represent collections on different passage days). Because we have different levels of replication (we have multiple healthy lines, each of which has replicates), this poses a new challange to the differential analyses, since not all samples are independent meseasurements. One way to solve this problem is to use mixed models. But leafcutter wasn’t built to do this easily. Another reasonable way is to simply combine the passage replicates and then simply do a 1 affected vs 3 healthy contrast. In the first analyses, I show that the replicates of the same cell line at different passages are highly correlated compared to different cell lines, which somewhat justifies combining these. In the next analyses, I repeat the splicing analysis above but now using this 1vs3 design.</p>
+<p>Here I did some of the same analyses, simply copy/pasting a lot of code used to in the analyses above. However, now we have a slightly different experimental design. We still have the 3 DHX38 iPSC-derived NPC replicates (same differentiation, replicated at different passages), and the 3 healthy control replicates (cell line XM001). But now we additionally have 2 replicates of cell line BIH4 and 2 replicates of cell line JG (both of these are also healthy controls, but with different genetic background and different differentiation, where the replicates still represent collections on different passage days). Because we have different levels of replication (we have multiple healthy lines, each of which has replicates), this poses a new challange to the differential analyses, since not all samples are independent meseasurements. One way to solve this problem is to use mixed models. But leafcutter wasn’t built to do this easily. Another reasonable way is to simply combine the passage replicates and then simply do a 1 affected vs 3 healthy contrast.</p>
+<p>In the first analyses, I repeat the differential expression analysis I did previously. Part of this involves showing that the replicates of the same cell line at different passages are highly correlated compared to different cell lines, which somewhat justifies combining these. In the next analyses, I repeat the splicing analysis above but now using this 1vs3 design.</p>
 <ul>
-<li><a href="">Passage number replicates are highly correlated</a></li>
+<li><a href="20200110_DiffExpression_MoreReplicates.html">Repeat of differential expression analysis, but with 1v3</a></li>
 <li><a href="20190105_DifferentialSplicingMoreReplicates.html">Repeat of splicing analyses, but with 1v3 design</a></li>
 </ul>
 </div>
