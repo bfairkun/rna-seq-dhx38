@@ -84,6 +84,18 @@ rule move_leafcutter_results:
         cat {input.sig} | gzip - > {output.sig}
         """
 
+rule move_leafcutter_count_table:
+    input:
+        "leafcutter/leafcutter_perind.counts.gz"
+    output:
+        numers = config["gitinclude_output"] + "leafcutter.perind.counts.numers.gz",
+        denoms = config["gitinclude_output"] + "leafcutter.perind.counts.denoms.gz",
+    shell:
+        """
+        zcat {input} | perl -lne 'if ($.==1) {{print}} else {{$_ =~ s/\d+\///g; print}}' | gzip - > {output.denoms}
+        zcat {input} | perl -lne 'if ($.==1) {{print}} else {{$_ =~ s/\/\d+//g; print}}' | gzip - > {output.numers}
+        """
+
 rule leafcutter_ds_from_list:
     input:
         numers = "leafcutter/leafcutter_perind_numers.counts.gz",

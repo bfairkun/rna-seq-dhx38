@@ -22,7 +22,8 @@ rule all:
         "Misc/MotifScores/Donors.txt",
         "../output/IntronFeatures.txt.gz",
         expand( "Alignments/DHXLocus/{sample}.bam", sample=SampleList),
-        expand( "../output/leafcutter_ds_analyses/{analysis_name}_effect_sizes.txt.gz", analysis_name=Leafcutter_ds_analyses_list)
+        expand( "../output/leafcutter_ds_analyses/{analysis_name}_effect_sizes.txt.gz", analysis_name=Leafcutter_ds_analyses_list),
+        config["gitinclude_output"] + "leafcutter.perind.counts.denoms.gz",
 
 include: "rules/DownloadReference.smk"
 include: "rules/DownloadAndMergeFastq.smk"
