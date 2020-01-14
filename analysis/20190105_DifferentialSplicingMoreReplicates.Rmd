@@ -1,0 +1,449 @@
+---
+title: "Untitled"
+author: "Benjamin Fair"
+date: '`r format(Sys.Date(), "%B %d, %Y")`'
+output:
+  html_document:
+    toc: true
+---
+
+```{r setup, include=FALSE}
+knitr::opts_chunk$set(echo = TRUE, warning = F, message = F)
+```
+
+## Introduction
+
+Exploratory differential expression analysis comparing RNA-seq from iPSC derived neurons from healthy control vs patient with biallelic mutations in DHX38 that may affect splicing and gene expression. Some things I want to check is what kinds of gene sets are differentially spliced, as well as if there are certain intron features associated with differentially spliced introns (weaker 5'ss motif perhaps)
+
+## Analysis
+
+I did the same leafcutter differential splicing analysis as before but this time with more replicates, wherein the biological replicates were combined at the level of fastq files.
+
+First, load necessary libraries
+```{r}
+library(tidyverse)
+library(knitr)
+library("clusterProfiler")
+library("org.Hs.eg.db")
+library(enrichplot)
+library(psych)
+library(corrplot)
+library(ggrepel)
+```
+
+Now let's establish that the 1 healthy vs 1 control (where 3 healthy bioligical replicates are combined into 1, same with control) is comparable with the previous analysis where the replicates are left separate. Obviously I expect the 3vs3 to have more inflated P-values, but I want to check that the P-values are still well correlated.
+
+```{r}
+sig_3v3 <- read.table("../output/leafcutter_ds_analyses/original_cluster_significance.txt.gz", sep='\t', header=T)
+
+head(sig_3v3) %>% kable()
+
+sig_1v1 <- read.table("../output/leafcutter_ds_analyses/originalCombined_cluster_significance.txt.gz", sep='\t', header=T)
+
+head(sig_1v1) %>% kable()
+
+#Check that the dimensions of the two results tables are identical... they should be
+dim(sig_3v3)
+dim(sig_1v1)
+
+#Check that the P-values are well correlated
+cor.test(sig_3v3$p, sig_1v1$p)
+
+#Visualize this correlation with scatter plot
+left_join(sig_3v3, sig_1v1, by="cluster", suffix=c(".3v3", ".1v1")) %>%
+  ggplot(aes(x=-log10(p.3v3), y=-log10(p.1v1))) +
+  geom_point(alpha=0.2) +
+  theme_bw()
+
+
+```
+
+Ok. Yes, it seems you get well correlated P-values. I feel justified in combining replicates as I have and running leafcutter's differential splicing analysis on those combined replicates. This is a much simpler approach than dealing with these different levels of replication with a mixed model for example. Let's check how many significant clusters you get this way...
+
+```{r}
+hist(sig_3v3$p)
+
+hist(sig_1v1$p)
+
+table(sig_1v1$p.adjust<0.1)
+table(sig_3v3$p.adjust<0.1)
+```
+
+Good. there are still some significant clusters to work with, but as expected, there are much less. Now we can add more replicates (different lines, each with multiple replicates similarly combined at the level of fastq files) and check how many significant clusters we get.
+
+```{r}
+sig <- read.table("../output/leafcutter_ds_analyses/AdditionalReps_cluster_significance.txt.gz", sep='\t', header=T)
+table(sig$p.adjust<0.1)
+table(sig$p.adjust<0.2)
+```
+
+Ok. only 24 significant differentially spliced clusters at FDR<0.1. These are likely more robustly associated with the DHX sample of interest carrying biallelic mutations. However, with this small of a number of significant junctions to deal with, there likely isn't any reasonable downstream analysis we can do with regards to looking for intron features that explain these. Let's make a volcano plot to visualize, labelling the genes with the significantly changed splicing events.
+
+```{r}
+effect_sizes <- read.table("../output/leafcutter_ds_analyses/AdditionalReps_effect_sizes.txt.gz", sep='\t', header=T)
+
+
+#how many clusters tested ("Success")
+table(sig$status) %>% kable()
+
+#how many introns for each cluster
+effect_sizes %>%
+  mutate(Cluster=sub(".+?:(clu_.+?_.+?)","\\1",intron)) %>%
+  group_by(Cluster) %>%
+  tally() %>%
+  ggplot(aes(x=n)) +
+  geom_histogram() +
+  scale_x_continuous(breaks = seq(1, 10, by = 1), limits=c(1,10)) +
+  xlab("Num introns per cluster") +
+  ylab("Freq") +
+  theme_bw()
+
+#histogram of Pvalues
+hist(sig$p)
+
+#how many significant (p.adjust < 0.1)
+table(sig$p.adjust<0.1) %>% kable()
+
+
+# merge significance and cluster tables
+leafcutter.merged <- effect_sizes %>%
+  mutate(cluster=gsub("(.+?:).+?:.+?:(clu.+?)", "\\1\\2", intron, perl=T)) %>%
+  mutate(junc_id=gsub("(.+?:.+?:.+?):clu.+", "\\1", intron, perl=T)) %>%
+  left_join(sig, by="cluster")
+
+# volcano plot of cluster-pvalues and largest within-cluster-delta-psi
+leafcutter.merged %>%
+  mutate(abs.deltapsi = abs(deltapsi)) %>%
+  group_by(cluster) %>% 
+  top_n(n=1, abs.deltapsi) %>%
+  mutate(sig=p.adjust<0.1 & abs.deltapsi>0.1) %>%
+  mutate(label=dplyr::case_when(
+    sig==TRUE ~ as.character(genes),
+    sig==FALSE ~ ""
+  )) %>%
+  mutate(alpha=case_when(
+    sig==TRUE ~ 1,
+    sig==FALSE ~ 0.05
+  )) %>%
+  ggplot(aes(x=deltapsi, y=-log10(p), color=sig, label=label)) +
+    geom_point(aes(alpha=alpha)) +
+    geom_text_repel(size=3) +
+    theme_bw() +
+    theme(legend.position = "none")
+
+```
+Let's check for intron clusters that overlap DHX38 gene, in case the gene itself is differentially spliced, possibly as a result of the mutations acting in cis.
+
+
+There are no clusters over DHX38. Note that leafcutter output only lists clusters that have more than 1 intron (not simple constitutive splicing) and that pass some default filters for minimum coverage over each the splice junction.
+
+```{r}
+#Filter based on leafcutter's gene annotations.
+sig %>% dplyr::filter(grepl("DHX38",genes))
+
+#Filter also based on genome coordinates of DHX38
+effect_sizes %>%
+  separate(intron, into=c("chrom", "start", "stop", "cluster"), sep=":") %>%
+  filter(chrom=="chr16" & start>= 72093613 & stop <= 72112912)
+```
+
+what kinds of intron features distinguish differentially spliced introns, which may be more enlightening about general splicing mechanisms due to this DHX38 genotype.
+
+I have scored the 5'ss and 3'ss motifs for each intron tested using a position specific score matrix based on annotated introns. I additionally used [svm-bpfinder](http://regulatorygenomics.upf.edu/Software/SVM_BP/) to score the best computationally predicted branch for each intron. I also annotated whether each intron is annotated, an unanottated alt3'ss, an unanotated alt5'ss, an unannotated new pairing of splice sites, or new intron (unannotated 5' and unannotated 3'ss). All of that work is hidden in the `code` section and output into a file in `output`. 
+
+Let's see if any of those features correlate with differentially expressed introns. If there is the DHX38 mutations preferentially activates less consensus splice sites for example, I expect the directionality to be consistent. Therefore, I will correlate those scores with the logeff (polarized effect size) for each intron, for significant introns.
+
+```{r}
+#read intron features
+IntronFeatures <- read.table("../output/IntronFeatures.txt.gz", sep='\t', header=T) %>%
+  separate(Intron, c("chrom", "start", "stop", "strand"), sep = "_") %>%
+  mutate(newStop=as.numeric(stop)+1,
+         newStart=as.numeric(start)) %>%
+  mutate(
+    junc_id=paste(paste0("chr", chrom), newStart, newStop, sep=":"),
+    IntronLength=newStop-newStart) %>%
+  dplyr::select(-c("chrom", "start", "stop", "newStop", "newStart"))
+
+head(IntronFeatures) %>% kable()
+
+#Check an example of a good donor score and a bad donor score
+#Good splice donor (positions -3 to +6)
+IntronFeatures %>%
+  top_n(1, DonorScore) %>% head(1) %>%
+  dplyr::select(donor_seq, DonorScore)
+
+#Bad splice donor
+IntronFeatures %>%
+  top_n(-1, DonorScore) %>% head(1) %>%
+  dplyr::select(donor_seq, DonorScore)
+
+# Check that the number of types of unannotated splicing is similar in both strands. Sometimes bugs related to coordinates produce wonky results
+IntronFeatures %>%
+  filter(strand=="-") %>%
+  pull(type) %>% table()
+
+IntronFeatures %>%
+  filter(strand=="+") %>%
+  pull(type) %>% table()
+
+# merge the intron features with the leafcutter results and filter for the significantly differentially spliced introns that have the greatest effect size within cluster
+leafcutter.merged.w.features <- leafcutter.merged %>%
+  mutate(abs.effectsize = abs(logef)) %>%
+  group_by(cluster) %>% 
+  top_n(n=1, abs.effectsize) %>%
+  ungroup() %>%
+  filter(p.adjust<0.2) %>%
+  left_join(IntronFeatures, by="junc_id")
+
+# Are specific types of unannotated splicing more prevalent?
+leafcutter.merged.w.features %>%
+  pull(type) %>% table()
+
+colnames(leafcutter.merged.w.features)
+
+# Set up features and effect sizes into a cleaner data frame
+IntronFeaturesAndEffectSizes <- leafcutter.merged.w.features %>%
+  dplyr::select(junc_id, logef, DonorScore, AcceptorScore, ss_dist, bp_scr, ppt_len, ppt_scr, svm_scr, IntronLength) %>%
+  column_to_rownames("junc_id")
+
+# See if there is any correlations
+CorrelationsWithFeatures <- corr.test(x=IntronFeaturesAndEffectSizes[,1],
+                         y=IntronFeaturesAndEffectSizes[,-1],
+                         method="spearman",
+                         adjust="none")
+
+# table of spearmans r, pvalue, and n
+data.frame(Spearman.r= t(CorrelationsWithFeatures$r), p=t(CorrelationsWithFeatures$p), n=t(CorrelationsWithFeatures$n)) %>% kable()
+```
+
+None of the features tested seem to correlate with the effect size of largest-effect introns in significant clusters.
+
+
+Check if the significant positive effect-size splicing changes have more cryptic 5'ss, or more cryptic 3'ss than negative effect-size splicing changes.
+
+When doing this analysis, some people think in terms of deltapsi, some people might think in terms of a different metric of effect size. Let's look at both.
+
+```{r}
+# leafcutter's logef effect size, versus deltapsi
+qplot(leafcutter.merged.w.features$logef, leafcutter.merged.w.features$deltapsi) + theme_bw()
+
+#significant positive deltapsi introns
+leafcutter.merged.w.features %>%
+  filter(deltapsi > 0) %>%
+  pull(type) %>% table()
+
+#significant negative deltapsi introns
+leafcutter.merged.w.features %>%
+  filter(deltapsi < 0) %>%
+  pull(type) %>% table()
+
+leafcutter.merged.w.features %>%
+  ggplot(aes(x=deltapsi, color=type)) +
+    stat_ecdf(geom = "step") +
+    ylab("Cumulative frequency") +
+    theme_bw()
+
+```
+
+
+There simply aren't many significant introns to do this kind of analyses. Nonetheless, the polarization in effect sizse for annotated introns and unanottated cryptic 5'ss seems to be the most likely candidates to be significant. Let's see if these effects are significant or could just be chance.
+
+```{r}
+## are alt annotated splice sites differentially regulated?
+wilcox.test(
+  leafcutter.merged.w.features %>%
+  filter(type=="AnnotatedSpliceSite") %>% pull(deltapsi))
+
+# same test but using logef instead of deltapsi
+wilcox.test(
+  leafcutter.merged.w.features %>%
+  filter(type=="AnnotatedSpliceSite") %>% pull(logef))
+
+## are cryptic unannotated 5'ss differentially regulated?
+wilcox.test(
+  leafcutter.merged.w.features %>%
+  filter(type=="Alt5ss") %>% pull(deltapsi))
+
+# same test but using logef instead of deltapsi
+wilcox.test(
+  leafcutter.merged.w.features %>%
+  filter(type=="Alt5ss") %>% pull(logef))
+
+```
+
+These effects aren't signicant enough to warrant mention in my opinion.
+
+Note that thus far, all my alternative splicing type classifications are based on identifying splice donors and splice acceptors that aren't in annotated transcripts (Ensembl annotations)... In other words, alternative 5'ss events that are annotated (most identified alternative splicing is annotated), are simply classified as "annotated". But if the effect about downregulation of cryptic 5'ss is real, I also expect the minor intron for annotated alternative 5'ss to decrease in the affected. So let's try to classify splicing types regardless of annotations, at least for clusters with only two or three introns where this is relatively straightforward:
+
+For example, for a cluster with two introns, if the splice donor coordinates is listed twice in the dataset and the splice acceptor coordinates is listed once, we know it is alternative 5'ss usage.
+
+
+```{r}
+#Reclassify splicing types
+leafcutter.merged.AS.reclassified <- leafcutter.merged %>% 
+  dplyr::select(intron) %>%
+  separate(intron, into=c("chrom", "start", "stop", "cluster"), sep=":", remove=F) %>%
+  mutate(strand=sub("clu_\\d+_(.+)", "\\1", cluster)) %>%
+  mutate(
+    SpliceDonorCoord=case_when(
+      strand=="+" ~ paste(chrom, start, strand),
+      strand=="-" ~ paste(chrom, stop, strand)),
+    SpliceAcceptorCoord=case_when(
+      strand=="+" ~ paste(chrom, stop, strand),
+      strand=="-" ~ paste(chrom, start, strand))) %>%
+  dplyr::select(intron, cluster, SpliceDonorCoord,SpliceAcceptorCoord) %>%
+  add_count(cluster, name="IntronsPerCluster") %>%
+  add_count(SpliceDonorCoord, name="SpliceDonorCount") %>%
+  add_count(SpliceAcceptorCoord, name="SpliceAcceptorCount") %>%
+  mutate(SplicingType=case_when(
+    IntronsPerCluster==2 & SpliceDonorCount==2 ~ "Alt3ss",
+    IntronsPerCluster==2 & SpliceAcceptorCount==2 ~ "Alt5ss",
+    IntronsPerCluster==3 & SpliceDonorCount==2 & SpliceAcceptorCount==2 ~ "CassetteExonSkipped",
+    IntronsPerCluster==3 & SpliceDonorCount==1 & SpliceAcceptorCount==2 ~ "CassetteExonIncluded.DownstreamIntron",
+    IntronsPerCluster==3 & SpliceDonorCount==2 & SpliceAcceptorCount==1 ~ "CassetteExonIncluded.UpstreamIntron",
+    IntronsPerCluster==3 & SpliceDonorCount==3 & SpliceAcceptorCount==1 ~ "Alt3ss",
+    IntronsPerCluster==3 & SpliceDonorCount==1 & SpliceAcceptorCount==3 ~ "Alt5ss",
+    IntronsPerCluster>=4 ~ "Complex"
+  )) %>%
+  dplyr::select(intron, SplicingType) %>%
+  left_join(leafcutter.merged, by="intron")
+
+#Number of splicing types
+table(leafcutter.merged.AS.reclassified$SplicingType) %>% kable()
+
+# Check that the classifications make sense by manually inspecting some intron coordinates for a few clusters
+head(leafcutter.merged.AS.reclassified) %>% kable()
+
+# Check that the classifications make sense in that the fraction of junction reads for introns upstream of cassette exons should strongly positively correlate with the fraction for introns downstream of cassette exons
+PlotExonSkippingSpliceRatios <- leafcutter.merged.AS.reclassified %>%
+  dplyr::select(cluster, SplicingType, H) %>%
+  filter(SplicingType %in% c("CassetteExonIncluded.DownstreamIntron", "CassetteExonIncluded.UpstreamIntron", "CassetteExonSkipped")) %>%
+  spread(key="SplicingType", value="H")
+
+ggplot(PlotExonSkippingSpliceRatios, aes(x=CassetteExonIncluded.DownstreamIntron, y=CassetteExonIncluded.UpstreamIntron)) +
+    geom_point()
+
+#And there should generally be anti correlation with the exon skipped isoform and either of the exon included introns
+ggplot(PlotExonSkippingSpliceRatios, aes(x=CassetteExonIncluded.DownstreamIntron, y=CassetteExonSkipped)) +
+    geom_point()
+
+#And finally, cassette skipped exons should have weaker splice sites.
+leafcutter.merged.AS.reclassified %>%
+  left_join(IntronFeatures, by="junc_id") %>%
+  filter(SplicingType %in% c("CassetteExonIncluded.DownstreamIntron", "CassetteExonIncluded.UpstreamIntron")) %>%
+  dplyr::select(SplicingType, DonorScore, AcceptorScore) %>%
+  gather(key="Motif", value="MotifScore", -SplicingType) %>%
+  mutate(Motif=case_when(
+    Motif=="DonorScore" ~ "5'ss",
+    Motif== "AcceptorScore" ~ "3'ss")) %>%
+  ggplot(aes(x=MotifScore, color=Motif, linetype=SplicingType)) +
+    stat_ecdf(geom = "step") +
+    ylab("Cumulative frequency") +
+    theme_bw()
+
+A<-leafcutter.merged.AS.reclassified %>%
+  left_join(IntronFeatures, by="junc_id") %>%
+  filter(SplicingType %in% c("CassetteExonIncluded.DownstreamIntron", "CassetteExonIncluded.UpstreamIntron")) %>%
+  dplyr::select(SplicingType, DonorScore, AcceptorScore)
+wilcox.test(DonorScore~SplicingType, data=A, alternative="less")
+wilcox.test(AcceptorScore~SplicingType, data=A)
+
+
+leafcutter.merged.AS.reclassified %>%
+  left_join(IntronFeatures, by="junc_id") %>%
+  filter(SplicingType %in% c("CassetteExonIncluded.DownstreamIntron", "CassetteExonIncluded.UpstreamIntron")) %>%
+  dplyr::select(SplicingType, svm_scr) %>%
+  ggplot(aes(x=svm_scr, linetype=SplicingType)) +
+    stat_ecdf(geom = "step") +
+    ylab("Cumulative frequency") +
+    theme_bw()
+
+```
+
+Okay yes, for cassette exons, upstream introns have weaker splice acceptors than down stream splice acceptors, downstream introns have weaker splice donors than upstream splice donors. That pattern isn't apparent for branchpoints though, so that signal may be too weak, or predictions on branchpoints may be lousy.
+
+But all in all it seems that my classification of alternative splicing types makes sense. Now let's check if the minor isoform (as assessed in healthy samples) for each splicing type is has a general polarity to effect size. Specifically, if alt5'ss have negative effect sizes.
+
+```{r}
+MinorIsoforms <- leafcutter.merged.AS.reclassified %>%
+  filter(p.adjust<0.3) %>%
+  group_by(cluster) %>%
+  top_n(-1, H) %>%
+  ungroup()
+
+#histogram of splicing fraction of minor isoforms (intron with smallest splicing fraction within cluster)
+hist(MinorIsoforms$H)
+
+MajorIsoforms <- leafcutter.merged.AS.reclassified %>%
+  filter(p.adjust<0.3) %>%
+  group_by(cluster) %>%
+  top_n(1, H) %>%
+  ungroup()
+
+#histogram of splicing fraction of major isoforms (intron with largest splicing fraction within cluster)
+hist(MajorIsoforms$H)
+
+#Now make plots to get to know if minor isoform alt5'ss have generally gone down. Same for alt 3'ss.
+MinorIsoforms %>%
+  filter(SplicingType %in% c("Alt5ss", "Alt3ss")) %>%
+ggplot(aes(x=deltapsi, color=SplicingType)) +
+    stat_ecdf(geom = "step") +
+    xlim(c(-1,1))+
+    ylab("Cumulative frequency") +
+    theme_bw()
+
+#Mirrored plot for major isoforms.
+MajorIsoforms %>%
+    filter(SplicingType %in% c("Alt5ss", "Alt3ss")) %>%
+ggplot(aes(x=deltapsi, color=SplicingType)) +
+    stat_ecdf(geom = "step") +
+    xlim(c(-1,1))+
+    ylab("Cumulative frequency") +
+    theme_bw()
+
+#Is this significant?
+wilcox.test(
+  MinorIsoforms %>%
+  filter(SplicingType=="Alt5ss") %>% pull(logef))
+wilcox.test(
+  MinorIsoforms %>%
+  filter(SplicingType=="Alt3ss") %>% pull(logef))
+
+#Try exon skipping
+leafcutter.merged.AS.reclassified %>%
+  filter(p.adjust<0.3) %>%
+  filter(SplicingType %in% c("CassetteExonSkipped", "CassetteExonIncluded.DownstreamIntron", "CassetteExonIncluded.UpstreamIntron")) %>%
+  ggplot(aes(x=deltapsi, color=SplicingType)) +
+    stat_ecdf(geom = "step") +
+    xlim(c(-1,1))+
+    ylab("Cumulative frequency") +
+    theme_bw()
+```
+
+So there is no apparent difference in alt5'ss or alt3'ss usage when I considered all easily classifiable introns, regardless of annotation. In other words, the minor isoforms for 5'ss were equally up and down regulated. This is mirrored in when looking at major isoforms.
+
+
+Finally, since all of this type of analysis didn't return anything very interesting with confidence, I should browse the raw aligned read data in IGV to explore patterns that I might not have picked up on this differential splicing analysis. To aid in IGV exploration, let's write out a bed file of the most significant clusters so we can quickly jump to the regions of interest that are differentially spliced
+
+```{r}
+#bed file, with chromosome, start, stop, name, score, strand, extra info
+
+BedFile <- leafcutter.merged.AS.reclassified %>%
+  dplyr::select(intron, SplicingType, logef, deltapsi, p) %>%
+  separate(intron, into=c("chrom", "start", "stop", "cluster"), remove=F) %>%
+  mutate(extra=paste(logef, deltapsi, SplicingType),
+         score=-log10(p),
+         strand=".",
+         name=paste0(chrom,":",start,"-",stop)
+         )%>%
+  dplyr::select(chrom, start, stop, name, score, strand, extra )
+
+head(BedFile) %>% kable()
+
+write.table(BedFile, file="../output/DiffSplicingRegions.WithMoreReplicates.bed", sep='\t', row.names = F, col.names = F, quote=F)
+```
+
+
+## Conclusions
+
+
